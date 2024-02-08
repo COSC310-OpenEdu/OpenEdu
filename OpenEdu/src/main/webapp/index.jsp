@@ -5,6 +5,6 @@
 </head>
 <body>
 <h1>Hello, World!</h1>
-<h2>Now I'm testing if Git changes are automatically applied!</h2>
+<h2>This index.jsp is from the src/main/webapp directory!</h2>
 </body>
 </html>

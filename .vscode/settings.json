@@ -1,4 +1,5 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/c179a886-b31d-461b-9dbd-d6602478455f/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/OpenEdu",
-    "appService.deploySubpath": "OpenEdu\\target\\OpenEdu.war"
+    "appService.deploySubpath": "OpenEdu\\target\\OpenEdu.war",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
