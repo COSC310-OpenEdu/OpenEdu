@@ -23,8 +23,7 @@ jobs:
 
       - name: Build with Maven
         run: 
-          cd OpenEdu
-          mvn clean install
+          cd OpenEdu; mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
