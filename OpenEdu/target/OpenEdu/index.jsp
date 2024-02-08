@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Testing!</title>
+    <title>Target/OpenEdu</title>
 </head>
 <body>
 <h1>Hello, World!</h1>
