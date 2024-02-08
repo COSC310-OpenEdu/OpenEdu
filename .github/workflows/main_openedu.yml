@@ -22,14 +22,15 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven
+        working-directory: ./OpenEdu
         run: 
-          cd OpenEdu; mvn clean install
+          mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.war'
+          path: '${{ github.workspace }}/OpenEdu/target/*.war'
 
   deploy:
     runs-on: ubuntu-latest
