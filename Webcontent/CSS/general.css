@@ -7,15 +7,12 @@ html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h
     border: 0;
 }
 
-/* Website wide variables */
+/*              */
+/*  Variables   */
+/*              */
 :root {
-    --mainLight: #808080;
     --main:#E3FDFD;
-    --mainDark:#747474;
-    
-    --secondLight: #A6E3E9;
     --second: #CBF1F5;
-    --secondMed: #A6E3E9;
     --secondDark: #A6E3E9;
 
     --narbarWidth: 4em;
@@ -57,4 +54,33 @@ a {
     margin-right: var(--sidebarWidth);
 
     padding: 1em;
+}
+
+/*                  */
+/*      Forms       */
+/*                  */
+
+form {
+    background-color: var(--second);
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow: auto;
+}
+
+form * {
+    margin: 0.25em;
+}
+
+form input{
+    width: 15em;
+}
+
+#Submit{
+    float: right;
+    width: 6em;
+}
+
+#Back {
+    float: left;
+    width: 6em;
 }

@@ -23,23 +23,19 @@
     
             <!-- Contains the bottom aligned elements (Page specific) -->
             <div id="Bottom">
-                <a href=""><div class="MenuItem" id="Logout">Login</div></a>
+                <div class="MenuItem Selected" id="Logout">Login</div>
             </div>
         </nav>
     
-        <!-- Information about user -->
-        <!-- Right column -->
-        <aside>
-            <div id="asideItem">Title</div>
-            <div id="asideItem">Description</div>
-            <div id="asideItem">Links</div>
-            <div id="asideFooter"></div>
-        </aside>
-    
         <!-- Main body of page -->
-        <!-- Contains a list of popular posts -->
-        <div id="body">
-            In page text
+        <div id="body" class="center">
+            <form action="" method="post">
+                <legend>Login:</legend>
+                <input type="text" placeholder="Username...">
+                <input type="password" placeholder="Password...">
+                <input type="button" value="Submit" id="Submit">
+                <input type="button" value="Back" id="Back">
+            </form>
         </div>
 
     </body>
