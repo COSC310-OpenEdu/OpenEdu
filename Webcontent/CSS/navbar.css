@@ -1,0 +1,35 @@
+nav {
+    width: 4em;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: var(--second);
+    border-right: 2px solid var(--secondDark);
+}
+
+div.MenuItem {
+    width: 4em;
+    height: 4em;
+    text-align: center;
+    background-color: var(--second);
+}
+
+div.MenuItem:hover {
+    background-color: var(--secondDark);
+}
+
+#Top {
+    position: inherit;
+}
+
+#Bottom {
+    position: inherit;
+    bottom: 0;
+}
+
+nav div div.Selected {
+    border-top: solid var(--secondMed);
+    border-bottom: solid var(--secondMed);
+    background-color: var(--secondDark);
+}

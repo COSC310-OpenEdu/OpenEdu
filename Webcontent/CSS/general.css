@@ -1,0 +1,60 @@
+/* Clear browser default padding and margins */
+html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h1, h2, h3, ul, li, body, div, p, img {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    border: 0;
+}
+
+/* Website wide variables */
+:root {
+    --mainLight: #808080;
+    --main:#E3FDFD;
+    --mainDark:#747474;
+    
+    --secondLight: #A6E3E9;
+    --second: #CBF1F5;
+    --secondMed: #A6E3E9;
+    --secondDark: #A6E3E9;
+
+    --narbarWidth: 4em;
+    --sidebarWidth: 10em;
+}
+
+/* Site wide font and colors */
+body, h1, h2, h3 {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+body {
+    background-color: var(--main);
+}
+
+/* Disable link styling by default */
+a {
+    text-decoration: none; 
+    color: inherit;
+}
+
+/* Center Div in middle of the page */
+.center {
+    /* Position the login screen in the very center of the page */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Adjust for the width of the div */
+    transform: translate(-50%, -50%);
+}
+
+/* Stylings for the main body of the page */
+#body {
+    margin-left: var(--narbarWidth);
+    margin-right: var(--sidebarWidth);
+
+    padding: 1em;
+}

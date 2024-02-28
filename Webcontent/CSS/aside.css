@@ -1,0 +1,25 @@
+aside {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: var(--sidebarWidth);
+
+    padding: 0.5em;
+
+    background-color: var(--second);
+}
+
+/* Search */
+
+form#Search input[type=text],
+form#Search input[type=button] {
+    margin: 1em,1em,0em,1em;
+    position: relative;
+    right: -50%;
+    width: 85%;
+    transform: translate(-50%, 0);
+}
+
+form#Search #Selected {
+    background-color: lightgray;
+}
