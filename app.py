@@ -1,11 +1,31 @@
 from flask import Flask, render_template
+import mysql.connector
 
 app = Flask(__name__)
+
+# Database configuration
+# Should put this in a config file but eh
+db_config = {
+    'user': 'team',
+    'password': 'COSC310Team',
+    'host': '50.98.157.215',
+    'port': '3306',
+    'database': 'openEDU'
+}
+
+# Establish a database connection
+db = mysql.connector.connect(**db_config)
 
 
 @app.route("/")
 def home():
-    return render_template("template.html")
+    # Test the database connection
+    cursor = db.cursor()
+    cursor.execute("SELECT VERSION()")  # Simple query to test
+    db_version = cursor.fetchone()
+    cursor.close()
+    return render_template("template.html", db_version=db_version)
+    
 
 
 if __name__ == "__main__":
