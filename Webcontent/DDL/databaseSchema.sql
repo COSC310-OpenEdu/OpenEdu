@@ -8,14 +8,14 @@ CREATE TABLE User (
     profilePicture BLOB,
     profilePictureLocator VARCHAR(20),
 
-    PRIMARY KEY userId
+    PRIMARY KEY (userId)
 )
 
 CREATE TABLE Course (
     courseId    INTEGER,
     name        VARCHAR(20),
 
-    PRIMARY KEY (couseId)
+    PRIMARY KEY (courseId)
 )
 
 CREATE TABLE Department (
@@ -30,7 +30,7 @@ CREATE TABLE Student (
     program VARCHAR(20),
 
     PRIMARY KEY (userId),
-    FOREIGN KEY userId REFERENCES User(userId)
+    FOREIGN KEY (userId) REFERENCES User(userId)
 )
 
 CREATE TABLE Instructor (
@@ -60,8 +60,7 @@ CREATE TABLE Assignment (
     dueDate         DATETIME,
 
     PRIMARY KEY (assignmentId, studentId, courseId),
-    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId),
-    FOREIGN KEY (studentId) REFERENCES Student(studentId),
+    FOREIGN KEY (studentId) REFERENCES Student(userId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 )
 
@@ -73,7 +72,7 @@ CREATE TABLE Grades (
 
     PRIMARY KEY (assignmentId, instructorId),
     FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId),
-    FOREIGN KEY (instructorId) REFERENCES Instructor(instructorId)
+    FOREIGN KEY (instructorId) REFERENCES Instructor(userId)
 )
 
 CREATE TABLE Attend (
@@ -81,7 +80,7 @@ CREATE TABLE Attend (
     courseId    INTEGER,
 
     PRIMARY KEY (studentId, courseId),
-    FOREIGN KEY (studentId) REFERENCES Student(studentId),
+    FOREIGN KEY (studentId) REFERENCES Student(userId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 )
 
@@ -90,6 +89,6 @@ CREATE TABLE Instructs (
     courseId        INTEGER,
     
     PRIMARY KEY (instructorId, courseId),
-    FOREIGN KEY (instructorId) REFERENCES Instructor(instructorId),
+    FOREIGN KEY (instructorId) REFERENCES Instructor(userId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 )
