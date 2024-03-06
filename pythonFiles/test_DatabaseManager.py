@@ -4,15 +4,27 @@ import pytest
 
 def test_ViewStudents():
     database = DatabaseManager()
-    database.viewStudents()
     
-    # Print Result-set
-    #for (firstName, lastName) in database.cur:
-        #print(f"First Name: {firstName}, Last Name: {lastName}")
+    studentData = database.viewStudents()
         
-    row = database.cur.fetchone()
-    assert(row[0] == "James")
+    assert(studentData[0][0] == "James") #Check there is a Student
     
-    database.closeConnection()
+    
+    
+def test_selectStudent():
+    database = DatabaseManager()
+    userId = 1
+    
+    studentData = database.selectStudent(userId)
+    
+    assert(studentData[1] == "James")
+    
 
 
+def test_selectStudent_nonIntegerUserId():
+    database = DatabaseManager()
+    userId = "Cat"
+    
+    studentData = database.selectStudent(userId)
+    
+    assert(studentData == None)
