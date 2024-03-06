@@ -26,6 +26,9 @@ def home():
     cursor.close()
     return render_template("template.html", db_version=db_version)
     
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 
 if __name__ == "__main__":
