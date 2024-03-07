@@ -11,9 +11,20 @@ html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h
 /*  Variables   */
 /*              */
 :root {
-    --main:#E3FDFD;
-    --second: #CBF1F5;
-    --secondDark: #A6E3E9;
+    --modal:#FEFEFE;
+    --modalFooter: #F1F1F1;
+    --contentBox: #F8F8F8;
+    --outlineColor: #CECECE;
+    --backgroundModal: rgb(0, 0, 0, 0.4);
+    --darkVariant: #99B0AE;
+    --primary: #B4CBC9;
+    --secondary: #D0E7E5;
+    --lightVariant: #DEF6F4;
+    --redButton: #FF5449;
+
+
+
+
 
     --narbarWidth: 4em;
     --sidebarWidth: 10em;
