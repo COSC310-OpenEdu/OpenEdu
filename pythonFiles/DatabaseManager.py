@@ -49,7 +49,22 @@ class DatabaseManager:
         studentData = self.cur.fetchone()
         self.closeConnection()
         return studentData
-        
     
+    def checkLogin(self, username, password) -> bool:
+        
+        
+        self.createConnection()
+        statement = "SELECT * FROM User WHERE username = ? AND password = ?"
+        self.cur.execute(statement, (username,password,))
+        
+        userData = self.cur.fetchone()
+        self.closeConnection()
+
+        if userData is None:
+            return False
+        else:
+            return True
+        
+
 
     

@@ -28,3 +28,21 @@ def test_selectStudent_nonIntegerUserId():
     studentData = database.selectStudent(userId)
     
     assert(studentData == None)
+
+def test_checkLogin():
+    database = DatabaseManager()
+    username = "jsmith"
+    password = "jsmith1234"
+
+    validLogin = database.checkLogin(username, password)
+
+    assert(validLogin == True)
+
+def test_checkLogin_wrongpass():
+    database = DatabaseManager()
+    username = "jsmith"
+    password = "wrongpassword"
+
+    validLogin = database.checkLogin(username, password)
+
+    assert(validLogin == False)
