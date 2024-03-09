@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import mysql.connector
 
 app = Flask(__name__)
@@ -30,14 +30,29 @@ def home():
 def login():
     return render_template("login.html")
 
-@app.route('/login/createaccount/submit')
-def createAccountSubmit():
-    # Handle account creation
-    return 'Submitted'
-
-@app.route("/login/createaccount")
+@app.route("/login/createaccount", method=['GET', 'POST'])
 def createAccount():
-    return render_template("accountCreation.html");
+    if (request.method == 'GET'):
+        return render_template("accountCreation.html");
+    else:
+        createUser = ("INSERT INTO User (firstName, lastName, email, password) VALUES (%s, %s, %s, %s);");
+        createTeacher = ("INSERT INTO Instructor (userId) VALUES (LAST_INSERT_ID());");
+        createStudent = ("INSERT INTO Student (userId) VALUES (LAST_INSERT_ID());");
+        
+        form = request.form;
+        userData = (form['fname'],form['lname'],form['email'],form['password']);
+        
+        cursor = db.cursor();
+        
+        cursor.execute(createUser, userData);
+        
+        if (form['accountType'] == 'student'):
+            cursor.execute(createStudent);
+        else:
+            cursor.execute(createTeacher);
+        
+        db.commit();
+        
 
 
 if __name__ == "__main__":
