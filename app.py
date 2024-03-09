@@ -30,6 +30,15 @@ def home():
 def login():
     return render_template("login.html")
 
+@app.route('/login/createaccount/submit')
+def createAccountSubmit():
+    # Handle account creation
+    return 'Submitted'
+
+@app.route("/login/createaccount")
+def createAccount():
+    return render_template("accountCreation.html");
+
 
 if __name__ == "__main__":
     app.run()

@@ -1,0 +1,29 @@
+form {
+    overflow: auto;
+    width: 30em;
+}
+
+form div {
+    width: 30em;
+}
+
+form .right {
+    position: relative;
+    float: right;
+    width: 50%;
+}
+
+form .left {
+    position: relative;
+    float:left;
+    width: 50%;
+}
+
+form div input, form select{
+    box-sizing: border-box;
+    width: 100%;
+}
+
+form legend {
+    
+}

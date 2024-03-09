@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/aside.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            document.querySelector('form').addEventListener('submit', function (e){
+                // Check selector
+                let selector = document.querySelector('#accountType');
+                if (selector.value == "select") {
+                    e.preventDefault();
+                }
+
+                // Check email
+                let email = document.querySelector("#email");
+                if (email.value == '') {
+                    e.preventDefault();
+                }
+
+                // Check first name
+                let fname = document.querySelector("#fname")
+                if (fname.value == '') {
+                    e.preventDefault();
+                }
+
+                // Check last name
+                let lname = document.querySelector("#lname")
+                if (lname.value == '') {
+                    e.preventDefault();
+                }
+
+                // Check username 
+                let username = document.querySelector("#username") 
+                if (username == '') {
+                    e.preventDefault();
+                }
+
+                // Check password
+                let passowrd = document.querySelector("#password")
+                if (passowrd == '') {
+                    e.preventDefault();
+                }
+
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <body>
+        <!-- Navigation bar -->
+        <!-- Left Column -->
+        <nav>
+            <!-- Contains the top aligned elements (Generic) -->
+            <div id="Top">
+                <a href=""><div class="MenuItem" id="Logo">Logo</div></a>
+                <a href=""><div class="MenuItem" id="Home">Home</div></a>
+                <a href=""><div class="MenuItem" id="Search">Search</div></a>
+            </div>
+    
+            <!-- Contains the bottom aligned elements (Page specific) -->
+            <div id="Bottom">
+                <a href="{{url_for('login')}}"><div class="MenuItem" id="Logout">Login</div></a>
+            </div>
+        </nav>
+    
+        <!-- Information about user -->
+        <!-- Right column -->
+        <aside>
+            <div id="asideItem">Title</div>
+            <div id="asideItem">Description</div>
+            <div id="asideItem">Links</div>
+            <div id="asideFooter"></div>
+        </aside>
+    
+        <!-- Main body of page -->
+        <!-- Contains a list of popular posts -->
+        <div id="body">
+            
+            <form action="{{ url_for('createAccountSubmit')}}" method="post">
+                <legend>Sign Up</legend>
+
+                <select name="accountType" id="accountType">
+                    <option value="select" selected>Account Type</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                </select> <br>
+                
+                <div>
+                    <label for="email">Email</label> <br>
+                    <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
+                </div>
+
+                <div class ="left">
+                    <label for="fname">First name</label> <br>
+                    <input type="text" name="fname" id="fname" placeholder="First Name">
+                </div>
+
+                <div class="rigth">
+                    <label for="lname">Last Name</label> <br>
+                    <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
+                </div>
+
+                <div>
+                    <label for="text">Username</label> <br>
+                    <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+                </div>
+
+                <div>
+                    <label for="password">Password</label> <br>
+                    <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+                </div>
+
+                <div class="buttons">
+                    <button onclick="javasrcipt:window.history.back();">Cancel</button>
+                    <button type="submit" class="right">Sign Up</button> <br>
+                </div>
+            </form>
+
+        </div>
+
+    </body>
+</body>
+</html>
