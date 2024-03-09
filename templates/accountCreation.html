@@ -9,42 +9,62 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
     <script>
+        
         document.addEventListener('DOMContentLoaded', function (){
+            document.querySelector('select').addEventListener('click', function (e){
+                e.target.classList.remove('highlight');
+            });
+
+            inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('click', function (e){
+                    e.target.classList.remove('highlight');
+                });
+            });
+
+            
             document.querySelector('form').addEventListener('submit', function (e){
                 // Check selector
                 let selector = document.querySelector('#accountType');
                 if (selector.value == "select") {
                     e.preventDefault();
+                    selector.classList.add('highlight');
                 }
 
                 // Check email
                 let email = document.querySelector("#email");
-                if (email.value == '') {
+                if (email.value.trim() == "") {
                     e.preventDefault();
+                    email.classList.add('highlight');
                 }
 
                 // Check first name
                 let fname = document.querySelector("#fname")
-                if (fname.value == '') {
+                if (fname.value.trim() == '') {
                     e.preventDefault();
+                    fname.classList.add('highlight');
+
                 }
 
                 // Check last name
                 let lname = document.querySelector("#lname")
-                if (lname.value == '') {
+                if (lname.value.trim() == '') {
                     e.preventDefault();
+                    lname.classList.add('highlight');
                 }
 
                 // Check username 
-                let username = document.querySelector("#username") 
-                if (username == '') {
+                let username = document.querySelector("#uname") 
+                if (username.value.trim() == '') {
                     e.preventDefault();
+                    username.classList.add('highlight');
                 }
 
                 // Check password
-                let passowrd = document.querySelector("#password")
-                if (passowrd == '') {
+                let password = document.querySelector("#password")
+                if (password.value.trim() == '') {
                     e.preventDefault();
+                    password.classList.add('highlight');
                 }
 
 
@@ -80,46 +100,55 @@
         </aside>
     
         <!-- Main body of page -->
-        <!-- Contains a list of popular posts -->
         <div id="body">
             
-            <form action="{{ url_for('createAccountSubmit')}}" method="post">
-                <legend>Sign Up</legend>
-
-                <select name="accountType" id="accountType">
-                    <option value="select" selected>Account Type</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                </select> <br>
+            <form action="{{ url_for('createAccountSubmit')}}" method="post" class="center">
+                <div class="FormLine FormHeader">
+                    <legend>Sign Up</legend>
+                </div>
                 
-                <div>
+                <div class="FormLine">
+                    <select name="accountType" id="accountType">
+                        <option value="select" selected>Account Type</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select> <br>
+                </div>
+                
+                <div class="FormLine">
                     <label for="email">Email</label> <br>
                     <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
                 </div>
 
-                <div class ="left">
-                    <label for="fname">First name</label> <br>
-                    <input type="text" name="fname" id="fname" placeholder="First Name">
+                <div class="FormLine">
+                    <div class="left">
+                        <label for="fname">First name</label> <br>
+                        <input type="text" name="fname" id="fname" placeholder="First Name">
+                    </div>
+                    <div class="right">
+                        <label for="lname">Last Name</label> <br>
+                        <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
+                    </div>
+
                 </div>
 
-                <div class="rigth">
-                    <label for="lname">Last Name</label> <br>
-                    <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
-                </div>
-
-                <div>
+                <div class="FormLine">
                     <label for="text">Username</label> <br>
                     <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
                 </div>
 
-                <div>
+                <div class="FormLine">
                     <label for="password">Password</label> <br>
                     <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
                 </div>
 
-                <div class="buttons">
-                    <button onclick="javasrcipt:window.history.back();">Cancel</button>
-                    <button type="submit" class="right">Sign Up</button> <br>
+                <div class="FormLine buttons">
+                    <div class="left">
+                        <button onclick="javasrcipt:window.history.back();">Cancel</button>
+                    </div>
+                    <div class="right">
+                        <button type="submit" class="right">Sign Up</button> <br>
+                    </div>
                 </div>
             </form>
 
