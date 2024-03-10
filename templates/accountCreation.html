@@ -9,8 +9,10 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
     <script>
-        
+        // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
+            
+            // Remove highlight from inputs when clicked on
             document.querySelector('select').addEventListener('click', function (e){
                 e.target.classList.remove('highlight');
             });
@@ -22,7 +24,7 @@
                 });
             });
 
-            
+            // Verify form inputs are submitted properly
             document.querySelector('form').addEventListener('submit', function (e){
                 // Check selector
                 let selector = document.querySelector('#accountType');
@@ -66,8 +68,6 @@
                     e.preventDefault();
                     password.classList.add('highlight');
                 }
-
-
             });
         });
     </script>

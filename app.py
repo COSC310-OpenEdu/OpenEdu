@@ -32,13 +32,16 @@ def login():
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
 def createAccount():
+    # Default handeling of page
     if (request.method == 'GET'):
         return render_template("accountCreation.html");
-    else:
+    # Post request occures when form is submitted
+    else: # Post Request
         createUser = ("INSERT INTO User (firstName, lastName, email, password, username) VALUES (%s, %s, %s, %s, %s);");
         createTeacher = ("INSERT INTO Instructor (userId) VALUES (LAST_INSERT_ID());");
         createStudent = ("INSERT INTO Student (userId) VALUES (LAST_INSERT_ID());");
         
+        # Retrieve form data
         form = request.form;
         userData = (form['fname'],form['lname'],form['email'],form['password'], form['uname']);
         
@@ -46,6 +49,7 @@ def createAccount():
         
         cursor.execute(createUser, userData);
         
+        # Create a student or instructor account depending on user's choice 
         if (form['accountType'] == 'student'):
             cursor.execute(createStudent);
         else:
@@ -53,6 +57,7 @@ def createAccount():
         
         db.commit();
         
+        # Forward to the login page
         return login();
         
 
