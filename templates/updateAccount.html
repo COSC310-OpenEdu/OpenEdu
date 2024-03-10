@@ -31,8 +31,10 @@
 
                 if (password.value != repassword.value && password.value.trim != '') {
                     e.preventDefault();
-                    e.target.classList.remove('highlight');
+                    password.classList.add('highlight');
+                    repassword.classList.add('highlight');
                 }
+                e.preventDefault();
             });
         });
     </script>
