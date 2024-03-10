@@ -1,35 +1,41 @@
-nav {
-    width: 4em;
-    height: 100vh;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    background-color: var(--second);
-    border-right: 2px solid var(--secondDark);
+/* Navbar flex container */
+.navbar {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary);
+    width: 80px;
 }
 
-div.MenuItem {
-    width: 4em;
-    height: 4em;
+/* Navigation menu links */
+.navbar a {
     text-align: center;
-    background-color: var(--second);
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
-div.MenuItem:hover {
-    background-color: var(--secondDark);
+/* Current navigation menu link */
+.navbar a.active {
+    background-color: white;
 }
 
-#Top {
-    position: inherit;
+/* Navigation menu links on hover */
+.navbar a:hover:not(.active) {
+    background-color: var(--darkVariant);
+    color: white;
 }
 
-#Bottom {
-    position: inherit;
-    bottom: 0;
+/* Top navigation menu */
+.navbar-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-nav div div.Selected {
-    border-top: solid var(--secondMed);
-    border-bottom: solid var(--secondMed);
-    background-color: var(--secondDark);
+/* Bottom navigation menu */
+.navbar-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
 }

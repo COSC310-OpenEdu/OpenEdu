@@ -1,0 +1,28 @@
+/* Page flex container */
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--modal);
+    height: 100vh;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--contentBox);
+    flex: auto;
+    height: 90vh;
+    margin: 36px;
+    border-radius: 20px;
+}
+
+.container-header {
+    display: flex;
+    height: fit-content;
+    padding: 20px;
+    align-items: center;
+    display: inline-flex;
+    background-color: var(--secondary);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
