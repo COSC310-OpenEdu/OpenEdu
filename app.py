@@ -12,7 +12,7 @@ app = Flask(__name__)
 db_config = {
     'user': 'team',
     'password': 'COSC310Team',
-    'host': '50.98.157.215',
+    'host': '192.168.1.98',
     'port': '3306',
     'database': 'openEDU'
 }
@@ -63,7 +63,13 @@ def createAccount():
         
         # Forward to the login page
         return login();
-        
+
+@app.route("/account/update", methods=['GET', 'POST'])
+def updateAccount():
+    if (request.method == 'GET'):
+        return render_template("updateAccount.html");
+    else:
+        return;
 
 @app.route("/authenticate", methods=['POST'])
 def authenticate():
