@@ -68,8 +68,24 @@ def createAccount():
 def updateAccount():
     if (request.method == 'GET'):
         return render_template("updateAccount.html");
-    else:
-        return;
+    else:  
+        updateEmail = "UPDATE User SET email = %s WHERE userId = %d";
+        updatePassword = "UPDATE User SET password = %s WHERE userId = %d";
+        
+        form = request.form;
+        
+        cursor = db.cursor();
+        
+        if (form['password'] != ''):
+            userData = (form['password'], 1);
+            cursor.execute(updatePassword, userData);
+        if (form['email'] != ''):
+            userData = (form['email'], 1);
+            cursor.execute(updateEmail, userData);
+            
+        db.commit();
+                  
+        return render_template("updateAccount.html");
 
 @app.route("/authenticate", methods=['POST'])
 def authenticate():
