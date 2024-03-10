@@ -1,6 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, request
 import mysql.connector
+from pythonFiles.DatabaseManager import DatabaseManager
 
+user = None
 app = Flask(__name__)
 
 # Database configuration
@@ -30,6 +32,22 @@ def home():
 def login():
     return render_template("login.html")
 
+@app.route("/authenticate", methods=['POST'])
+def authenticate():
+    #Get inputted username and password from user
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    #Check if user exists in database
+    database = DatabaseManager()
+    validLogin = database.checkLogin(username, password)
+
+    #If exists, bring back to home page, ow stay on login page
+    if validLogin:
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('login'))
+    
 
 if __name__ == "__main__":
     app.run()
