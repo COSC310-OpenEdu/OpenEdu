@@ -19,14 +19,14 @@ html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h
     --darkVariant: #99B0AE;
     --primary: #B4CBC9;
     --secondary: #D0E7E5;
-    --lightVariant: #DEF6F4;
+    --lightVariant: #2d3837;
     --redButton: #FF5449;
 
 
 
 
 
-    --narbarWidth: 4em;
+    --narbarWidth: 5em;
     --sidebarWidth: 10em;
 }
 
@@ -40,7 +40,7 @@ h1 {
 }
 
 body {
-    background-color: var(--main);
+    background-color: white;
 }
 
 /* Disable link styling by default */
@@ -63,6 +63,7 @@ a {
 #body {
     margin-left: var(--narbarWidth);
     margin-right: var(--sidebarWidth);
+    background-color: white;
 
     padding: 1em;
 }
@@ -72,7 +73,7 @@ a {
 /*                  */
 
 form {
-    background-color: var(--second);
+    background-color: var(--modal);
     padding: 1em;
     width: 13em;
     border-radius: 0.5em;
@@ -95,4 +96,17 @@ form input{
 #Back {
     float: left;
     width: 6em;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+span.size-36 {
+    font-size: 36px;
+    font-variation-settings: 'OPSZ' 36;
 }
