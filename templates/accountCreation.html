@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/aside.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
+    <script>
+        // Run once document is loaded
+        document.addEventListener('DOMContentLoaded', function (){
+            
+            // Remove highlight from inputs when clicked on
+            document.querySelector('select').addEventListener('click', function (e){
+                e.target.classList.remove('highlight');
+            });
+
+            inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('click', function (e){
+                    e.target.classList.remove('highlight');
+                });
+            });
+
+            // Verify form inputs are submitted properly
+            document.querySelector('form').addEventListener('submit', function (e){
+                // Check selector
+                let selector = document.querySelector('#accountType');
+                if (selector.value == "select") {
+                    e.preventDefault();
+                    selector.classList.add('highlight');
+                }
+
+                // Check email
+                let email = document.querySelector("#email");
+                if (email.value.trim() == "") {
+                    e.preventDefault();
+                    email.classList.add('highlight');
+                }
+
+                // Check first name
+                let fname = document.querySelector("#fname")
+                if (fname.value.trim() == '') {
+                    e.preventDefault();
+                    fname.classList.add('highlight');
+
+                }
+
+                // Check last name
+                let lname = document.querySelector("#lname")
+                if (lname.value.trim() == '') {
+                    e.preventDefault();
+                    lname.classList.add('highlight');
+                }
+
+                // Check username 
+                let username = document.querySelector("#uname") 
+                if (username.value.trim() == '') {
+                    e.preventDefault();
+                    username.classList.add('highlight');
+                }
+
+                // Check password
+                let password = document.querySelector("#password")
+                if (password.value.trim() == '') {
+                    e.preventDefault();
+                    password.classList.add('highlight');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <body>
+        <!-- Navigation bar -->
+        <!-- Left Column -->
+        <nav>
+            <!-- Contains the top aligned elements (Generic) -->
+            <div id="Top">
+                <a href=""><div class="MenuItem" id="Logo">Logo</div></a>
+                <a href=""><div class="MenuItem" id="Home">Home</div></a>
+                <a href=""><div class="MenuItem" id="Search">Search</div></a>
+            </div>
+    
+            <!-- Contains the bottom aligned elements (Page specific) -->
+            <div id="Bottom">
+                <a href="{{url_for('login')}}"><div class="MenuItem" id="Logout">Login</div></a>
+            </div>
+        </nav>
+    
+        <!-- Information about user -->
+        <!-- Right column -->
+        <aside>
+            <div id="asideItem">Title</div>
+            <div id="asideItem">Description</div>
+            <div id="asideItem">Links</div>
+            <div id="asideFooter"></div>
+        </aside>
+    
+        <!-- Main body of page -->
+        <div id="body">
+            <div class="overlay"></div>
+            <form action="{{ url_for('createAccount')}}" method="post" class="center">
+                <div class="FormLine FormHeader">
+                    <legend>Sign Up</legend>
+                </div>
+                
+                <div class="FormLine">
+                    <select name="accountType" id="accountType">
+                        <option value="select" selected>Account Type</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select> <br>
+                </div>
+                
+                <div class="FormLine">
+                    <label for="email">Email</label> <br>
+                    <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
+                </div>
+
+                <div class="FormLine">
+                    <div class="left">
+                        <label for="fname">First Name</label> <br>
+                        <input type="text" name="fname" id="fname" placeholder="First Name">
+                    </div>
+                    <div class="right">
+                        <label for="lname">Last Name</label> <br>
+                        <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
+                    </div>
+
+                </div>
+
+                <div class="FormLine">
+                    <label for="text">Username</label> <br>
+                    <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+                </div>
+
+                <div class="FormLine">
+                    <label for="password">Password</label> <br>
+                    <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+                </div>
+
+                <div class="FormLine buttons">
+                    <div class="left">
+                        <button onclick="javasrcipt:window.history.back();">Cancel</button>
+                    </div>
+                    <div class="right">
+                        <button type="submit" class="right">Sign Up</button> <br>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </body>
+</body>
+</html>

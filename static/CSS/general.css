@@ -23,9 +23,6 @@ html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h
     --redButton: #FF5449;
 
 
-
-
-
     --narbarWidth: 5em;
     --sidebarWidth: 10em;
 }
@@ -76,7 +73,7 @@ form {
     background-color: var(--modal);
     padding: 1em;
     width: 13em;
-    border-radius: 0.5em;
+    border-radius: 0em;
     overflow: auto;
 }
 

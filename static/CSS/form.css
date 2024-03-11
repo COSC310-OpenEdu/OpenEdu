@@ -1,0 +1,84 @@
+form {
+    overflow:visible;
+    width: 30em;
+    background-color: var(--modal);
+    padding: 0em;
+}
+
+form * {
+    padding: 0em;
+    margin: 0em;
+}
+
+form .FormLine {
+    box-sizing: border-box;
+    overflow: auto;
+    width: 30em;
+    padding: 1em 1em 1em 1em;
+}
+
+
+form .FormHeader {
+    padding-left: 2em;
+    border-bottom: 1px solid black;
+}
+form legend {
+    font-size:x-large;
+}
+
+form .buttons {
+    background-color: var(--modalFooter);
+}
+
+form button {
+    border:none;
+    color: var(--modal);
+    height: 2em;
+    width: 50%;
+}
+
+form .right {
+    width: 45%;
+    float: right;
+}
+
+form .right button {
+    background-color: var(--darkVariant);
+}
+
+form .left {
+    width: 45%;
+    float: left;
+}
+
+form .left button {
+    background-color: var(--redButton);
+}
+
+form input, form select{
+    box-sizing: border-box;
+    width:100%;
+    height: 3em;
+    padding-left: 1em;
+}
+
+form label {
+    position: relative;
+    top: -0.5em;
+    left: 0.5em;
+    font-size: large;
+}
+
+form .highlight {
+    background-color: #fcb3b7;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    pointer-events: all;
+}

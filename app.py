@@ -1,4 +1,6 @@
+
 from flask import Flask, render_template, redirect, url_for, request
+
 import mysql.connector
 from pythonFiles.DatabaseManager import DatabaseManager
 
@@ -30,7 +32,38 @@ def home():
     
 @app.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template("login.html");
+
+@app.route("/login/createaccount", methods=['GET', 'POST'])
+def createAccount():
+    # Default handeling of page
+    if (request.method == 'GET'):
+        return render_template("accountCreation.html");
+    # Post request occures when form is submitted
+    else: # Post Request
+        createUser = ("INSERT INTO User (firstName, lastName, email, password, username) VALUES (%s, %s, %s, %s, %s);");
+        createTeacher = ("INSERT INTO Instructor (userId) VALUES (LAST_INSERT_ID());");
+        createStudent = ("INSERT INTO Student (userId) VALUES (LAST_INSERT_ID());");
+        
+        # Retrieve form data
+        form = request.form;
+        userData = (form['fname'],form['lname'],form['email'],form['password'], form['uname']);
+        
+        cursor = db.cursor();
+        
+        cursor.execute(createUser, userData);
+        
+        # Create a student or instructor account depending on user's choice 
+        if (form['accountType'] == 'student'):
+            cursor.execute(createStudent);
+        else:
+            cursor.execute(createTeacher);
+        
+        db.commit();
+        
+        # Forward to the login page
+        return login();
+        
 
 @app.route("/authenticate", methods=['POST'])
 def authenticate():
