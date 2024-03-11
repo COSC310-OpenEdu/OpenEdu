@@ -1,0 +1,45 @@
+/* Assignment question flex container */
+.question-container {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--modal);
+    width: auto;
+    height: fit-content;
+    border: 2px solid var(--outlineColor);
+    border-radius: 12px;
+    padding: 12px;
+ }
+ 
+ .question-container-body {
+    display: flex;
+    flex-direction: column;
+ }
+ 
+ .question-container-sidebar {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+ }
+
+ select {
+    width: 200px;
+    height: 48px;
+    border: 2px solid var(--outlineColor);
+    border-radius: 12px;
+    background-color: var(--modal);
+    margin: 8px;
+ }
+ 
+ button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 36px;
+    background-color: var(--darkVariant);
+    color: white;
+    border-radius: 12px;
+    margin: 8px;
+ }
+ 

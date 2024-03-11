@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Create Assignment</title>
+   <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+   <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/aside.css') }}">
+   <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+   <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageContent.css') }}">
+   <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/assignment.css') }}">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body class="page-container">
+   <!-- Navigation bar -->
+   <!-- Left Column -->
+   <nav class="navbar">
+       <!-- Contains the top aligned elements (Generic) -->
+       <ul class="navbar-top">
+           <li>
+               <a href="" id="Logo">
+                   <span class="material-symbols-outlined size-36">
+                       school
+                   </span>
+               </a>
+           </li>
+           <li>
+               <a href="" class="active" id="Home">
+                   <span class="material-symbols-outlined">
+                       home
+                   </span>Home
+               </a>
+           </li>
+           <li>
+               <a href="" id="Search">
+                   <span class="material-symbols-outlined">
+                       search
+                   </span>Search
+               </a>
+           </li>
+       </ul>
+
+
+       <!-- Contains the bottom aligned elements (Page specific) -->
+       <ul class="navbar-bottom">
+           <li>
+               <a href="{{url_for('login')}}" id="Logout">
+                   <span class="material-symbols-outlined">
+                       login
+                   </span>Login
+               </a>
+           </li>
+       </ul>
+   </nav>
+
+   <!-- Main body of page -->
+   <!-- Contains assignment/quiz building section -->
+   <div class="main-container">
+       <div class="single-column-container">
+           <div class="container-header">Header</div>
+           <div class="container-body">
+               <select class="question-select" required>
+                   <option value="">- Question Type -</option>
+                   <option value="text box">Text Box</option>
+                   <option value="essay">Essay</option>
+                   <option value="multiple choice">Multiple Choice</option>
+                   <option value="true or false">True or False</option>
+               </select>
+               <button>
+                   <span class="material-symbols-outlined">add</span>Add
+               </button>
+           </div>
+       </div>
+   </div>
+
+   <!-- Right column -->
+   <div class="sidebar-container">
+       <div class="container-header">
+           <p>Questions</p>
+       </div>
+       <div class="container-body">
+           
+           <button>
+               Publish Quiz
+           </button>
+       </div>
+   </div>
+</body>
+</html>

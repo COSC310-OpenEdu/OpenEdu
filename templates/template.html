@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-<div class="flex-container">
+<div class="page-container">
     <!-- Navigation bar -->
     <!-- Left Column -->
     <nav class="navbar">
@@ -55,10 +55,12 @@
     <!-- Main body of page -->
     <!-- Contains a list of popular posts -->
     <div class="main-container">
-        <div class="container-header">Header</div>
-        <!--All this does is test the database connection by getting its version --> 
-        <div>
-            <p>Database Version: {{ db_version }}</p>
+        <div class="single-column-container">
+            <div class="container-header">Header</div>
+            <!--All this does is test the database connection by getting its version --> 
+            <div class="container-body">
+                <p>Database Version: {{ db_version }}</p>
+            </div>
         </div>
     </div>
 

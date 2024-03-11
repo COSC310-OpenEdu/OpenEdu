@@ -1,28 +1,56 @@
 /* Page flex container */
-.flex-container {
+.page-container {
     display: flex;
     flex-direction: row;
-    background-color: var(--modal);
-    height: 100vh;
+    height: 100%;
+    overflow: hidden;
 }
 
+/* Page body container */
 .main-container {
     display: flex;
     flex-direction: column;
-    background-color: var(--contentBox);
     flex: auto;
-    height: 90vh;
-    margin: 36px;
-    border-radius: 20px;
+    height: 100vh;
+    overflow-y: auto;
 }
 
+/* Single column page view container */
+.single-column-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--contentBox);
+    margin: 36px;
+    border-radius: 20px;
+ } 
+
+ /* Header for page content containers */
 .container-header {
     display: flex;
     height: fit-content;
     padding: 20px;
     align-items: center;
-    display: inline-flex;
     background-color: var(--secondary);
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
+}
+
+/* Body for page content containers */
+.container-body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Small sidebar for assignment related pages */
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--contentBox);
+    width: 250px;
+    height: fit-content;
+    margin-top: 36px;
+    margin-right: 36px;
+    border-radius: 20px;
 }
