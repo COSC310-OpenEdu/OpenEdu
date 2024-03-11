@@ -1,29 +1,27 @@
-import mariadb
+import mysql.connector
 
 class DatabaseManager:
     
     def __init__(self):
         self.cur = None #Cursor that access that database
-    
+        self.conn = None
     
     def createConnection(self) -> None:
-
-        conn = mariadb.connect(
-                user="team",
-                password="COSC310Team",
-                host="50.98.157.215",
-                port=3306,
-                database='openEDU'
-            )
+        db_config = {
+                    'user': 'team',
+                    'password': 'COSC310Team',
+                    'host': '50.98.157.215',
+                    'port': '3306',
+                    'database': 'openEDU'
+                    }
+        self.conn = mysql.connector.connect(**db_config) #Creates the cursor. Each method will create a different statement  
+        self.cur = self.conn.cursor()
         
-        self.cur = conn.cursor() #Creates the cursor. Each method will create a different statement
-    
     
     def closeConnection(self) -> None:
         self.cur.close()
         self.cur = None
-        
-        
+             
     #View All Users in Database
     def viewStudents(self) -> list:
         self.createConnection()
@@ -32,7 +30,6 @@ class DatabaseManager:
         self.cur.execute(statement)
         
         studentData = self.cur.fetchall()
-        
         self.closeConnection()
         return studentData
     
@@ -43,7 +40,7 @@ class DatabaseManager:
             return None
         
         self.createConnection()
-        statement = "SELECT * FROM User WHERE userId = ?"
+        statement = "SELECT * FROM User WHERE userId = %s"
         self.cur.execute(statement, (userId,))
         
         studentData = self.cur.fetchone()
@@ -51,10 +48,8 @@ class DatabaseManager:
         return studentData
     
     def checkLogin(self, username, password) -> bool:
-        
-        
         self.createConnection()
-        statement = "SELECT * FROM User WHERE username = ? AND password = ?"
+        statement = "SELECT * FROM User WHERE username = %s AND password = %s"
         self.cur.execute(statement, (username,password,))
         
         userData = self.cur.fetchone()
