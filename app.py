@@ -12,7 +12,7 @@ app = Flask(__name__)
 db_config = {
     'user': 'team',
     'password': 'COSC310Team',
-    'host': '192.168.1.98',
+    'host': '50.98.157.215',
     'port': '3306',
     'database': 'openEDU'
 }
