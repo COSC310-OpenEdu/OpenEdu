@@ -7,37 +7,91 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/aside.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageContent.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
 </head>
 <body>
-    <body>
-        <!-- Navigation bar -->
-        <!-- Left Column -->
-        <nav>
-            <!-- Contains the top aligned elements (Generic) -->
-            <div id="Top">
-                <a href=""><div class="MenuItem" id="Logo">Logo</div></a>
-                <a href=""><div class="MenuItem" id="Home">Home</div></a>
-                <a href=""><div class="MenuItem" id="Search">Search</div></a>
-            </div>
-    
-            <!-- Contains the bottom aligned elements (Page specific) -->
-            <div id="Bottom">
-                <div class="MenuItem Selected" id="Logout">Login</div>
-            </div>
-        </nav>
-    
-        <!-- Main body of page -->
-        <div id="body" class="center">
-            <form action="{{url_for('authenticate')}}" method="post">
-                <legend>Login:</legend>
-                <input type="text" name="username" placeholder="Username...">
-                <input type="password" name="password" placeholder="Password...">
-                <input type="submit" value="Submit" id="Submit">
-                <input type="button" value="Back" id="Back">
+<div class="flex-container">
+    <!-- Navigation bar -->
+    <!-- Left Column -->
+    <nav class="navbar">
+        <!-- Contains the top aligned elements (Generic) -->
+        <ul class="navbar-top">
+            <li>
+                <a href="" id="Logo">
+                    <span class="material-symbols-outlined size-36">
+                        school
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="active" id="Home">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>Home
+                </a>
+            </li>
+            <li>
+                <a href="" id="Search">
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>Search
+                </a>
+            </li>
+        </ul>
+
+        <!-- Contains the bottom aligned elements (Page specific) -->
+        <ul class="navbar-bottom">
+            <li>
+                <a href="{{url_for('login')}}" id="Logout">
+                    <span class="material-symbols-outlined">
+                        login
+                    </span>Login
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main body of page -->
+    <div class="main-container">
+        <div id="body">
+            <div class="overlay"></div>
+            <form action="{{ url_for('authenticate')}}" method="post" class="center">
+                <div class="FormLine FormHeader">
+                    <legend>Login</legend>
+                </div>
+                
+                <div class="FormLine">
+                    <label for="text">Username</label> <br>
+                    <input type="text" name="uname" id="username" placeholder="Enter Username"> <br>
+                </div>
+
+                <div class="FormLine">
+                    <label for="password">Password</label> <br>
+                    <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+                </div>
+
+                <div class="FormLine LineButton">
+                    <button type="submit">Login</button>
+                </div>
+
+                <div class="FormLine buttons">
+                    <div class="left">
+                        <button onclick="javasrcipt:window.history.back();">Cancel</button>
+                    </div>
+                    <div class="right">
+                        <a href="{{ url_for('createAccount')}}" class="right" style="width: 80%;">Sign Up</a> <br>
+                        <a class="right" style="width: 80%;">Forgot Password?</a> <br>
+                    </div>
+                </div>
+
             </form>
+
         </div>
 
-    </body>
+    </div>
+
 </body>
 </html>
