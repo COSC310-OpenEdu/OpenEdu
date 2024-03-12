@@ -81,6 +81,9 @@ def authenticate():
     else:
         return redirect(url_for('login'))
     
+@app.route("/seeGrades", methods=['GET'])
+def seeGrades():  
+    return render_template("seeGrades.html")
 
 if __name__ == "__main__":
     app.run()
