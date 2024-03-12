@@ -15,24 +15,22 @@
     </head>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Create variables
             let groups = document.getElementsByClassName("grade");
             let assignmentButton = groups[0].children[0];
             let testButton = groups[1].children[0];
             let buttons = [];
             let toggle = true;
-
+            
+            // Adds hide class to each gradeItem
             for (let i = 0; i < groups.length; i++) {
                 buttons.push(groups[i].children[0]);
                 for (let j = 1; j < groups[i].children.length; j++) {
                     groups[i].children[j].classList.add("hide");
                 }
             }
-            document.addEventListener("animationstart", function() {
-                for (let i = 1; i < groups[1].children.length; i++) {
-                    
-                }
-            });
             
+            // When element is clicked, sets distance a variable for animation and unhides/hides gradeItems
             function click(index) {
                 for (let i = 1; i < groups[index].children.length; i++) {
                     let t = i*-3.3 + "";
@@ -42,6 +40,7 @@
                     
                 }
             }
+            // Creates onClick listeners for each gradeGroup
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].addEventListener("click", function() {
                     click(i);
@@ -90,7 +89,7 @@
         </nav>
         <main>
             <div class="main-container" style="width: 82vw;">
-                <div class="container-header">COSC 310 101 2023 Winter/Sections/Grades</div>
+                <div class="container-header">{{ courseName[0] }}</div>
                 <!--All this does is test the database connection by getting its version -->
                 <div class="header">
                     <span>Grade Item</span>
@@ -106,9 +105,16 @@
                             <span>Assignment 1</span>
                             <span>8.33%</span><span>60</span><span>0-100</span><span>100%</span><span>1.67%</span>
                     </div>
+                    <!-- Creates a new row for every assignment -->
+                    {% for item in grades %}
+                    <div class="gradeItem">     
+                        <span>{{ item[1] }}</span>
+                        <span>n/a</span><span>{{ item[2] }}</span><span>0-100</span><span>{{ 100*item[2] / 100 }}%</span><span>idk</span>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="grade">
-                    <div class = "gradeGroup" id="tests">
+                <div class="grade" id="tests">
+                    <div class = "gradeGroup">
                         <span class="gradeTitle">&#9660; Tests</span>
                         <span>35.00%</span><span>85.79</span><span>0-100</span><span>85.79%</span>
                         <span></span>
