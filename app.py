@@ -3,8 +3,9 @@ from flask import Flask, render_template, redirect, url_for, request
 
 import mysql.connector
 from pythonFiles.DatabaseManager import DatabaseManager
+from pythonFiles.User import User
 
-user = None
+currentUser = None #Start with no user logged in
 app = Flask(__name__)
 
 # Database configuration
@@ -77,6 +78,9 @@ def authenticate():
 
     #If exists, bring back to home page, ow stay on login page
     if validLogin:
+        #Create User class that stores data for current logged-in user
+        SData = database.selectStudentUserPass(username, password)
+        currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5]) 
         return redirect(url_for('home'))
     else:
         return redirect(url_for('login'))
