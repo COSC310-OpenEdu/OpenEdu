@@ -21,6 +21,8 @@ class DatabaseManager:
     def closeConnection(self) -> None:
         self.cur.close()
         self.cur = None
+        self.conn.close()
+        self.conn = None
              
     #View All Users in Database
     def viewStudents(self) -> list:
