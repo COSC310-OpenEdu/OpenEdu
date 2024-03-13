@@ -41,3 +41,11 @@ def test_checkLogin_wrongpass():
 
     validLogin = database.checkLogin(username, password)
     assert(validLogin == False)
+
+def test_selectStudent_userpass():
+    database = DatabaseManager()
+    username = "jsmith"
+    password = "jsmith1234"
+
+    validLogin = database.selectStudentUserPass(username, password)
+    assert(validLogin[0] == 1)

@@ -62,6 +62,16 @@ class DatabaseManager:
         else:
             return True
         
+    def selectStudentUserPass(self, username, password):
+        self.createConnection()
+        statement = "SELECT * FROM User WHERE username = %s AND password = %s"
+        self.cur.execute(statement, (username,password,))
+        
+        userData = self.cur.fetchone()
+
+        return userData
+
+        
 
 
     
