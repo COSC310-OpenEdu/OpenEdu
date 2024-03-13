@@ -80,7 +80,38 @@ def authenticate():
         return redirect(url_for('home'))
     else:
         return redirect(url_for('login'))
+    
+@app.route("/createAssignment", methods = ['POST', 'GET'])
+def createAssignment():
+   if request.method == 'GET':
+       return render_template("createAssignment.html")
+   if request.method == 'POST':
+       questionForm = request.form
+       return render_template('assignmentOverview.html', questionForm = questionForm)
 
+@app.route("/createAssignment/overview", methods = ['POST', 'GET'])
+def assignmentData():
+   questionForm = request.form
+   return render_template("assignmentOverview.html", questionForm = questionForm)
+    
+@app.route("/seeGrades", methods=['GET'])
+def seeGrades(): 
+    # Query for getting grades for every assignment in a class for a given student
+    getGrades = "SELECT Assignment.assignmentId, name, grade, comment FROM Assignment JOIN Grades ON Assignment.assignmentId = Grades.assignmentId WHERE studentId = %s AND courseId = %s"
+    # Query for getting the course name
+    getCourseName = "SELECT name FROM Course WHERE courseId  = %s"
+    
+    cursor = db.cursor()
+    cursor.execute(getGrades, ("1","1",)) # Test, change later
+    grades = cursor.fetchall()
+    cursor.close()
+    cursor = db.cursor()
+    cursor.execute(getCourseName, ("1",)) # Test, change later
+    courseName = cursor.fetchone()
+    cursor.close()
+    
+    # Go to See Grades page
+    return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
 @app.route("/createAssignment", methods = ['POST', 'GET'])
 def createAssignment():
