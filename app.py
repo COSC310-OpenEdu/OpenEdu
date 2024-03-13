@@ -68,7 +68,7 @@ def createAccount():
 @app.route("/authenticate", methods=['POST'])
 def authenticate():
     #Get inputted username and password from user
-    username = request.form.get('username')
+    username = request.form.get('uname')
     password = request.form.get('password')
 
     #Check if user exists in database
