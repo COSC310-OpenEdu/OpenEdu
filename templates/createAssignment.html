@@ -13,19 +13,21 @@
         let questionNumber = 1;
         function addQuestion() {
 
+            // Get the user selected value from select menu
             let userChoice = document.getElementById("questionSelectBox").value;
 
+            // Adds the text box style question to form when add button is clicked
             if (userChoice == "text box") {
-                document.getElementById("addQuestions").insertAdjacentHTML("beforeend",
+                document.getElementById("questionForm").insertAdjacentHTML("beforeend",
                 `<div class="question-container" id="question`+ questionNumber +`">
                     <div class="question-container-header">
                         <label for="question`+ questionNumber +`">Question `+ questionNumber + `</label>
                     </div>
                     <div class="question-container-body">
                         <label for='questionText`+ questionNumber +`'>Question</label>
-                        <input class="question" type="text" id="questionText`+ questionNumber +`" name="questionText" />
+                        <input class="question" type="text" id="questionText`+ questionNumber +`" name="questionText" required/>
                         <label for='marks`+ questionNumber +`'>Possible marks</label>
-                        <input class="marks" type="number" id="marks`+ questionNumber +`" name="marks" />
+                        <input class="marks" type="number" id="marks`+ questionNumber +`" name="marks" required/>
                     </div>
                 </div>`
                 );
@@ -35,8 +37,9 @@
                 questionNumber++;
             }
 
+            // Adds the essay style question box to form whem add button is clicked
             if (userChoice == "essay") {
-                document.getElementById("addQuestions")
+                document.getElementById("questionForm")
                 .insertAdjacentHTML("beforeend",
                 `<div class="question-container" id="question`+ questionNumber +`">
                     <div class="question-container-header">
@@ -44,9 +47,9 @@
                     </div>
                     <div class="question-container-body">
                         <label for='questionText`+ questionNumber +`'>Question</label>
-                        <textarea class="question" type="text" id="questionText`+ questionNumber +`" name="questionText" rows="5"></textarea>
+                        <textarea class="question" type="text" id="questionText`+ questionNumber +`" name="“Question `+ questionNumber +`"" rows="5" required></textarea>
                         <label for='marks`+ questionNumber +`'>Possible marks</label>
-                        <input class="marks" type="number" id="marks`+ questionNumber +`" name="marks" />
+                        <input class="marks" type="number" min="0" id="marks`+ questionNumber +`" name=""Question `+ questionNumber +` Marks"" required/>
                     </div>
                 </div>`
                 );
@@ -87,7 +90,6 @@
            </li>
        </ul>
 
-
        <!-- Contains the bottom aligned elements (Page specific) -->
        <ul class="navbar-bottom">
            <li>
@@ -121,7 +123,7 @@
            </div>
 
            <!-- Container body where questions are populated -->
-           <form class="container-body" id="addQuestions"></form>        
+           <form action="/createAssignment/overview" class="container-body" id="questionForm" method="post"></form>        
        </div>
    </div>
 
@@ -137,7 +139,7 @@
 
        <!-- Button for publishing the assignment -->
        <div class="container-footer">
-            <button style="width: 100%; height: 36px;">
+            <button type="submit" form="questionForm" style="width: 100%; height: 36px;">
                 <span class="material-symbols-outlined">assignment_add</span>Publish
             </button>
        </div>

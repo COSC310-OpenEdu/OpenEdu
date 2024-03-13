@@ -80,7 +80,20 @@ def authenticate():
         return redirect(url_for('home'))
     else:
         return redirect(url_for('login'))
-    
+
+
+@app.route("/createAssignment", methods = ['POST', 'GET'])
+def createAssignment():
+   if request.method == 'GET':
+       return render_template("createAssignment.html")
+   if request.method == 'POST':
+       questionForm = request.form
+       return render_template('assignmentOverview.html', questionForm = questionForm)
+
+@app.route("/createAssignment/overview", methods = ['POST', 'GET'])
+def assignmentData():
+   questionForm = request.form
+   return render_template("assignmentOverview.html", questionForm = questionForm)
 
 if __name__ == "__main__":
     app.run()

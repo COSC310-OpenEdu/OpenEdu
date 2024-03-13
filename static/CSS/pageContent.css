@@ -58,6 +58,7 @@
     overflow-y: auto;
 }
 
+/* Footer for page content containers */
 .container-footer {
     display: flex;
     height: fit-content;
