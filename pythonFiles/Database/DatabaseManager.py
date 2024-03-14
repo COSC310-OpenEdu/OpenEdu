@@ -34,21 +34,7 @@ class DatabaseManager:
         if (cls.cur == None):
             cls.createConnection();
         return cls.cur;
-            
     
-    def checkLogin(self, username, password) -> bool:
-        
-        
-    def selectStudentUserPass(self, username, password):
-        self.createConnection()
-        statement = "SELECT * FROM User WHERE username = %s AND password = %s"
-        self.cur.execute(statement, (username,password,))
-        
-        userData = self.cur.fetchone()
-
-        return userData
-
-        
-
-
-    
+    def commit(cls) -> None:
+        if (cls.conn != None):
+            cls.conn.commit();

@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, url_for, request
 import mysql.connector
 from pythonFiles.Database.DatabaseManager import DatabaseManager
 from pythonFiles.User import User
+from pythonFiles.Database.Update.CreateAccount import CreateAccount
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -42,28 +43,15 @@ def createAccount():
         return render_template("accountCreation.html");
     # Post request occures when form is submitted
     else: # Post Request
-        createUser = ("INSERT INTO User (firstName, lastName, email, password, username) VALUES (%s, %s, %s, %s, %s);");
-        createTeacher = ("INSERT INTO Instructor (userId) VALUES (LAST_INSERT_ID());");
-        createStudent = ("INSERT INTO Student (userId) VALUES (LAST_INSERT_ID());");
         
         # Retrieve form data
         form = request.form;
-        userData = (form['fname'],form['lname'],form['email'],form['password'], form['uname']);
         
-        cursor = db.cursor();
-        
-        cursor.execute(createUser, userData);
-        
-        # Create a student or instructor account depending on user's choice 
-        if (form['accountType'] == 'student'):
-            cursor.execute(createStudent);
-        else:
-            cursor.execute(createTeacher);
-        
-        db.commit();
-        
+        # Update Database
+        CreateAccount.update((form['accountType'],form['fname'],form['lname'],form['email'],form['password'], form['uname']));
+                
         # Forward to the login page
-        return login();
+        return redirect(url_for('login'))
         
 
 @app.route("/authenticate", methods=['POST'])

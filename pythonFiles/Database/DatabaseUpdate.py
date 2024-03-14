@@ -5,3 +5,4 @@ class DatabaseQuery(ABC):
     @abstractmethod
     def update(cls, dataTuple) -> bool:
         pass;
+    
