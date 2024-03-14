@@ -34,7 +34,6 @@ def home():
     
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-
     if(request.method == 'GET'):
         return render_template("login.html");
     else:
@@ -54,7 +53,8 @@ def login():
             session['userId'] = StudentData[0]
             return redirect(url_for('home'))
         else:
-            return redirect(url_for('login'))
+            error = "Invalid username and password"
+            return render_template("login.html", error=error);
 
 @app.route("/logout")
 def logout():
