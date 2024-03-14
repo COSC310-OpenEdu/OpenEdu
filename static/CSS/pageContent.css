@@ -4,8 +4,10 @@
     flex-direction: row;
     background-color: var(--modal);
     height: 100vh;
+    overflow: hidden;
 }
 
+/* Page body container */
 .main-container {
     display: flex;
     flex-direction: column;
@@ -16,13 +18,46 @@
     border-radius: 20px;
 }
 
+ /* Header for page content containers */
 .container-header {
     display: flex;
     height: fit-content;
     padding: 20px;
     align-items: center;
-    display: inline-flex;
+    justify-content: space-between;
     background-color: var(--secondary);
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
+}
+
+/* Body for page content containers */
+.container-body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Small sidebar for assignment related pages */
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--contentBox);
+    width: 250px;
+    height: fit-content;
+    max-height: Calc(100vh - 72px);
+    margin-top: 36px;
+    margin-right: 36px;
+    border-radius: 20px;
+    overflow-y: auto;
+}
+
+/* Footer for page content containers */
+.container-footer {
+    display: flex;
+    height: fit-content;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
 }
