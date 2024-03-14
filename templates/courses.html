@@ -10,5 +10,76 @@
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/pageContent.css">
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/courses.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+        
     </head>
+    <body>
+        <div class="flex-container">
+            <nav class="navbar">
+                <!-- Contains the top aligned elements (Generic) -->
+                <ul class="navbar-top">
+                    <li>
+                        <a href="" id="Logo">
+                            <span class="material-symbols-outlined size-36">
+                                school
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="active" id="Home">
+                            <span class="material-symbols-outlined">
+                                home
+                            </span>Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" id="Search">
+                            <span class="material-symbols-outlined">
+                                search
+                            </span>Search
+                        </a>
+                    </li>
+                </ul>
+                <!-- Contains the bottom aligned elements (Page specific) -->
+            <ul class="navbar-bottom">
+                <li>
+                    <a href="{{url_for('login')}}" id="Logout">
+                        <span class="material-symbols-outlined">
+                            logout
+                        </span>Logout
+                    </a>
+                </li>
+            </ul>
+            </nav>
+            <main>
+                <div class="main-container" style="width: 82vw;">
+                    <div class="container-header"></div>
+                    <div class="course">
+                        <div class="banner"><span></span></div>
+                        <p>COSC 310 101 2023W2</p>
+                        <p>Software Engineering</p>
+                    </div>
+                    <div class="course">
+                        <div class="banner"><span></span></div>
+                        <p>COSC 310 101 2023W2</p>
+                        <p>Software Engineering</p>
+                    </div>
+                    <div class="course">
+                        <div class="banner"><span></span></div>
+                        <p>COSC 310 101 2023W2</p>
+                        <p>Software Engineering</p>
+                    </div>
+                    <div class="course">
+                        <div class="banner"><span></span></div>
+                        <p>COSC 310 101 2023W2</p>
+                        <p>Software Engineering</p>
+                    </div>
+                    <div class="course">
+                        <div class="banner"><span></span></div>
+                        <p>COSC 310 101 2023W2</p>
+                        <p>Software Engineering</p>
+                    </div>
+                </div>
+            </main>
+          
+        </div>
+    </body>
