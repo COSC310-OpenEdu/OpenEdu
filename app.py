@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 
 import mysql.connector
 from pythonFiles.DatabaseManager import DatabaseManager
@@ -7,6 +7,7 @@ from pythonFiles.User import User
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
+app.secret_key = "a"
 
 # Database configuration
 # Should put this in a config file but eh
@@ -31,9 +32,35 @@ def home():
     cursor.close()
     return render_template("template.html", db_version=db_version)
     
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("login.html");
+
+    if(request.method == 'GET'):
+        return render_template("login.html");
+    else:
+         #Get inputted username and password from user
+        username = request.form.get('uname')
+        password = request.form.get('password')
+
+        #Check if user exists in database
+        database = DatabaseManager()
+        validLogin = database.checkLogin(username, password)
+
+        #If exists, bring back to home page, ow stay on login page
+        if validLogin:
+            #Adds username and userId to session
+            StudentData = database.selectStudentUserPass(username, password)
+            session['username'] = request.form['uname']
+            session['userId'] = StudentData[0]
+            return redirect(url_for('home'))
+        else:
+            return redirect(url_for('login'))
+
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    session.pop('userId', None)
+    return redirect(url_for('home'))
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
 def createAccount():
@@ -65,25 +92,6 @@ def createAccount():
         # Forward to the login page
         return login();
         
-
-@app.route("/authenticate", methods=['POST'])
-def authenticate():
-    #Get inputted username and password from user
-    username = request.form.get('uname')
-    password = request.form.get('password')
-
-    #Check if user exists in database
-    database = DatabaseManager()
-    validLogin = database.checkLogin(username, password)
-
-    #If exists, bring back to home page, ow stay on login page
-    if validLogin:
-        #Create User class that stores data for current logged-in user
-        SData = database.selectStudentUserPass(username, password)
-        currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5]) 
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('login'))
     
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
