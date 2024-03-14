@@ -1,3 +1,14 @@
+/* Primary container for page content */
+.primary-container {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  height: Calc(100vh - 72px);
+  background-color: var(--contentBox);
+  margin: 36px;
+  border-radius: 20px;
+} 
+
 /* Assignment question flex container */
 .question-container {
     display: flex;
@@ -98,7 +109,7 @@
  #questionForm textarea {
    border: 1.5px solid var(--outlineColor);
    border-radius: 4px;
-   font-size: 1.5rem;
+   font-size: 1rem;
    resize: vertical;
    width: 30rem;
    height: 5rem;

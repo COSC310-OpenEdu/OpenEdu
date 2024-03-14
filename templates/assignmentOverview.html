@@ -10,7 +10,7 @@
     <link rel="stylesheet" type= "text/css" href= "../static/CSS/assignment.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
-<body class="page-container">
+<body class="flex-container">
    <!-- Navigation bar -->
    <!-- Left Column -->
    <nav class="navbar">
@@ -53,7 +53,7 @@
 
    <!-- Main body of page -->
    <!-- Contains assignment/quiz questions -->
-   <div class="main-container">
+   <div style="display: flex; flex: auto;">
        <div class="primary-container">
            <div class="container-header"><h1>Header</h1></div>
 
@@ -61,7 +61,7 @@
             <!-- still needs to be styled -->
             <div class="container-body">
                 {% for key,value in questionForm.items() %}
-                </div><strong>{{key}}</strong>: {{value}}</div>
+                <strong>{{key}}</strong>: {{value}}
                 {% endfor %}
             </div>    
        </div>

@@ -1,8 +1,9 @@
 /* Page flex container */
-.page-container {
+.flex-container {
     display: flex;
     flex-direction: row;
-    height: 100%;
+    background-color: var(--modal);
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -10,19 +11,12 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    flex: auto;
-    height: 100vh;
-}
-
-/* Primary container for page content */
-.primary-container {
-    display: flex;
-    flex-direction: column;
-    height: Calc(100vh - 72px);
     background-color: var(--contentBox);
+    flex: auto;
+    height: 90vh;
     margin: 36px;
     border-radius: 20px;
- } 
+}
 
  /* Header for page content containers */
 .container-header {

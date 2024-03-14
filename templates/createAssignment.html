@@ -25,9 +25,9 @@
                     </div>
                     <div class="question-container-body">
                         <label for='questionText`+ questionNumber +`'>Question</label>
-                        <input class="question" type="text" id="questionText`+ questionNumber +`" name="questionText" required/>
+                        <input class="question" type="text" id="questionText`+ questionNumber +`" name="Question `+ questionNumber +`" required/>
                         <label for='marks`+ questionNumber +`'>Possible marks</label>
-                        <input class="marks" type="number" id="marks`+ questionNumber +`" name="marks" required/>
+                        <input class="marks" type="number" id="marks`+ questionNumber +`" name="Question `+ questionNumber +` Marks" required/>
                     </div>
                 </div>`
                 );
@@ -47,9 +47,9 @@
                     </div>
                     <div class="question-container-body">
                         <label for='questionText`+ questionNumber +`'>Question</label>
-                        <textarea class="question" type="text" id="questionText`+ questionNumber +`" name="“Question `+ questionNumber +`"" rows="5" required></textarea>
+                        <textarea class="question" type="text" id="questionText`+ questionNumber +`" name="Question `+ questionNumber +`" rows="5" required></textarea>
                         <label for='marks`+ questionNumber +`'>Possible marks</label>
-                        <input class="marks" type="number" min="0" id="marks`+ questionNumber +`" name=""Question `+ questionNumber +` Marks"" required/>
+                        <input class="marks" type="number" min="0" id="marks`+ questionNumber +`" name="Question `+ questionNumber +` Marks" required/>
                     </div>
                 </div>`
                 );
@@ -61,7 +61,7 @@
         }
     </script>
 </head>
-<body class="page-container">
+<body class="flex-container">
    <!-- Navigation bar -->
    <!-- Left Column -->
    <nav class="navbar">
@@ -104,11 +104,11 @@
 
    <!-- Main body of page -->
    <!-- Contains assignment/quiz building section -->
-   <div class="main-container">
-       <div class="primary-container">
+   <div style="display: flex; flex: auto;">
+    <div class="primary-container"> 
            <div class="container-header">
             <h1>Header</h1>
-                <div style="display: flex; flex-direction: row; align-items: center;">
+                <div style="display: flex; flex-direction: row; align-items: center; margin-left: auto;">
 
                     <!-- Select menu and add button for question type -->
                     <select class="question-select" required id="questionSelectBox">
@@ -120,10 +120,12 @@
                         <span class="material-symbols-outlined">add</span>Add
                     </button>
                 </div>
-           </div>
+            </div>
 
            <!-- Container body where questions are populated -->
-           <form action="/createAssignment/overview" class="container-body" id="questionForm" method="post"></form>        
+
+           <form action="/createAssignment/overview" class="container-body" id="questionForm" method="post"></form>    
+  
        </div>
    </div>
 
