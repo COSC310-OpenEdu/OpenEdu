@@ -1,0 +1,22 @@
+.course {
+    background-color: var(--modal);
+    width: 15em;
+    height: 15em;
+    margin: 2em;
+    border-radius: 1em;
+    
+}
+
+.banner {
+    background-color: red;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    width: 100%;
+    padding-top: 8em;
+    height: 2em;
+    margin-bottom: 1em;
+}
+
+.course p {
+    text-align: center;
+}
