@@ -2,7 +2,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 
 import mysql.connector
-from pythonFiles.DatabaseManager import DatabaseManager
+from pythonFiles.Database.DatabaseManager import DatabaseManager
 from pythonFiles.User import User
 
 currentUser = None #Start with no user logged in

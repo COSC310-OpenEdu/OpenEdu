@@ -1,4 +1,4 @@
-from DatabaseManager import DatabaseManager
+from pythonFiles.Database.DatabaseManager import DatabaseManager
 import pytest
 
 
