@@ -88,7 +88,7 @@ def authenticate():
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
     # Query for getting grades for every assignment in a class for a given student
-    getGrades = "SELECT Assignment.assignmentId, name, grade, comment FROM Assignment JOIN Grades ON Assignment.assignmentId = Grades.assignmentId WHERE studentId = %s AND courseId = %s"
+    getGrades = "SELECT Assignment.assignmentId, name, grade, comment FROM Assignment JOIN Grades ON Assignment.assignmentId = Grades.assignmentId WHERE Assignment.studentId = %s AND courseId = %s"
     # Query for getting the course name
     getCourseName = "SELECT name FROM Course WHERE courseId  = %s"
     
