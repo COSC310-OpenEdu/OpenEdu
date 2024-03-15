@@ -29,7 +29,10 @@ def home():
     cursor.execute("SELECT VERSION()")  # Simple query to test
     db_version = cursor.fetchone()
     cursor.close()
-    return render_template("template.html", db_version=db_version)
+    if (currentUser != None):
+        return render_template("courses.html", db_version=db_version)
+    else:
+        return render_template("template.html", db_version=db_version)
     
 @app.route("/login")
 def login():
