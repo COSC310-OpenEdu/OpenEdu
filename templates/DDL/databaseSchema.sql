@@ -1,7 +1,7 @@
 USE openEDU;
 
 SET foreign_key_checks = 0;
-DROP TABLE IF EXISTS User, Course, Department, Student, Instructor, Admin, Assignment, Grades, Attend, Instructs;
+DROP TABLE IF EXISTS User, Course, Department, Student, Instructor, Admin, Assignment, Grades, Attend, Instructs, Question, Solution;
 SET foreign_key_checks = 1;
 
 
@@ -71,17 +71,6 @@ CREATE TABLE IF NOT EXISTS Assignment (
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 );
 
-CREATE TABLE IF NOT EXISTS Grades (
-    assignmentId    INTEGER NOT NULL,
-    instructorId    INTEGER NOT NULL,
-    grade           DECIMAL,
-    comment         VARCHAR(50),
-
-    PRIMARY KEY (assignmentId, instructorId),
-    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId),
-    FOREIGN KEY (instructorId) REFERENCES Instructor(userId)
-);
-
 CREATE TABLE IF NOT EXISTS Attend (
     studentId   INTEGER NOT NULL,
     courseId    INTEGER NOT NULL,
@@ -98,6 +87,44 @@ CREATE TABLE IF NOT EXISTS Instructs (
     PRIMARY KEY (instructorId, courseId),
     FOREIGN KEY (instructorId) REFERENCES Instructor(userId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
+);
+
+CREATE TABLE IF NOT EXISTS Question(
+    questionId INT NOT NULL,
+    assignmentId INT NOT NULL,
+    questionText VARCHAR(200),
+    questionAnswer VARCHAR(200),
+    longQuestion BIT,
+
+    PRIMARY KEY (questionId, assignmentId),
+    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId)
+);
+
+CREATE TABLE IF NOT EXISTS Solution (
+    assignmentId INT NOT NULL,
+    questionId INT NOT NULL,
+    studentId INT NOT NULL,
+    studentAnswer VARCHAR(1000),
+
+    PRIMARY KEY (questionId, studentId, assignmentId),
+    FOREIGN KEY (questionId) REFERENCES Question(questionId),
+    FOREIGN KEY (studentId) REFERENCES Student(userId),
+    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId)
+);
+
+CREATE TABLE IF NOT EXISTS Grades (
+    questionId    INTEGER NOT NULL,
+    studentId    INTEGER NOT NULL,
+    assignmentId    INTEGER NOT NULL,
+    instructorId    INTEGER NOT NULL,
+    grade           FLOAT(6,3),
+    comment         VARCHAR(50),
+
+    PRIMARY KEY (questionId, studentId, assignmentId, instructorId),
+    FOREIGN KEY (questionId) REFERENCES Question(questionId),
+    FOREIGN KEY (studentId) REFERENCES Student(userId),
+    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId),
+    FOREIGN KEY (instructorId) REFERENCES Instructor(userId)
 );
 
 -- Insert Courses
@@ -150,8 +177,25 @@ INSERT INTO Assignment (studentId, courseId) VALUES (1,1);
 INSERT INTO Assignment (studentId, courseId) VALUES (1,2);
 INSERT INTO Assignment (studentId, courseId) VALUES (2,1);
 
+-- Insert Questions 
+INSERT INTO Question (assignmentId, questionId, questionText, questionAnswer, longQuestion) VALUES (1, 1, "This is a question 1", "This is the answer 1", 0);
+INSERT INTO Question (assignmentId, questionId, questionText, questionAnswer, longQuestion) VALUES (1, 2, "This is a question 2", "This is the answer 2", 1);
+INSERT INTO Question (assignmentId, questionId, questionText, questionAnswer, longQuestion) VALUES (1, 3, "This is a question 3", "This is the answer 3", 0);
+
+-- INSERT Solutions
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,1,1,"The solution 1 Student 1");
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,2,1,"The solution 2 Student 1");
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,3,1,"The solution 3 Student 1");
+
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,1,2,"The solution 1 Student 2");
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,2,2,"The solution 2 Student 2");
+INSERT INTO Solution (assignmentId, questionId, studentId, studentAnswer) VALUES (1,3,2,"The solution 3 Student 2");
 
 -- Insert Grade
-INSERT INTO Grades (instructorId, assignmentId, grade) VALUES (3,1,91.5);
-INSERT INTO Grades (instructorId, assignmentId, grade) VALUES (3,2,81.0);
-INSERT INTO Grades (instructorId, assignmentId, grade) VALUES (3,3,83.2);
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,1,1,3,91.5, "Good");
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,2,1,3,45.5, "See me after class");
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,3,1,3,91.5, "Good");
+
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,1,2,3,91.5, "Excellent");
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,2,2,3,100.0, "Very Good");
+INSERT INTO Grades (assignmentId, questionId, studentId, instructorId, grade, comment) VALUES (1,3,2,3,91.5, "Very Good");

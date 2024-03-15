@@ -7,24 +7,139 @@
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/general.css">
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/aside.css">
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/navbar.css">
+        <link rel="stylesheet" type= "text/css" href= "../static/CSS/pageContent.css">
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/seeGrades.css">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     </head>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Create variables
+            let groups = document.getElementsByClassName("grade");
+            let assignmentButton = groups[0].children[0];
+            let testButton = groups[1].children[0];
+            let buttons = [];
+            let toggle = true;
+            
+            // Adds hide class to each gradeItem
+            for (let i = 0; i < groups.length; i++) {
+                buttons.push(groups[i].children[0]);
+                for (let j = 1; j < groups[i].children.length; j++) {
+                    groups[i].children[j].classList.add("hide");
+                }
+            }
+            
+            // When element is clicked, sets distance a variable for animation and unhides/hides gradeItems
+            function click(index) {
+                for (let i = 1; i < groups[index].children.length; i++) {
+                    let t = i*-3.3 + "";
+                    t += "em";
+                    groups[index].children[i].style.setProperty("--slide", t);
+                    toggle = groups[index].children[i].classList.toggle("hide");
+                    
+                }
+            }
+            // Creates onClick listeners for each gradeGroup
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function() {
+                    click(i);
+                });
+            }
+        });
+        
+    </script>
     <body>
-        <nav>
+    <div class="flex-container">
+        <nav class="navbar">
             <!-- Contains the top aligned elements (Generic) -->
-            <div id="Top">
-                <a href=""><div class="MenuItem" id="Logo">Logo</div></a>
-                <a href=""><div class="MenuItem" id="Home">Home</div></a>
-                <a href=""><div class="MenuItem" id="Search">Search</div></a>
-            </div>
-    
+            <ul class="navbar-top">
+                <li>
+                    <a href="" id="Logo">
+                        <span class="material-symbols-outlined size-36">
+                            school
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="active" id="Home">
+                        <span class="material-symbols-outlined">
+                            home
+                        </span>Home
+                    </a>
+                </li>
+                <li>
+                    <a href="" id="Search">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>Search
+                    </a>
+                </li>
+            </ul>
             <!-- Contains the bottom aligned elements (Page specific) -->
-            <div id="Bottom">
-                <div class="MenuItem Selected" id="Logout">Login</div>
-            </div>
+        <ul class="navbar-bottom">
+            <li>
+                <a href="{{url_for('login')}}" id="Logout">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>Logout
+                </a>
+            </li>
+        </ul>
         </nav>
         <main>
-            
+            <div class="main-container" style="width: 82vw;">
+                <div class="container-header">{{ courseName[0] }}</div>
+                <!--All this does is test the database connection by getting its version -->
+                <div class="header">
+                    <span>Grade Item</span>
+                    <span>Calculated Weight</span><span>Grade</span><span>Range</span><span>Percentage</span><span>Total Contribution </span>
+                </div> 
+                <div class="grade"id="assignments">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle">&#9660; Assignments</span>
+                        <span>8.33%</span><span>60</span><span>0-100</span><span>100%</span>
+                        <span>1.67%</span>
+                    </div>
+                    <div class="gradeItem">     
+                            <span>Assignment 1</span>
+                            <span>8.33%</span><span>60</span><span>0-100</span><span>100%</span><span>1.67%</span>
+                    </div>
+                    <!-- Creates a new row for every assignment -->
+                    {% for item in grades %}
+                    <div class="gradeItem">     
+                        <span>{{ item[1] }}</span>
+                        <span>n/a</span><span>{{ item[2] }}</span><span>0-100</span><span>{{ 100*item[2] / 100 }}%</span><span>idk</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="grade" id="tests">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle">&#9660; Tests</span>
+                        <span>35.00%</span><span>85.79</span><span>0-100</span><span>85.79%</span>
+                        <span></span>
+                    </div>
+                    <div class="gradeItem">     
+                            <span>Test 1</span>
+                            <span>33.33%</span><span>25.00</span><span>0-30</span><span>83.33%</span><span>9.72%</span>
+                    </div>
+                    <div class="gradeItem">     
+                        <span>Test 2</span>
+                        <span>33.33%</span><span>30.00</span><span>0-35</span><span>85.71%</span><span>10.00%</span>
+                    </div>
+                    <div class="gradeItem">     
+                        <span>Test 3</span>
+                        <span>33.33%</span><span>26.50</span><span>0-30</span><span>88.33%</span><span>10.31%</span>
+                    </div>
+                </div>
+            </div>
         </main>
+        <aside class="aside">
+            <div id="asideItem">Title</div>
+            <div id="asideItem">Description</div>
+            <div id="asideItem">Links</div>
+            <div id="asideFooter"></div>
+        </aside>
+    </div>
     </body>
 </html>

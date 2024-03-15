@@ -1,11 +1,13 @@
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 
 import mysql.connector
 from pythonFiles.DatabaseManager import DatabaseManager
+from pythonFiles.User import User
 
-user = None
+currentUser = None #Start with no user logged in
 app = Flask(__name__)
+app.secret_key = "a"
 
 # Database configuration
 # Should put this in a config file but eh
@@ -30,9 +32,41 @@ def home():
     cursor.close()
     return render_template("template.html", db_version=db_version)
     
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("login.html");
+    if(request.method == 'GET'):
+        return render_template("login.html");
+    else:
+         #Get inputted username and password from user
+        username = request.form.get('uname')
+        password = request.form.get('password')
+
+        #Check if user exists in database
+        database = DatabaseManager()
+        validLogin = database.checkLogin(username, password)
+
+        #If exists, bring back to home page, ow stay on login page
+        if validLogin:
+            return addUserToSession(username, password)
+        else:
+            error = "Invalid username and password"
+            return render_template("login.html", error=error);
+
+def addUserToSession(username, password):
+    #Adds username and userId to session
+    database = DatabaseManager()
+    StudentData = database.selectStudentUserPass(username, password)
+    session['username'] = request.form['uname']
+    session['userId'] = StudentData[0]
+    return redirect(url_for('home'))
+
+
+@app.route("/logout")
+def logout():
+    #Remove user from session and return to home page
+    session.pop('username', None)
+    session.pop('userId', None)
+    return redirect(url_for('home'))
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
 def createAccount():
@@ -74,6 +108,7 @@ def updateAccount():
         
         form = request.form;
         
+
         cursor = db.cursor();
         
         if (form['password'] != ''):
@@ -87,22 +122,39 @@ def updateAccount():
                   
         return render_template("updateAccount.html");
 
-@app.route("/authenticate", methods=['POST'])
-def authenticate():
-    #Get inputted username and password from user
-    username = request.form.get('username')
-    password = request.form.get('password')
-
-    #Check if user exists in database
-    database = DatabaseManager()
-    validLogin = database.checkLogin(username, password)
-
-    #If exists, bring back to home page, ow stay on login page
-    if validLogin:
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('login'))
     
+@app.route("/seeGrades", methods=['GET'])
+def seeGrades(): 
+    # Query for getting grades for every assignment in a class for a given student
+    getGrades = "SELECT Assignment.assignmentId, name, grade, comment FROM Assignment JOIN Grades ON Assignment.assignmentId = Grades.assignmentId WHERE Assignment.studentId = %s AND courseId = %s"
+    # Query for getting the course name
+    getCourseName = "SELECT name FROM Course WHERE courseId  = %s"
+    
+    cursor = db.cursor()
+    cursor.execute(getGrades, ("1","1",)) # Test, change later
+    grades = cursor.fetchall()
+    cursor.close()
+    cursor = db.cursor()
+    cursor.execute(getCourseName, ("1",)) # Test, change later
+    courseName = cursor.fetchone()
+    cursor.close()
+    
+    # Go to See Grades page
+    return render_template("seeGrades.html", grades=grades, courseName=courseName)
+
+
+@app.route("/createAssignment", methods = ['POST', 'GET'])
+def createAssignment():
+   if request.method == 'GET':
+       return render_template("createAssignment.html")
+   if request.method == 'POST':
+       questionForm = request.form
+       return render_template('assignmentOverview.html', questionForm = questionForm)
+
+@app.route("/createAssignment/overview", methods = ['POST', 'GET'])
+def assignmentData():
+   questionForm = request.form
+   return render_template("assignmentOverview.html", questionForm = questionForm)
 
 if __name__ == "__main__":
     app.run()
