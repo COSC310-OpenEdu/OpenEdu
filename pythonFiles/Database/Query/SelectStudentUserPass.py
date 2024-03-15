@@ -1,5 +1,7 @@
-from DatabaseQuery import DatabaseQuery
-from DatabaseManager import DatabaseManager
+from pythonFiles.Database.Query.DatabaseQuery import DatabaseQuery
+from pythonFiles.Database.DatabaseManager import DatabaseManager
+import mysql
+
 
 class SelectStudentUserPass(DatabaseQuery):
     @classmethod

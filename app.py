@@ -5,7 +5,7 @@ from pythonFiles.Database.Update.CreateAccount import CreateAccount
 from pythonFiles.Database.Query.SelectCourseQuery import SelectCourseQuery
 from pythonFiles.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from pythonFiles.Database.Query.SelectStudentUserPass import SelectStudentUserPass
-from pythonFiles.Database.Check.UsernamePasswordCheck import UsernamepasswordCheck
+from pythonFiles.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 
 
 currentUser = None #Start with no user logged in
@@ -36,7 +36,7 @@ def createAccount():
 def authenticate():
     #Check if the information the user submitted is in the database
     form = request.form;
-    validLogin = UsernamepasswordCheck.check((form['uname'],form['password']));
+    validLogin = UsernamePasswordCheck.check((form['uname'],form['password']));
 
     #If exists, Log the user in. Otherwise stay on the login page.
     if validLogin:

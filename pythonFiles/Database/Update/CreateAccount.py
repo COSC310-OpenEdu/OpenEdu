@@ -1,5 +1,6 @@
-from DatabaseUpdate import DatabaseUpdate
-from DatabaseManager import DatabaseManager
+from pythonFiles.Database.Update.DatabaseUpdate import DatabaseUpdate
+from pythonFiles.Database.DatabaseManager import DatabaseManager
+import mysql
 
 class CreateAccount(DatabaseUpdate):
     @classmethod 

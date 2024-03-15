@@ -1,5 +1,7 @@
-from DatabaseQuery import DatabaseQueryAll;
-from DatabaseManager import DatabaseManager;
+from pythonFiles.Database.Query.DatabaseQueryAll import DatabaseQueryAll;
+from pythonFiles.Database.DatabaseManager import DatabaseManager;
+import mysql
+
 
 class SelectGradeForStudent(DatabaseQueryAll):
     @classmethod

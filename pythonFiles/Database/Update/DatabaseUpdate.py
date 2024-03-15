@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class DatabaseQuery(ABC):
+class DatabaseUpdate(ABC):
     @classmethod
     @abstractmethod
     def update(cls, dataTuple) -> bool:
