@@ -1,10 +1,18 @@
 .course {
     background-color: var(--modal);
-    width: 15em;
+    width: 12.5em;
     height: 15em;
     margin: 2em;
     border-radius: 1em;
-    
+}
+
+.courseRow {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main-container {
+    overflow: auto;
 }
 
 .banner {
