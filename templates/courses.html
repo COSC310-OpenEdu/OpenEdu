@@ -53,35 +53,21 @@
             <main>
                 <div class="main-container" style="width: 82vw;">
                     <div class="container-header"></div>
+                    {% set colors = "rgb(1,0,1)" %}
+                    {% for i in range(0, 2) %}
                     <div class="courseRow">
+                        {% for j in range(i*4, (i+1)*4) %}
                     <div class="course">
-                        <div class="banner"><span></span></div>
+                        <div class="banner" style=""~colors~""><span></span></div>
                         <p>COSC 310 101 2023W2</p>
                         <p>Software Engineering</p>
                     </div>
-                    <div class="course">
-                        <div class="banner"><span></span></div>
-                        <p>COSC 310 101 2023W2</p>
-                        <p>Software Engineering</p>
+                        {% endfor %}
+                    
                     </div>
-                    <div class="course">
-                        <div class="banner"><span></span></div>
-                        <p>COSC 310 101 2023W2</p>
-                        <p>Software Engineering</p>
+                    {% endfor %}
                     </div>
-                    <div class="course">
-                        <div class="banner"><span></span></div>
-                        <p>COSC 310 101 2023W2</p>
-                        <p>Software Engineering</p>
-                    </div>
-                    </div>
-                    <div class="courseRow">
-                    <div class="course">
-                        <div class="banner"><span></span></div>
-                        <p>COSC 310 101 2023W2</p>
-                        <p>Software Engineering</p>
-                    </div>
-                    </div>
+                    
                 </div>
             </main>
           
