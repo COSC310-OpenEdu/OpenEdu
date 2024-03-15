@@ -6,16 +6,16 @@ def test_ViewStudents():
     database = DatabaseManager()
     
     studentData = database.viewStudents()
-    assert(studentData[0][0] == "Jayden") #Check there is a Student
+    assert(studentData[0][0] == "James") #Check there is a Student
     
     
     
 def test_selectStudent():
     database = DatabaseManager()
-    userId = 2
+    userId = 1
     
     studentData = database.selectStudent(userId)
-    assert(studentData[1] == "Jayden")
+    assert(studentData[1] == "James")
     
 
 
@@ -48,4 +48,4 @@ def test_selectStudent_userpass():
     password = "jsmith1234"
 
     validLogin = database.selectStudentUserPass(username, password)
-    assert(validLogin[0] == 2)
+    assert(validLogin[0] == 1)

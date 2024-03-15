@@ -47,17 +47,23 @@ def login():
 
         #If exists, bring back to home page, ow stay on login page
         if validLogin:
-            #Adds username and userId to session
-            StudentData = database.selectStudentUserPass(username, password)
-            session['username'] = request.form['uname']
-            session['userId'] = StudentData[0]
-            return redirect(url_for('home'))
+            return addUserToSession(username, password)
         else:
             error = "Invalid username and password"
             return render_template("login.html", error=error);
 
+def addUserToSession(username, password):
+    #Adds username and userId to session
+    database = DatabaseManager()
+    StudentData = database.selectStudentUserPass(username, password)
+    session['username'] = request.form['uname']
+    session['userId'] = StudentData[0]
+    return redirect(url_for('home'))
+
+
 @app.route("/logout")
 def logout():
+    #Remove user from session and return to home page
     session.pop('username', None)
     session.pop('userId', None)
     return redirect(url_for('home'))
