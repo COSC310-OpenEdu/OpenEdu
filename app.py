@@ -1,36 +1,19 @@
-
 from flask import Flask, render_template, redirect, url_for, request
 
-import mysql.connector
-from pythonFiles.Database.DatabaseManager import DatabaseManager
 from pythonFiles.User import User
 from pythonFiles.Database.Update.CreateAccount import CreateAccount
+from pythonFiles.Database.Query.SelectCourseQuery import SelectCourseQuery
+from pythonFiles.Database.Query.SelectGradeForStudent import SelectGradeForStudent
+from pythonFiles.Database.Query.SelectStudentUserPass import SelectStudentUserPass
+from pythonFiles.Database.Check.UsernamePasswordCheck import UsernamepasswordCheck
+
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
 
-# Database configuration
-# Should put this in a config file but eh
-db_config = {
-    'user': 'team',
-    'password': 'COSC310Team',
-    'host': '50.98.157.215',
-    'port': '3306',
-    'database': 'openEDU'
-}
-
-# Establish a database connection
-db = mysql.connector.connect(**db_config)
-
-
 @app.route("/")
 def home():
-    # Test the database connection
-    cursor = db.cursor()
-    cursor.execute("SELECT VERSION()")  # Simple query to test
-    db_version = cursor.fetchone()
-    cursor.close()
-    return render_template("template.html", db_version=db_version)
+    return render_template("template.html")
     
 @app.route("/login")
 def login():
@@ -38,16 +21,11 @@ def login():
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
 def createAccount():
-    # Default handeling of page
     if (request.method == 'GET'):
         return render_template("accountCreation.html");
-    # Post request occures when form is submitted
-    else: # Post Request
-        
-        # Retrieve form data
+    else: # Post request
+        # Update Database with user inputted information
         form = request.form;
-        
-        # Update Database
         CreateAccount.update((form['accountType'],form['fname'],form['lname'],form['email'],form['password'], form['uname']));
                 
         # Forward to the login page
@@ -56,18 +34,14 @@ def createAccount():
 
 @app.route("/authenticate", methods=['POST'])
 def authenticate():
-    #Get inputted username and password from user
-    username = request.form.get('uname')
-    password = request.form.get('password')
+    #Check if the information the user submitted is in the database
+    form = request.form;
+    validLogin = UsernamepasswordCheck.check((form['uname'],form['password']));
 
-    #Check if user exists in database
-    database = DatabaseManager()
-    validLogin = database.checkLogin(username, password)
-
-    #If exists, bring back to home page, ow stay on login page
+    #If exists, Log the user in. Otherwise stay on the login page.
     if validLogin:
         #Create User class that stores data for current logged-in user
-        SData = database.selectStudentUserPass(username, password)
+        SData = SelectStudentUserPass.query((form['uname'],form['password']));
         currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5]) 
         return redirect(url_for('home'))
     else:
@@ -75,19 +49,15 @@ def authenticate():
     
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
-    # Query for getting grades for every assignment in a class for a given student
-    getGrades = "SELECT Assignment.assignmentId, name, grade, comment FROM Assignment JOIN Grades ON Assignment.assignmentId = Grades.assignmentId WHERE studentId = %s AND courseId = %s"
-    # Query for getting the course name
-    getCourseName = "SELECT name FROM Course WHERE courseId  = %s"
+    studentId = '1'
+    assignmentId = '1'
+    courseId = '1'
     
-    cursor = db.cursor()
-    cursor.execute(getGrades, ("1","1",)) # Test, change later
-    grades = cursor.fetchall()
-    cursor.close()
-    cursor = db.cursor()
-    cursor.execute(getCourseName, ("1",)) # Test, change later
-    courseName = cursor.fetchone()
-    cursor.close()
+    # Query for getting grades for every assignment in a class for a given student
+    grades = SelectGradeForStudent.queryAll((studentId, assignmentId));
+    
+    # Query for getting the course name
+    courseName = SelectCourseQuery.query((courseId))
     
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)

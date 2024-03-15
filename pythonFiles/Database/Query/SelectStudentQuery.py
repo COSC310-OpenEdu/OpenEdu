@@ -1,7 +1,7 @@
 from DatabaseQuery import DatabaseQuery;
 from DatabaseManager import DatabaseManager;
 
-class QuertSelectStudent(DatabaseQuery):
+class SelectStudentQuery(DatabaseQuery):
     @classmethod
     def query(cls, dataTuple) -> tuple:
         sql = "SELECT * FROM User WHERE userId = %s"
