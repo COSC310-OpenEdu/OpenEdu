@@ -10,7 +10,16 @@
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/pageContent.css">
         <link rel="stylesheet" type= "text/css" href= "../static/CSS/courses.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let courses = document.getElementsByClassName("banner");
+                for (let i = 0; i < courses.length; i++) {
+                    courses[i].style.backgroundColor = "green";
+                    console.log("ASD");
+                }
+                
+            });
+        </script>
     </head>
     <body>
         <div class="flex-container">
@@ -51,17 +60,28 @@
             </ul>
             </nav>
             <main>
-                <div class="main-container" style="width: 82vw;">
-                    <div class="container-header"></div>
-                    {% set colors = "rgb(1,0,1)" %}
-                    {% for i in range(0, 2) %}
+                <div class="main-container" style="width: 82vw;" id="courses">
+                    
+                    <div class="container-header">Registered Courses</div>
+                    
+                    {% for i in range(0, (courses|length/4)|int + 1) %}
+                    
                     <div class="courseRow">
-                        {% for j in range(i*4, (i+1)*4) %}
+                        {% set max = (i+1)*4 %}
+                        {% if max > courses|length %}
+                            {% set max = (courses|length - max)|abs %}
+                        {% endif %}
+                        
+                        {% for j in range(i*4, max) %}
+                    
                     <div class="course">
-                        <div class="banner" style=""~colors~""><span></span></div>
+                    <a href="#{{j}}"> <!-- URL FOR COURSE HOMEPAGE GOES HERE -->
+                        <div class="banner"><span></span></div>
                         <p>COSC 310 101 2023W2</p>
                         <p>Software Engineering</p>
+                    </a>
                     </div>
+                    
                         {% endfor %}
                     
                     </div>

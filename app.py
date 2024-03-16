@@ -31,7 +31,11 @@ def home():
     db_version = cursor.fetchone()
     cursor.close()
     if (session.get("username") != None):
-        return render_template("courses.html", db_version=db_version)
+        registeredCourses = "SELECT CourseId FROM Attend WHERE studentId = %s"
+        cursor = db.cursor()
+        cursor.execute(registeredCourses, ("1",)) # Test, change later
+        courses = cursor.fetchall()
+        return render_template("courses.html", courses=courses)
     else:
         return render_template("template.html", db_version=db_version)
     
@@ -133,6 +137,7 @@ def createAssignment():
 def assignmentData():
    questionForm = request.form
    return render_template("assignmentOverview.html", questionForm = questionForm)
+
 
 if __name__ == "__main__":
     app.run()

@@ -1,7 +1,7 @@
 .course {
     background-color: var(--modal);
-    width: 12.5em;
-    height: 15em;
+    width: 15em;
+    height: 13em;
     margin: 2em;
     border-radius: 1em;
 }
@@ -20,11 +20,16 @@
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
     width: 100%;
-    padding-top: 8em;
-    height: 2em;
-    margin-bottom: 1em;
+    padding-top: 6em;
+    height: 3em;
+    margin-bottom: 0.5em;
 }
 
 .course p {
-    text-align: center;
+    margin-left: 0.5em;
+}
+
+.container-header {
+    font-weight: bold;
+    font-size:larger;
 }
