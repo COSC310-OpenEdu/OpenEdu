@@ -12,3 +12,9 @@ def test_selectCourseQuery_invalid():
     
     studentData = SelectStudentQuery.query((userId,))
     assert(studentData[1] != "NotJames")
+    
+def test_selectCourseQuery_nonIntegerId():
+    userId = 'Cat'
+    
+    studentData = SelectStudentQuery.query((userId,))
+    assert(studentData is None)
