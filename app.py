@@ -97,7 +97,31 @@ def createAccount():
         
         # Forward to the login page
         return login();
+
+@app.route("/account/update", methods=['GET', 'POST'])
+def updateAccount():
+    if (request.method == 'GET'):
+        return render_template("updateAccount.html");
+    else:  
+        updateEmail = "UPDATE User SET email = %s WHERE userId = %d";
+        updatePassword = "UPDATE User SET password = %s WHERE userId = %d";
         
+        form = request.form;
+        
+
+        cursor = db.cursor();
+        
+        if (form['password'] != ''):
+            userData = (form['password'], 1);
+            cursor.execute(updatePassword, userData);
+        if (form['email'] != ''):
+            userData = (form['email'], 1);
+            cursor.execute(updateEmail, userData);
+            
+        db.commit();
+                  
+        return render_template("updateAccount.html");
+
     
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
@@ -117,6 +141,7 @@ def seeGrades():
     
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
+
 
 @app.route("/createAssignment", methods = ['POST', 'GET'])
 def createAssignment():
