@@ -8,12 +8,12 @@ class SelectStudentQuery(DatabaseQuery):
     def query(cls, dataTuple) -> tuple:
         sql = "SELECT * FROM User WHERE userId = %s"
         
-
-        #if not isinstance(userId, int): #Only allow userId to be an integer
-        #    return None
+        userId = dataTuple[0];
+        if not isinstance(userId, int): #Only allow userId to be an integer
+            return None
         
         cursor = DatabaseManager.getDatabaseCursor();
-        cursor.execute(sql, dataTuple)
+        cursor.execute(sql, (userId,))
         studentData = cursor.fetchone()
         
         DatabaseManager.closeConnection()
