@@ -1,5 +1,5 @@
-from pythonFiles.Database.Query.DatabaseQuery import DatabaseQuery;
-from pythonFiles.Database.DatabaseManager import DatabaseManager;
+from src.Database.Query.DatabaseQuery import DatabaseQuery;
+from src.Database.DatabaseManager import DatabaseManager;
 import mysql
 
 
@@ -8,12 +8,12 @@ class SelectStudentQuery(DatabaseQuery):
     def query(cls, dataTuple) -> tuple:
         sql = "SELECT * FROM User WHERE userId = %s"
         
-        userId = dataTuple
-        if not isinstance(userId, int): #Only allow userId to be an integer
-            return None
+
+        #if not isinstance(userId, int): #Only allow userId to be an integer
+        #    return None
         
         cursor = DatabaseManager.getDatabaseCursor();
-        cursor.execute(sql, (userId))
+        cursor.execute(sql, dataTuple)
         studentData = cursor.fetchone()
         
         DatabaseManager.closeConnection()

@@ -1,5 +1,5 @@
-from pythonFiles.Database.Query.DatabaseQueryAll import DatabaseQueryAll;
-from pythonFiles.Database.DatabaseManager import DatabaseManager;
+from src.Database.Query.DatabaseQueryAll import DatabaseQueryAll;
+from src.Database.DatabaseManager import DatabaseManager;
 import mysql
 
 

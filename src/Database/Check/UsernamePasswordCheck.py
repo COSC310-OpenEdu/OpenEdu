@@ -1,5 +1,5 @@
-from pythonFiles.Database.Check.DatabaseCheck import DatabaseCheck
-from pythonFiles.Database.DatabaseManager import DatabaseManager
+from src.Database.Check.DatabaseCheck import DatabaseCheck
+from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
 class UsernamePasswordCheck(DatabaseCheck):

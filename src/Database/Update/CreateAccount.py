@@ -1,5 +1,5 @@
-from pythonFiles.Database.Update.DatabaseUpdate import DatabaseUpdate
-from pythonFiles.Database.DatabaseManager import DatabaseManager
+from src.Database.Update.DatabaseUpdate import DatabaseUpdate
+from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
 class CreateAccount(DatabaseUpdate):
