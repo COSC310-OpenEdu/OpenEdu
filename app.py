@@ -31,9 +31,9 @@ def home():
     db_version = cursor.fetchone()
     cursor.close()
     if (session.get("username") != None):
-        registeredCourses = "SELECT CourseId FROM Attend WHERE studentId = %s"
+        registeredCourses = "SELECT Attend.CourseId, name, session, term FROM Attend JOIN Course ON Attend.CourseId = Course.courseId WHERE studentId = %s"
         cursor = db.cursor()
-        cursor.execute(registeredCourses, ("1",)) # Test, change later
+        cursor.execute(registeredCourses, (session['userId'],)) # Test, change later
         courses = cursor.fetchall()
         return render_template("courses.html", courses=courses)
     else:
@@ -138,6 +138,11 @@ def assignmentData():
    questionForm = request.form
    return render_template("assignmentOverview.html", questionForm = questionForm)
 
+@app.route("/courseDashboard/<courseId>", methods = ['GET'])
+def courseDashboard(courseId):
+    
+    
+    return render_template("courseDashboard.html", courseId=courseId)
 
 if __name__ == "__main__":
     app.run()

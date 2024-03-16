@@ -1,8 +1,11 @@
 .course {
     background-color: var(--modal);
-    width: 15em;
-    height: 13em;
+    width: 18em;
+    height: 17em;
     margin: 2em;
+    margin-top: 4em;
+    margin-bottom: 0em;
+    margin-right: 1em;
     border-radius: 1em;
 }
 
@@ -13,7 +16,14 @@
 
 .main-container {
     overflow: auto;
+    
 }
+
+.coursesGroup {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
 
 .banner {
     background-color: red;
@@ -21,7 +31,7 @@
     border-top-right-radius: 1em;
     width: 100%;
     padding-top: 6em;
-    height: 3em;
+    height: 6.5em;
     margin-bottom: 0.5em;
 }
 

@@ -13,9 +13,19 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 let courses = document.getElementsByClassName("banner");
+                let green = "rgba(207,234,195,255)";
+                let yellow = "rgba(236,228,195,255)";
+                let pink = "rgba(254,219,215,255)";
+                let blue = "rgba(193,220,235,255)";
+                let purple = "rgba(216, 215, 254, 255)"
+                let colors = [green, yellow, pink, blue, purple];
+                let colorIndex = 0;
                 for (let i = 0; i < courses.length; i++) {
-                    courses[i].style.backgroundColor = "green";
-                    console.log("ASD");
+                    courses[i].style.backgroundColor = colors[colorIndex];
+                    colorIndex++;
+                    if (colorIndex > colors.length - 1) {
+                        colorIndex = 0;
+                    }
                 }
                 
             });
@@ -63,22 +73,22 @@
                 <div class="main-container" style="width: 82vw;" id="courses">
                     
                     <div class="container-header">Registered Courses</div>
-                    
+                    <div class="coursesGroup">
                     {% for i in range(0, (courses|length/4)|int + 1) %}
                     
                     <div class="courseRow">
                         {% set max = (i+1)*4 %}
                         {% if max > courses|length %}
-                            {% set max = (courses|length - max)|abs %}
+                            {% set max = courses|length %}
                         {% endif %}
                         
                         {% for j in range(i*4, max) %}
                     
                     <div class="course">
-                    <a href="#{{j}}"> <!-- URL FOR COURSE HOMEPAGE GOES HERE -->
+                    <a href="{{ url_for('courseDashboard', courseId=courses[j][0]) }}"> <!-- URL FOR COURSE HOMEPAGE GOES HERE -->
                         <div class="banner"><span></span></div>
-                        <p>COSC 310 101 2023W2</p>
-                        <p>Software Engineering</p>
+                        <p>{{courses[j][1]}} {{courses[j][2]}} {{courses[j][3]}}</p>
+                        <p>FULL COURSE NAME GOES HERE</p>
                     </a>
                     </div>
                     
@@ -87,7 +97,7 @@
                     </div>
                     {% endfor %}
                     </div>
-                    
+                    </div>
                 </div>
             </main>
           
