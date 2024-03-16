@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request
 
-from pythonFiles.User import User
-from pythonFiles.Database.Update.CreateAccount import CreateAccount
-from pythonFiles.Database.Query.SelectCourseQuery import SelectCourseQuery
-from pythonFiles.Database.Query.SelectGradeForStudent import SelectGradeForStudent
-from pythonFiles.Database.Query.SelectStudentUserPass import SelectStudentUserPass
-from pythonFiles.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
+from src.User import User
+from src.Database.Update.CreateAccount import CreateAccount
+from src.Database.Query.SelectCourseQuery import SelectCourseQuery
+from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
+from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
+from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 
 
 currentUser = None #Start with no user logged in
@@ -54,10 +54,10 @@ def seeGrades():
     courseId = '1'
     
     # Query for getting grades for every assignment in a class for a given student
-    grades = SelectGradeForStudent.queryAll((studentId, assignmentId));
+    grades = SelectGradeForStudent.queryAll((studentId, assignmentId,));
     
     # Query for getting the course name
-    courseName = SelectCourseQuery.query((courseId))
+    courseName = SelectCourseQuery.query((courseId,))
     
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
