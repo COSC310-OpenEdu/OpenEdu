@@ -156,5 +156,13 @@ def assignmentData():
    questionForm = request.form
    return render_template("assignmentOverview.html", questionForm = questionForm)
 
+@app.route("/teacher/dashboard")
+def teacherDash():
+    return render_template("teacher/dashboard.html")
+
+@app.route("/teacher/courseName/dashboard")
+def teacherCourseDash():
+    return render_template("teacher/courseDashboard.html")
+
 if __name__ == "__main__":
     app.run()
