@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 
 from src.User import User
+from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
 from src.Database.Query.SelectCourseQuery import SelectCourseQuery
 from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
@@ -26,8 +27,7 @@ def login():
         password = request.form.get('password')
 
         #Check if user exists in database
-        database = DatabaseManager()
-        validLogin = database.checkLogin(username, password)
+        validLogin = UsernamePasswordCheck.check((username, password));
 
         #If exists, bring back to home page, ow stay on login page
         if validLogin:
@@ -38,8 +38,7 @@ def login():
 
 def addUserToSession(username, password):
     #Adds username and userId to session
-    database = DatabaseManager()
-    StudentData = database.selectStudentUserPass(username, password)
+    StudentData = SelectStudentUserPass.query((username, password));
     session['username'] = request.form['uname']
     session['userId'] = StudentData[0]
     return redirect(url_for('home'))
