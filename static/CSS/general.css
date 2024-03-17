@@ -22,7 +22,6 @@ html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h
     --lightVariant: #2d3837;
     --redButton: #FF5449;
 
-
     --narbarWidth: 5em;
     --sidebarWidth: 10em;
 }
@@ -95,6 +94,7 @@ form input{
     width: 6em;
 }
 
+/* Google material symbol icons */
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,
@@ -103,6 +103,7 @@ form input{
   'opsz' 24
 }
 
+/* Larger icon sizing */
 span.size-36 {
     font-size: 36px;
     font-variation-settings: 'OPSZ' 36;
