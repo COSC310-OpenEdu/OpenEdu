@@ -7,7 +7,7 @@ from src.Database.Query.SelectCourseQuery import SelectCourseQuery
 from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
 from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
-
+from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -15,23 +15,14 @@ app.secret_key = "a"
 
 @app.route("/")
 def home():
-<<<<<<< HEAD
     # Test the database connection
-    cursor = db.cursor()
-    cursor.execute("SELECT VERSION()")  # Simple query to test
-    db_version = cursor.fetchone()
-    cursor.close()
+    
     if (session.get("username") != None):
-        registeredCourses = "SELECT Attend.CourseId, name, session, term FROM Attend JOIN Course ON Attend.CourseId = Course.courseId WHERE studentId = %s"
-        cursor = db.cursor()
-        cursor.execute(registeredCourses, (session['userId'],)) # Test, change later
-        courses = cursor.fetchall()
+        
+        courses = SelectRegisteredCourses.query((session['userId']))
         return render_template("courses.html", courses=courses)
     else:
-        return render_template("template.html", db_version=db_version)
-=======
-    return render_template("template.html")
->>>>>>> f57ea7fb49a29502cf5d649656d42ff58165b971
+        return render_template("template.html")
     
 @app.route("/login", methods=['GET', 'POST'])
 def login():
