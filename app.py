@@ -104,5 +104,8 @@ def seeGrades():
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
+@app.route("/courseRegistration")
+def courseRegistration():
+    return render_template("courseRegistration.html")
 if __name__ == "__main__":
     app.run()
