@@ -35,7 +35,12 @@
 
                 // Check email
                 let email = document.querySelector("#email");
+                let re = /^[a-zA-Z1-9.]+@[a-zA-Z1-9.]+.[a-zA-Z1-9]+/;
                 if (email.value.trim() == "") {
+                    e.preventDefault();
+                    email.classList.add('highlight');
+                }
+                if (!email.value.trim().match(re)) {
                     e.preventDefault();
                     email.classList.add('highlight');
                 }
