@@ -18,7 +18,7 @@
             // Create variables
             let groups = document.getElementsByClassName("grade");
             let assignmentButton = groups[0].children[0];
-            let testButton = groups[1].children[0];
+           
             let buttons = [];
             let toggle = true;
             
@@ -93,53 +93,27 @@
                 <!--All this does is test the database connection by getting its version -->
                 <div class="header">
                     <span>Grade Item</span>
-                    <span>Calculated Weight</span><span>Grade</span><span>Range</span><span>Percentage</span><span>Total Contribution </span>
+                    <span>Grade</span><span>Max</span><span>Percentage</span>
                 </div> 
                 <div class="grade"id="assignments">
                     <div class = "gradeGroup">
                         <span class="gradeTitle">&#9660; Assignments</span>
-                        <span>8.33%</span><span>60</span><span>0-100</span><span>100%</span>
-                        <span>1.67%</span>
+                        <span>60</span><span>0-100</span><span>100%</span>
+                        
                     </div>
-                    <div class="gradeItem">     
-                            <span>Assignment 1</span>
-                            <span>8.33%</span><span>60</span><span>0-100</span><span>100%</span><span>1.67%</span>
-                    </div>
+                    
                     <!-- Creates a new row for every assignment -->
                     {% for item in grades %}
                     <div class="gradeItem">     
                         <span>{{ item[1] }}</span>
-                        <span>n/a</span><span>{{ item[2] }}</span><span>0-100</span><span>{{ 100*item[2] / 100 }}%</span><span>idk</span>
+                        <span>{{ item[2] }}</span><span>100</span><span>{{ 100*item[2] / 100 }}%</span><span>idk</span>
                     </div>
                     {% endfor %}
                 </div>
-                <div class="grade" id="tests">
-                    <div class = "gradeGroup">
-                        <span class="gradeTitle">&#9660; Tests</span>
-                        <span>35.00%</span><span>85.79</span><span>0-100</span><span>85.79%</span>
-                        <span></span>
-                    </div>
-                    <div class="gradeItem">     
-                            <span>Test 1</span>
-                            <span>33.33%</span><span>25.00</span><span>0-30</span><span>83.33%</span><span>9.72%</span>
-                    </div>
-                    <div class="gradeItem">     
-                        <span>Test 2</span>
-                        <span>33.33%</span><span>30.00</span><span>0-35</span><span>85.71%</span><span>10.00%</span>
-                    </div>
-                    <div class="gradeItem">     
-                        <span>Test 3</span>
-                        <span>33.33%</span><span>26.50</span><span>0-30</span><span>88.33%</span><span>10.31%</span>
-                    </div>
-                </div>
+                
             </div>
         </main>
-        <aside class="aside">
-            <div id="asideItem">Title</div>
-            <div id="asideItem">Description</div>
-            <div id="asideItem">Links</div>
-            <div id="asideFooter"></div>
-        </aside>
+        
     </div>
     </body>
 </html>
