@@ -20,10 +20,6 @@ const navbarTemplate = document.createElement('template');
 
 navbarTemplate.innerHTML = `
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-
     /* Navbar flex container */
     nav {
       background-color: #B4CBC9;
@@ -46,6 +42,7 @@ navbarTemplate.innerHTML = `
       justify-content: center;
       padding-top: 12px;
       padding-bottom: 12px;
+      font-family: Roboto, sans-serif;
     }
 
     /* Current navigation menu link */
@@ -121,8 +118,12 @@ class Navbar extends HTMLElement {
     // Highlight the active navbar menu item based on current page
     if (window.location.pathname == '/teacher/dashboard') {
       this.shadowRoot.getElementById("Home").classList.add("active");
-    } else if (window.location.pathname == '/teacher/courseName/dashboard') {
+    } else if (window.location.pathname.includes("/teacher/")) {
       this.shadowRoot.getElementById("Courses").classList.add("active");
+    }
+
+    if (window.location.pathname.includes("/teacher")) {
+      this.shadowRoot.getElementById("Home").setAttribute("href", "/teacher/dashboard");
     }
   }
 }

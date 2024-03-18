@@ -7,8 +7,10 @@ Usage:
 Insert the following into the HTML <head> tag:
 <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
 
-Insert the following into the HTML <body> tag for the navbar:
-<header-component></header-component>
+Insert the following into the custom HTML <body-component> tag:
+<span slot="secondHeader">
+    <header-component></header-component>
+</span>
 */
 const headerTemplate = document.createElement('template');
 
@@ -34,6 +36,7 @@ headerTemplate.innerHTML = `
         justify-content: center;
         padding: 18px 36px 18px 36px;
         border-bottom: 12px solid rgb(0 0 0 / 0%);
+        font-family: Roboto, sans-serif;
     }
 
     /* Current header menu link */
@@ -47,7 +50,7 @@ headerTemplate.innerHTML = `
     }
     </style>
     <header>
-        <a href="dashboard.html" id="Dashboard">
+        <a href="#" id="Dashboard">
             <slot name="dashboard">Dashboard</slot>
         </a>
         <a href="#" id="Assignments">
@@ -74,7 +77,18 @@ class CourseHeader extends HTMLElement {
         // Highlight the active header menu item based on current page
         if (window.location.pathname == "/teacher/courseName/dashboard") {
             this.shadowRoot.getElementById("Dashboard").classList.add("active");
+        } else if (window.location.pathname == "/teacher/courseName/assignments") { // courseName needs to be changed for actual course name/id
+            this.shadowRoot.getElementById("Assignments").classList.add("active");
         }
+
+        // Populate hrefs for teachers
+        if (window.location.pathname.includes("/teacher")) {
+            this.shadowRoot.getElementById("Dashboard").setAttribute("href", "dashboard");
+            this.shadowRoot.getElementById("Assignments").setAttribute("href", "assignments");
+            this.shadowRoot.getElementById("Grading").setAttribute("href", "grading");
+            this.shadowRoot.getElementById("People").setAttribute("href", "people");
+        }
+
     }
 }
 

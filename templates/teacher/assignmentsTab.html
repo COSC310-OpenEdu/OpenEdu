@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSC 310 Dashboard</title>
+    <title>COSC 310 Assignments</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="{{ url_for('static', filename='js/navbar.js')}}" type="text/javascript" defer></script>
@@ -18,11 +18,20 @@
     <!-- Main body of page -->
     <!-- Contains a list of courses being taught by a teacher -->
     <body-component>
-        <span slot="header">COSC 310 101</span>
+        <span slot="header">COSC 310 101 / Assignments</span>
         <span slot="secondHeader">
             <header-component></header-component>
         </span>
-        <span slot="contents"><button-component></button-component></span>
+        <span slot="contents"><button-component>
+            <span slot="button-icon">edit</span>
+            <span slot="button-text">Create Assignment</span>
+        </button-component></span>
+        <span slot="contents"><button-component>
+            <span slot="button-icon">edit</span>
+            <span slot="button-text">Create Quiz</span>
+        </button-component></span>
+
+        
     </body-component>
 </body>
 </html>

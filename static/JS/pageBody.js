@@ -46,13 +46,28 @@ bodyTemplate.innerHTML = `
     }
 
     .container-body {
+        font-family: Roboto, sans-serif;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         flex-wrap: wrap;
         flex: 1;
         padding: 60px;
         gap: 36px;
         overflow-y: auto;
+    }
+
+    ul {
+        text-decoration: none;
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    li {
+        text-decoration: none;
+        font-family: Roboto, sans-serif;
     }
   </style>
 
@@ -61,6 +76,7 @@ bodyTemplate.innerHTML = `
             <div class="header"><slot name="header">Header</slot></div>
             <div><slot name="secondHeader"></slot></div>
             <div class="container-body">
+                <slot name="contents"></slot>
             </div>
         </div>
     </div>
@@ -73,7 +89,7 @@ class PageBody extends HTMLElement {
 
     connectedCallback() {
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(bodyTemplate.content);
+        shadowRoot.appendChild(bodyTemplate.content.cloneNode(true));
     }
 }
 

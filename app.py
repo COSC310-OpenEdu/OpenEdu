@@ -109,13 +109,23 @@ def assignmentData():
    questionForm = request.form
    return render_template("assignmentOverview.html", questionForm = questionForm)
 
-@app.route("/teacher/dashboard")
+@app.route("/teacher/dashboard", methods = ['POST','GET'])
 def teacherDash():
-    return render_template("teacher/dashboard.html")
+    courses = []
+    for i in range(1,5):
+        courseId = i
+        courseName = SelectCourseQuery.query((courseId,))
+        courses.append(courseName[0])
+    return render_template("teacher/dashboard.html", courses = courses)
 
-@app.route("/teacher/courseName/dashboard")
+@app.route("/teacher/COSC310/dashboard", methods = ['POST','GET'])
 def teacherCourseDash():
+
     return render_template("teacher/courseDashboard.html")
+
+@app.route("/teacher/COSC310/assignments")
+def teacherCourseAssignments():
+    return render_template("teacher/assignmentsTab.html")
 
 if __name__ == "__main__":
     app.run()
