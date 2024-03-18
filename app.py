@@ -125,5 +125,6 @@ def courseDashboard(courseId):
 @app.route("/courseRegistration")
 def courseRegistration():
     return render_template("courseRegistration.html")
+
 if __name__ == "__main__":
     app.run()
