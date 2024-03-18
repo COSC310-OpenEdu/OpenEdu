@@ -1,0 +1,402 @@
+[33mcommit 2dddd57197a3f85f2738fbf50aa5ebe804e3dccf[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mcoursesPage[m[33m)[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Mon Mar 18 13:02:39 2024 -0700
+
+    Added try catch for homepage
+
+:100644 100644 e78655f 6336659 M	__pycache__/app.cpython-312.pyc
+:100644 100644 cead41f 336e2de M	src/Database/Query/SelectRegisteredCoursesQuery.py
+:100644 100644 769196f 0013e8b M	static/CSS/seeGrades.css
+:100644 100644 3f6b4a2 78a37d4 M	templates/seeGrades.html
+
+[33mcommit c3ae09e7815b4e91b6220a4cab71280a0c62a716[m[33m ([m[1;31morigin/coursesPage[m[33m)[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Mon Mar 18 10:49:12 2024 -0700
+
+    Closes #97; Changed app.py to accomodate new changes
+
+:100644 100644 559e8d0 e78655f M	__pycache__/app.cpython-312.pyc
+:100644 100644 0520474 b498c10 M	app.py
+:000000 100644 0000000 cead41f A	src/Database/Query/SelectRegisteredCoursesQuery.py
+
+[33mcommit e963fa1a4d5432f420dad4656743982d311b6ac5[m
+Merge: 026cfb9 f57ea7f
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Mon Mar 18 10:28:18 2024 -0700
+
+    merging
+
+[33mcommit f57ea7fb49a29502cf5d649656d42ff58165b971[m[33m ([m[1;31morigin/user-creation-email-check[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: cf92eca ac700c6
+Author: Aidan Morris <95064852+SilverSix6@users.noreply.github.com>
+Date:   Sat Mar 16 19:01:35 2024 -0700
+
+    Merge pull request #91 from COSC310-OpenEdu/Database-Calls
+    
+    Database calls
+
+[33mcommit ac700c6dbad09536facd633f6cafc809d7c20ff8[m[33m ([m[1;31morigin/Database-Calls[m[33m)[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Sat Mar 16 19:01:03 2024 -0700
+
+    Fixed issue caused by merge in login
+
+:100644 100644 b4174a0 e744f08 M	app.py
+
+[33mcommit 980efd025f14b530c662c68e0ce4669101616801[m
+Merge: 0f1773f cf92eca
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Sat Mar 16 18:31:14 2024 -0700
+
+    Merge branch 'main' into Database-Calls
+
+[33mcommit 026cfb98025bac3a7189f6d122f9d46b265fc17a[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Sat Mar 16 00:08:42 2024 -0700
+
+    Finished courses page (mostly)
+
+:100644 100644 3f3f4a1 559e8d0 M	__pycache__/app.cpython-312.pyc
+:100644 100644 473cf4a d58c793 M	app.py
+:100644 100644 4072b1f b83f239 M	static/CSS/courses.css
+:000000 100644 0000000 22fe570 A	templates/courseDashboard.html
+:100644 100644 a326e91 b67a8b7 M	templates/courses.html
+
+[33mcommit 861c1933515378761b2ef59cd5641948191c2beb[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 22:23:29 2024 -0700
+
+    Added jinja code to show the correct number of courses
+
+:100644 100644 206ed43 3f3f4a1 M	__pycache__/app.cpython-312.pyc
+:100644 100644 aab43dd 473cf4a M	app.py
+:100644 100644 d282f26 4979d37 M	pythonFiles/__pycache__/DatabaseManager.cpython-312.pyc
+:100644 100644 e24abb0 eb60dee M	pythonFiles/__pycache__/User.cpython-312.pyc
+:100644 100644 fbe894d 4072b1f M	static/CSS/courses.css
+:100644 100644 5673e3e a326e91 M	templates/courses.html
+
+[33mcommit 0f1773ffecb771d9be2b369b1add96e57bfddcdd[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:56:30 2024 -0700
+
+    Updated imports. Fixed see grades on syntax issue
+
+:100644 100644 b2cd80b 42f6867 M	app.py
+
+[33mcommit cf92eca1425298850581f85faea29ad3ab58d880[m
+Merge: d1a25d3 2093141
+Author: Aidan Morris <95064852+SilverSix6@users.noreply.github.com>
+Date:   Fri Mar 15 18:41:44 2024 -0700
+
+    Merge pull request #55 from COSC310-OpenEdu/update-user-details-aidan
+    
+    Update user details aidan
+    
+    Ip address has been reverted to original state
+
+[33mcommit 1c1ff6b2188f8d408749b9cf30bf3aceb6524df5[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:37:04 2024 -0700
+
+    Changed test names to better suite the tests
+
+:100644 100644 6001724 5c33d00 M	tests/test_UsernamePasswordCheck.py
+
+[33mcommit c7ec9a7d6ec514be21f9c4d2d8d3e0854c976c58[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:35:40 2024 -0700
+
+    Removed old database manager tests
+
+:100644 000000 02d1554 0000000 D	src/testDatabaseManager.py
+
+[33mcommit b567c9a823af35bcb6bcb03925f5d62d07a8f6c7[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:34:42 2024 -0700
+
+    Added test for SelectStudentUserPass.py
+
+:000000 100644 0000000 f1c200c A	tests/test_SelectStudentUserPass.py
+
+[33mcommit 49697b9701e1ba6b2cbdcd0ae8792e0cfe46d47e[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:29:46 2024 -0700
+
+    Added git ignore file
+
+:000000 100644 0000000 88315da A	.gitignore
+
+[33mcommit c64cbc2e813e84748547f579749bd754cde0c108[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:26:54 2024 -0700
+
+    Added tests for UsernamePasswordCheck.py
+
+:000000 100644 0000000 6001724 A	tests/test_UsernamePasswordCheck.py
+
+[33mcommit 68c49979d40ead6b1ea5b1cecec0dc955ddc5a82[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:26:28 2024 -0700
+
+    Fixed error were None values would fail the test
+
+:100644 100644 edcf1f2 51d80ec M	tests/test_SelectStudentQuery.py
+
+[33mcommit e8d74106e3cb0c5cd1ef64c6669ac011e51b9523[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:17:30 2024 -0700
+
+    Improved layout of test_SelectStudentQueryAll.py
+
+:100644 100644 f44f304 4d8fcf6 M	tests/test_SelectStudentQueryAll.py
+
+[33mcommit e22486d9caa06bb98792b28bf70d65a82a2683b5[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:16:03 2024 -0700
+
+    Added check for non integer inputs to SelectStudent
+
+:100644 100644 5ff0a85 fb9107c M	src/Database/Query/SelectStudentQuery.py
+
+[33mcommit c014c80451dbb85aa54c486e8ca3113b44d05f1c[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:13:01 2024 -0700
+
+    Added tests for SelectStudentQueryAll
+
+:000000 100644 0000000 f44f304 A	tests/test_SelectStudentQueryAll.py
+
+[33mcommit 859fc7a92e34460f400d3bdf2536a5e00a6e4ef2[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 18:06:48 2024 -0700
+
+    Moved pythonFiles to src. Added folder tests to contain all tests
+
+:100644 000000 225992b 0000000 D	__pycache__/app.cpython-312.pyc
+:100644 000000 1419395 0000000 D	pythonFiles/__pycache__/DatabaseManager.cpython-311.pyc
+:100644 000000 33bb051 0000000 D	pythonFiles/__pycache__/DatabaseManager.cpython-312.pyc
+:100644 000000 510a0ab 0000000 D	pythonFiles/__pycache__/__init__.cpython-311.pyc
+:100644 000000 60509c1 0000000 D	pythonFiles/__pycache__/test_DatabaseManager.cpython-311-pytest-8.0.2.pyc
+:100644 000000 a12b4cd 0000000 D	pythonFiles/__pycache__/test_DatabaseManager.cpython-311.pyc
+:100644 100644 723cf7e 723cf7e R100	pythonFiles/Database/Check/DatabaseCheck.py	src/Database/Check/DatabaseCheck.py
+:100644 100644 a87c7ca 494c7eb R079	pythonFiles/Database/Check/UsernamePasswordCheck.py	src/Database/Check/UsernamePasswordCheck.py
+:100644 100644 329838d 329838d R100	pythonFiles/Database/DatabaseManager.py	src/Database/DatabaseManager.py
+:100644 100644 5684236 5684236 R100	pythonFiles/Database/Query/DatabaseQuery.py	src/Database/Query/DatabaseQuery.py
+:100644 100644 08ed41c 08ed41c R100	pythonFiles/Database/Query/DatabaseQueryAll.py	src/Database/Query/DatabaseQueryAll.py
+:100644 100644 94989f0 d677805 R076	pythonFiles/Database/Query/SelectCourseQuery.py	src/Database/Query/SelectCourseQuery.py
+:100644 100644 1c54f4b fb80848 R081	pythonFiles/Database/Query/SelectGradeForStudent.py	src/Database/Query/SelectGradeForStudent.py
+:100644 100644 ba39164 5ff0a85 R054	pythonFiles/Database/Query/SelectStudentQuery.py	src/Database/Query/SelectStudentQuery.py
+:100644 100644 13ef059 9c7b3dd R074	pythonFiles/Database/Query/SelectStudentQueryAll.py	src/Database/Query/SelectStudentQueryAll.py
+:100644 100644 dd51d57 297769c R077	pythonFiles/Database/Query/SelectStudentUserPass.py	src/Database/Query/SelectStudentUserPass.py
+:100644 100644 4cc2e05 53d10ff R087	pythonFiles/Database/Update/CreateAccount.py	src/Database/Update/CreateAccount.py
+:100644 100644 50c146a 50c146a R100	pythonFiles/Database/Update/DatabaseUpdate.py	src/Database/Update/DatabaseUpdate.py
+:100644 100644 ff59816 ff59816 R100	pythonFiles/User.py	src/User.py
+:100644 100644 02d1554 02d1554 R100	pythonFiles/Database/test_DatabaseManager.py	src/testDatabaseManager.py
+:000000 100644 0000000 edcf1f2 A	tests/test_SelectStudentQuery.py
+
+[33mcommit 33e8734698b1f5a516ed39d10582fec07e1601d0[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 15:15:25 2024 -0700
+
+    Worked on more backend
+
+:100644 100644 adeef34 206ed43 M	__pycache__/app.cpython-312.pyc
+:100644 100644 6767459 aab43dd M	app.py
+:100644 100644 1c0db80 5673e3e M	templates/courses.html
+
+[33mcommit 302636c1516257c13bb56b23499d15b3e0d78545[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 14:40:37 2024 -0700
+
+    Fixed issue with database methods and variables
+
+:100644 100644 298ae7a 329838d M	pythonFiles/Database/DatabaseManager.py
+
+[33mcommit 1f60be6a71f972a58a53a3bce2721fac60e7305a[m
+Merge: babdde4 d1a25d3
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 14:30:48 2024 -0700
+
+    Merge branch 'main' of https://github.com/COSC310-OpenEdu/OpenEdu into coursesPage
+
+[33mcommit babdde4b9e99c769612cf557aa16eb13dee2ab72[m
+Merge: b77763a 966419a
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 14:29:47 2024 -0700
+
+    merge
+
+[33mcommit b77763ae72d5aafdf282bf8134f08873d6a7d7a8[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 14:24:53 2024 -0700
+
+    Worked on some backend
+
+:100644 100644 ef4977c adeef34 M	__pycache__/app.cpython-312.pyc
+:100644 100644 d675899 4e01798 M	app.py
+
+[33mcommit a93ef47fc8c4ea509d8a299eccb188d8a26da7aa[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 14:13:18 2024 -0700
+
+    Fixed import statements
+
+:100644 100644 ccd7a2c b2cd80b M	app.py
+:100644 100644 1f49b2c 723cf7e R090	pythonFiles/Database/DatabaseCheck.py	pythonFiles/Database/Check/DatabaseCheck.py
+:100644 100644 47d42e3 a87c7ca M	pythonFiles/Database/Check/UsernamePasswordCheck.py
+:100644 100644 32ff18e 298ae7a M	pythonFiles/Database/DatabaseManager.py
+:100644 100644 5684236 5684236 R100	pythonFiles/Database/DatabaseQuery.py	pythonFiles/Database/Query/DatabaseQuery.py
+:100644 100644 1787145 08ed41c R081	pythonFiles/Database/DatabaseQueryAll.py	pythonFiles/Database/Query/DatabaseQueryAll.py
+:100644 100644 290d75e 94989f0 M	pythonFiles/Database/Query/SelectCourseQuery.py
+:100644 100644 bf55b46 1c54f4b M	pythonFiles/Database/Query/SelectGradeForStudent.py
+:100644 100644 8676439 ba39164 M	pythonFiles/Database/Query/SelectStudentQuery.py
+:100644 100644 b531f0d 13ef059 M	pythonFiles/Database/Query/SelectStudentQueryAll.py
+:100644 100644 c493e78 dd51d57 M	pythonFiles/Database/Query/SelectStudentUserPass.py
+:100644 100644 5d80348 4cc2e05 M	pythonFiles/Database/Update/CreateAccount.py
+:100644 100644 fa221db 50c146a R083	pythonFiles/Database/DatabaseUpdate.py	pythonFiles/Database/Update/DatabaseUpdate.py
+
+[33mcommit e785f36c8d43771fb10a0e933959e6961f0dc4a1[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 14:02:12 2024 -0700
+
+    Finished most of front end
+
+:100644 100644 fd182ca d282f26 M	pythonFiles/__pycache__/DatabaseManager.cpython-312.pyc
+:100644 100644 1d4b4e9 e24abb0 M	pythonFiles/__pycache__/User.cpython-312.pyc
+:100644 100644 b04178c fbe894d M	static/CSS/courses.css
+:100644 100644 211f109 1c0db80 M	templates/courses.html
+
+[33mcommit 11f38faa7cf9da40e243045f6a5e6c86309beb1a[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Thu Mar 14 14:00:56 2024 -0700
+
+    Worked on front end
+
+:100644 100644 e69de29 b04178c M	static/CSS/courses.css
+:100644 100644 29912b2 211f109 M	templates/courses.html
+
+[33mcommit 1167a39ac2b32bf5375419f1858fa99a3c896791[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Wed Mar 13 17:02:13 2024 -0700
+
+    Added html
+
+:100644 100644 e69de29 29912b2 M	templates/courses.html
+
+[33mcommit 089f951c26ca5f7a741d5f867170d35cebe865dc[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Wed Mar 13 16:02:03 2024 -0700
+
+    Pulling from main
+
+:000000 100644 0000000 e69de29 A	static/CSS/courses.css
+:000000 100644 0000000 e69de29 A	templates/courses.html
+
+[33mcommit 966419a301f136a3927ab4ac3063f9e3f66e01f9[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Fri Mar 15 14:02:12 2024 -0700
+
+    Finished most of front end
+
+:100644 100644 ac0d1ed beb7f1a M	__pycache__/app.cpython-312.pyc
+:100644 100644 fd182ca d282f26 M	pythonFiles/__pycache__/DatabaseManager.cpython-312.pyc
+:100644 100644 1d4b4e9 e24abb0 M	pythonFiles/__pycache__/User.cpython-312.pyc
+:100644 100644 b04178c fbe894d M	static/CSS/courses.css
+:100644 100644 211f109 1c0db80 M	templates/courses.html
+
+[33mcommit 209314136e24e5f024cd4aec2768f90dba19ff05[m[33m ([m[1;31morigin/update-user-details-aidan[m[33m)[m
+Merge: e62f9a6 d1a25d3
+Author: Aidan Morris <95064852+SilverSix6@users.noreply.github.com>
+Date:   Fri Mar 15 13:43:32 2024 -0700
+
+    Merge branch 'main' into update-user-details-aidan
+
+[33mcommit d8df1d95929eaaaabd77d3afbfc7330ba5f410ba[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 13:21:08 2024 -0700
+
+    Added course select course and select grade for student
+
+:000000 100644 0000000 290d75e A	pythonFiles/Database/Query/SelectCourseQuery.py
+:000000 100644 0000000 bf55b46 A	pythonFiles/Database/Query/SelectGradeForStudent.py
+
+[33mcommit 0161bf6c0b299a5e008f964da314eefb9b586833[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Fri Mar 15 13:09:59 2024 -0700
+
+    Finished moving sql querys out of app.py
+
+:100644 100644 a17a2cf ccd7a2c M	app.py
+:100644 100644 b343add 8676439 M	pythonFiles/Database/Query/SelectStudentQuery.py
+
+[33mcommit d1a25d351ee5298ab2b53769ebadf424fe003992[m
+Merge: 2826e0a 82dc2aa
+Author: Anilov Laxina <78817046+AnLaxina@users.noreply.github.com>
+Date:   Fri Mar 15 12:53:58 2024 -0700
+
+    Merge pull request #85 from COSC310-OpenEdu/userSessionalVariable
+    
+    User sessional variable
+
+[33mcommit 82dc2aad5c9356f45e60a81c96e5bf1061dcd07a[m[33m ([m[1;31morigin/userSessionalVariable[m[33m)[m
+Author: aidanelliott <aidan.elliott29@gmail.com>
+Date:   Fri Mar 15 12:39:47 2024 -0700
+
+    seperated addUserToSession to new function and fixed some tests
+
+:100644 100644 2b3fcf4 5cabe05 M	app.py
+:100644 100644 68ef166 b75f01c M	pythonFiles/test_DatabaseManager.py
+
+[33mcommit 2826e0aeb1fea20f760271d4257691fe42f55901[m
+Merge: 3b892b0 6cc72e5
+Author: Aidanell <aidan.elliott29@gmail.com>
+Date:   Thu Mar 14 18:20:00 2024 -0700
+
+    Merge pull request #86 from COSC310-OpenEdu/Database-Refactor-Course-Assignment
+    
+    Database Refactor
+
+[33mcommit 3b892b0de285a93229a7b51bb9402b56b57fa070[m
+Merge: 6f6a9cb b86ab02
+Author: Joy Musiel <33619450+JoyMusiel@users.noreply.github.com>
+Date:   Thu Mar 14 14:35:11 2024 -0700
+
+    Merge pull request #58 from COSC310-OpenEdu/feature/assignment-creation
+    
+    Assignment Creation Frontend
+
+[33mcommit b86ab020c59eaa4595c4a24fc4ca57c0973311b9[m[33m ([m[1;31morigin/feature/assignment-creation[m[33m)[m
+Merge: c280769 6f6a9cb
+Author: Joy Musiel <joymusiel@gmail.com>
+Date:   Thu Mar 14 14:30:59 2024 -0700
+
+    Merge branch 'main' into feature/assignment-creation
+
+[33mcommit 6f6a9cb5c2c3cf23cabd04227229894db15fab55[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Thu Mar 14 14:07:22 2024 -0700
+
+    Closes #87; Fixed SQL for seeGrades
+
+:100644 100644 225992b ef4977c M	__pycache__/app.cpython-312.pyc
+:100644 100644 9327c3d 9211aac M	app.py
+:100644 100644 33bb051 fd182ca M	pythonFiles/__pycache__/DatabaseManager.cpython-312.pyc
+:000000 100644 0000000 1d4b4e9 A	pythonFiles/__pycache__/User.cpython-312.pyc
+
+[33mcommit 503ce4e7cc8f2dab62f2571af4c8542fb62abf91[m
+Author: fruitgushers <jeremyadams166@gmail.com>
+Date:   Thu Mar 14 14:00:56 2024 -0700
+
+    Worked on front end
+
+:100644 100644 e69de29 b04178c M	static/CSS/courses.css
+:100644 100644 29912b2 211f109 M	templates/courses.html
+
+[33mcommit d5807fb91adf62d4b5b174f6c1479ab3d97b024c[m
+Author: SilverSix6 <aidanmorris810@gmail.com>
+Date:   Thu Mar 14 13:57:25 2024 -0700
+
+    Moved select student by username and password out of app.py
+    Moved create account sql out of app.py
+
+:100644 100644 27553c2 a17a2cf M	ap
