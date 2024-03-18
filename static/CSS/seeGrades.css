@@ -74,8 +74,12 @@ main {
 
 .gradeItem :first-child, .header :first-child {
     text-align: left;
-    width: 26em;
+    width: 15em;
     padding-left: 0em;
+}
+
+.gradeGroup :first-child {
+    width: 15.5em;
 }
 
 .gradeGroup :nth-last-child(1), .gradeItem :nth-last-child(1) {
@@ -83,10 +87,20 @@ text-align: right;
 width: 12em;
 padding-right: 2.5em;
 }
-
-.header :nth-last-child(1) {
+ 
+.gradeGroup :nth-last-child(1) {
+    padding-right: 1em;
+}
+.header :nth-last-child(1), .gradeGroup :nth-last-child(1) {
     text-align: right;
     width: 15em;
+}
+
+.header :nth-child(2) {
+    width: 20em;
+}
+.gradeGroup :nth-child(2) {
+    width: 25em;
 }
 
 

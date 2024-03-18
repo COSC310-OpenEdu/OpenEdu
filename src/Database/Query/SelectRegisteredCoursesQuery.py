@@ -6,12 +6,12 @@ class SelectRegisteredCourses(DatabaseQuery):
     @classmethod
     def query(cls, dataTuple) -> tuple:
         registeredCourses = "SELECT Attend.CourseId, name, session, term FROM Attend JOIN Course ON Attend.CourseId = Course.courseId WHERE studentId = %s"
-
         studentId = dataTuple
-        
-        cursor = DatabaseManager.getDatabaseCursor()
-        cursor.execute(registeredCourses, (studentId,))
-        course = cursor.fetchall()
-        DatabaseManager.closeConnection()
-        
+        try:
+            cursor = DatabaseManager.getDatabaseCursor()
+            cursor.execute(registeredCourses, (studentId,))
+            course = cursor.fetchall()
+            DatabaseManager.closeConnection()
+        except:
+            course = "CONNECTION ERROR"
         return course;
