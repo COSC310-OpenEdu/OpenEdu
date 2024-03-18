@@ -4,7 +4,7 @@ buttonTemplate.innerHTML = `
     <style>
         button {
             width: fit-content;
-            height: fit-content;
+            height: 46px;
             display: flex;
             flex-direction: row;
             background-color: #F8F8F8;
@@ -14,11 +14,6 @@ buttonTemplate.innerHTML = `
             justify-content: center;
             align-items: center;
             gap: 10px;
-        }
-
-        button span {
-            font-size: 18px;
-            font-family: Roboto, sans-serif;
         }
 
         /* Google material symbol icons */
@@ -34,6 +29,10 @@ buttonTemplate.innerHTML = `
           word-wrap: normal;
           white-space: nowrap;
           direction: ltr;
+        }
+
+        button:hover {
+          background-color: #B4CBC9;
         }
     </style>
     <button>
@@ -54,3 +53,4 @@ class Button extends HTMLElement {
   }
   
   customElements.define('button-component', Button);
+  

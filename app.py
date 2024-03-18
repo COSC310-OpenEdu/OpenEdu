@@ -96,21 +96,14 @@ def seeGrades():
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
 
-@app.route("/createAssignment", methods = ['POST', 'GET'])
+@app.route("/teacher/COSC310/assignments/createQuiz", methods = ['POST', 'GET'])
 def createAssignment():
    if request.method == 'GET':
-       return render_template("createAssignment.html")
-   if request.method == 'POST':
-       questionForm = request.form
-       return render_template('assignmentOverview.html', questionForm = questionForm)
-
-@app.route("/createAssignment/overview", methods = ['POST', 'GET'])
-def assignmentData():
-   questionForm = request.form
-   return render_template("assignmentOverview.html", questionForm = questionForm)
+       return render_template("teacher/createQuiz.html")
 
 @app.route("/teacher/dashboard", methods = ['POST','GET'])
 def teacherDash():
+    # temporarily getting a list of all courses
     courses = []
     for i in range(1,5):
         courseId = i
@@ -120,7 +113,6 @@ def teacherDash():
 
 @app.route("/teacher/COSC310/dashboard", methods = ['POST','GET'])
 def teacherCourseDash():
-
     return render_template("teacher/courseDashboard.html")
 
 @app.route("/teacher/COSC310/assignments")

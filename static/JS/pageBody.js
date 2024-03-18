@@ -43,45 +43,38 @@ bodyTemplate.innerHTML = `
         font-family: Roboto, sans-serif;
         font-weight: 700;
         position: sticky;
+        overflow: hidden;
     }
 
     .container-body {
         font-family: Roboto, sans-serif;
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
         flex: 1;
         padding: 60px;
         gap: 36px;
-        overflow-y: auto;
+        overflow: auto;
     }
 
-    ul {
-        text-decoration: none;
-        list-style-type: none;
+    .overflow {
         display: flex;
-        flex-direction: row;
-        gap: 24px;
         flex-wrap: wrap;
     }
 
-    li {
-        text-decoration: none;
-        font-family: Roboto, sans-serif;
-    }
   </style>
 
     <div class="page-container">
         <div class="container">
             <div class="header"><slot name="header">Header</slot></div>
             <div><slot name="secondHeader"></slot></div>
-            <div class="container-body">
-                <slot name="contents"></slot>
+            <div class="container-body" id="container-body">
+                    <slot name="contents"></slot>
+
             </div>
         </div>
     </div>
 `;
-
+console.log(window.location.pathname)
 class PageBody extends HTMLElement {
     constructor() {
         super();
@@ -90,6 +83,10 @@ class PageBody extends HTMLElement {
     connectedCallback() {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(bodyTemplate.content.cloneNode(true));
+
+        if (window.location.pathname == '/teacher/dashboard') {
+            this.shadowRoot.getElementById('container-body').classList.add("overflow");
+        }
     }
 }
 

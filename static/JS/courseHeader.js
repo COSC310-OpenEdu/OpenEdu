@@ -75,18 +75,21 @@ class CourseHeader extends HTMLElement {
         shadowRoot.appendChild(headerTemplate.content);
 
         // Highlight the active header menu item based on current page
-        if (window.location.pathname == "/teacher/courseName/dashboard") {
+        if (window.location.pathname == "/teacher/COSC310/dashboard") {
             this.shadowRoot.getElementById("Dashboard").classList.add("active");
-        } else if (window.location.pathname == "/teacher/courseName/assignments") { // courseName needs to be changed for actual course name/id
+        } else if (window.location.pathname == "/teacher/COSC310/assignments") { // courseName needs to be changed for actual course name/id
             this.shadowRoot.getElementById("Assignments").classList.add("active");
         }
 
         // Populate hrefs for teachers
         if (window.location.pathname.includes("/teacher")) {
-            this.shadowRoot.getElementById("Dashboard").setAttribute("href", "dashboard");
-            this.shadowRoot.getElementById("Assignments").setAttribute("href", "assignments");
-            this.shadowRoot.getElementById("Grading").setAttribute("href", "grading");
-            this.shadowRoot.getElementById("People").setAttribute("href", "people");
+            this.shadowRoot.getElementById("Dashboard").setAttribute("href", "/teacher/COSC310/dashboard");
+            this.shadowRoot.getElementById("Assignments").setAttribute("href", "/teacher/COSC310/assignments");
+            this.shadowRoot.getElementById("Grading").setAttribute("href", "/teacher/COSC310/grading");
+            this.shadowRoot.getElementById("People").setAttribute("href", "/teacher/COSC310/people");
+        }
+        if (window.location.pathname.includes("/assignments/create")) {
+            this.shadowRoot.getElementById("Assignments").classList.add("active");
         }
 
     }

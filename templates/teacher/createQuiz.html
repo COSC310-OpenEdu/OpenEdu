@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Assignment</title>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="{{ url_for('static', filename='js/navbar.js')}}" type="text/javascript" defer></script>
+    <script src="{{ url_for('static', filename='js/pageBody.js')}}" type="text/javascript" defer></script>
+    <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
+    <script src="{{ url_for('static', filename='js/button.js')}}" type="text/javascript" defer></script>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
+
+    <script>
+        let questionNumber = 1;
+        function addQuestion() {
+
+            // Get the user selected value from select menu
+            let userChoice = document.getElementById("questionSelectBox").value;
+
+            // Adds the text box style question to form when add button is clicked
+            if (userChoice == "text box") {
+                document.getElementById("questionForm").insertAdjacentHTML("beforeend",
+                `<div class="question-container" id="question`+ questionNumber +`">
+                    <div class="question-container-header">
+                        <label for="question`+ questionNumber +`">Question `+ questionNumber + `</label>
+                    </div>
+                    <div class="question">
+                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="Question `+ questionNumber +`" required/>
+                    </div>
+                    <div class="question">
+                        <input placeholder="Answer" class="border-box" type="text" id="marks`+ questionNumber +`" name="Question `+ questionNumber +` Marks" required/>
+                    </div>
+                </div>`
+                );
+                document.getElementById("questionList").insertAdjacentHTML("beforeend",
+                `<a href="#question`+ questionNumber +`">Question `+ questionNumber +`</a>`
+                );
+                questionNumber++;
+            }
+        }
+    </script>
+</head>
+<body style="display: flex; flex-direction: row; ">
+   <!-- Navigation bar -->
+   <navbar-component></navbar-component>
+
+   <!-- Main body of page -->
+   <!-- Contains assignment/quiz building section -->
+   <body-component>
+        <span slot="header">COSC 310 101 / Assignments / Create Quiz</span> <!-- course name in header needs to be changed depending on course clicked -->
+        <span slot="secondHeader">
+            <header-component></header-component>
+        </span>
+        
+        <!-- Primary column containing question builder -->
+        <div slot="contents" class="primary-container">
+            <div class="form-header">
+                <input id="quizId" class="border-box" placeholder="Quiz Name">
+                <div class="form-header-right">
+                    <!-- Select menu and add button for question type -->
+                    <select class="border-box" required id="questionSelectBox">
+                        <option value="">- Question Type -</option>
+                        <option value="text box">Text Box</option>
+                    </select>
+                    <!-- Button for adding questions -->
+                    <button-component onclick="addQuestion()" id="addQuestion">
+                        <span slot="button-icon">add</span>
+                        <span slot="button-text">Add Question</span>
+                    </button-component>
+                </div>
+            </div>
+            <form action="" id="questionForm" method="post"></form>
+        </div>
+
+        <!-- Secondary column containing list of links to each question added to form -->
+        <div slot="contents" class="secondary-container">
+            <div class="header">Questions</div>
+
+            <!-- Container body that is populated with links to each question -->
+            <div class="list-body" id="questionList"></div>
+
+            <div class="footer">
+                <!-- Cancel button, redirects to assignments tab -->
+                <button-component>
+                    <span slot="button-icon">close</span>
+                    <span slot="button-text">Cancel</span>
+                </button-component>
+            
+                <!-- Button for publishing the assignment -->
+                <button-component>
+                    <span slot="button-icon">assignment_add</span>
+                    <span slot="button-text">Publish</span>
+                </button-component>
+            </div>
+   </body-component>
+</body>
+</html>

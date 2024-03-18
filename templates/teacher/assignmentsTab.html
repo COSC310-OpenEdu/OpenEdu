@@ -22,16 +22,23 @@
         <span slot="secondHeader">
             <header-component></header-component>
         </span>
-        <span slot="contents"><button-component>
-            <span slot="button-icon">edit</span>
-            <span slot="button-text">Create Assignment</span>
-        </button-component></span>
-        <span slot="contents"><button-component>
-            <span slot="button-icon">edit</span>
-            <span slot="button-text">Create Quiz</span>
-        </button-component></span>
-
-        
+        <span slot="contents">
+            <a href="#">
+                <button-component>
+                <span slot="button-icon">edit</span>
+                <span slot="button-text">Create Assignment</span>
+                </button-component>
+            </a>
+        </span>
+        </a>
+        <span slot="contents">
+            <a href="assignments/createQuiz">
+                <button-component>
+                    <span slot="button-icon">edit</span>
+                    <span slot="button-text">Create Quiz</span>
+                </button-component>
+            </a>
+        </span>
     </body-component>
 </body>
 </html>
