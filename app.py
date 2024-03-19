@@ -7,7 +7,7 @@ from src.Database.Query.SelectCourseQuery import SelectCourseQuery
 from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
 from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
-
+from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -15,7 +15,14 @@ app.secret_key = "a"
 
 @app.route("/")
 def home():
-    return render_template("template.html")
+    # Test the database connection
+    
+    if (session.get("username") != None):
+        
+        courses = SelectRegisteredCourses.query((session['userId']))
+        return render_template("courses.html", courses=courses)
+    else:
+        return render_template("template.html")
     
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -108,6 +115,12 @@ def createAssignment():
 def assignmentData():
    questionForm = request.form
    return render_template("assignmentOverview.html", questionForm = questionForm)
+
+@app.route("/courseDashboard/<courseId>", methods = ['GET'])
+def courseDashboard(courseId):
+    
+    
+    return render_template("courseDashboard.html", courseId=courseId)
 
 if __name__ == "__main__":
     app.run()
