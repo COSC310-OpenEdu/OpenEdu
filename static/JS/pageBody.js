@@ -73,8 +73,7 @@ bodyTemplate.innerHTML = `
             </div>
         </div>
     </div>
-`;
-console.log(window.location.pathname)
+`
 class PageBody extends HTMLElement {
     constructor() {
         super();

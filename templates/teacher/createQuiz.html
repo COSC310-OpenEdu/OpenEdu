@@ -11,7 +11,6 @@
     <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
     <script src="{{ url_for('static', filename='js/button.js')}}" type="text/javascript" defer></script>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
-
     <script>
         let questionNumber = 1;
         function addQuestion() {
@@ -24,13 +23,13 @@
                 document.getElementById("questionForm").insertAdjacentHTML("beforeend",
                 `<div class="question-container" id="question`+ questionNumber +`">
                     <div class="question-container-header">
-                        <label for="question`+ questionNumber +`">Question `+ questionNumber + `</label>
+                        Question `+ questionNumber + `
                     </div>
                     <div class="question">
-                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="Question `+ questionNumber +`" required/>
+                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" required/>
                     </div>
                     <div class="question">
-                        <input placeholder="Answer" class="border-box" type="text" id="marks`+ questionNumber +`" name="Question `+ questionNumber +` Marks" required/>
+                        <input placeholder="Answer" class="border-box" type="text" id="answer`+ questionNumber +`" required/>
                     </div>
                 </div>`
                 );
@@ -45,7 +44,6 @@
 <body style="display: flex; flex-direction: row; ">
    <!-- Navigation bar -->
    <navbar-component></navbar-component>
-
    <!-- Main body of page -->
    <!-- Contains assignment/quiz building section -->
    <body-component>
