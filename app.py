@@ -112,6 +112,9 @@ def seeGrades():
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
+@app.route('/search', methods = ['POST', 'GET'])
+def search():
+    return render_template('search.html')
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
 def createQuiz(courseId):
