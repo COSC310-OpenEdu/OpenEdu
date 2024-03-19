@@ -5,15 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COSC 310 Dashboard</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="{{ url_for('static', filename='js/navbar.js')}}" type="text/javascript" defer></script>
+
     <script src="{{ url_for('static', filename='js/pageBody.js')}}" type="text/javascript" defer></script>
     <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
     <script src="{{ url_for('static', filename='js/button.js')}}" type="text/javascript" defer></script>
 </head>
 <body style="display: flex; flex-direction: row; overflow: hidden;">
     <!-- Navigation bar -->
-    <navbar-component></navbar-component>
+    <nav class="navbar">
+        <!-- Contains the top aligned elements -->
+        <div class="navbar-top">
+            <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
+            <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+            <a href="/teacher/dashboard" id="Home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+            <a href="#" id="Courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+            <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
+        </div>
+        <!-- Contains the bottom aligned elements -->
+        <div class="navbar-bottom">
+            <a href="#" id="Log"><span class="material-symbols-outlined">logout</span>Logout</a>
+        </div>
+    </nav>
 
     <!-- Main body of page -->
     <!-- Contains a list of files uploaded by the teacher -->
