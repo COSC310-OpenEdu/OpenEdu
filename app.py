@@ -119,5 +119,9 @@ def teacherCourseDash():
 def teacherCourseAssignments():
     return render_template("teacher/assignmentsTab.html")
 
+@app.route("/teacher/<courseId>/grading", methods = ['GET'])
+def teacherCourseGrading(courseId):
+    return render_template("teacher/grading.html", courseId=courseId)
+
 if __name__ == "__main__":
     app.run()
