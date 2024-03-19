@@ -124,8 +124,6 @@ def assignmentData():
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
 def courseDashboard(courseId):
-    
-    
     return render_template("courseDashboard.html", courseId=courseId)
 
 if __name__ == "__main__":
