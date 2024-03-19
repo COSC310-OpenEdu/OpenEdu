@@ -8,6 +8,8 @@ from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
 from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
+from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
+from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -46,9 +48,26 @@ def login():
 def addUserToSession(username, password):
     #Adds username and userId to session
     StudentData = SelectStudentUserPass.query((username, password));
+    userId = StudentData[0]
     session['username'] = request.form['uname']
-    session['userId'] = StudentData[0]
-    return redirect(url_for('home'))
+    session['userId'] = userId
+    #Checks for User type and redirect accordingly
+    if userId is None:
+        return redirect(url_for('home'))
+    if CheckUserIsInstructor.check(userId):
+        session["userType"] = "Instructor"
+        #URL will be /teacher/dashboard once implemented
+        return redirect(url_for('home'))
+    if CheckUserIsStudent.check(userId):
+        session["userType"] = "Student"
+        #URL will be /student/dashboard once implemented
+        return redirect(url_for('home'))
+    else:
+        session["userType"] = "Admin"
+        #URL will be /admin/dashboard once implemented
+        return redirect(url_for('home'))
+
+
 
 
 @app.route("/logout")
@@ -56,6 +75,7 @@ def logout():
     #Remove user from session and return to home page
     session.pop('username', None)
     session.pop('userId', None)
+    session.pop("userType", None)
     return redirect(url_for('home'))
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
@@ -72,20 +92,6 @@ def createAccount():
         return redirect(url_for('login'))
         
 
-@app.route("/authenticate", methods=['POST'])
-def authenticate():
-    #Check if the information the user submitted is in the database
-    form = request.form;
-    validLogin = UsernamePasswordCheck.check((form['uname'],form['password']));
-
-    #If exists, Log the user in. Otherwise stay on the login page.
-    if validLogin:
-        #Create User class that stores data for current logged-in user
-        SData = SelectStudentUserPass.query((form['uname'],form['password']));
-        currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5]) 
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('login'))
     
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
