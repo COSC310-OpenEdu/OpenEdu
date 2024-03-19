@@ -8,6 +8,8 @@ from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
 from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
+from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
+from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -46,9 +48,21 @@ def login():
 def addUserToSession(username, password):
     #Adds username and userId to session
     StudentData = SelectStudentUserPass.query((username, password));
+    userId = StudentData[0]
     session['username'] = request.form['uname']
-    session['userId'] = StudentData[0]
-    return redirect(url_for('home'))
+    session['userId'] = userId
+    #Checks for User type and redirect accordingly
+    if CheckUserIsInstructor.check(userId):
+        session["userType"] = "Instructor"
+        return redirect(url_for('/teacher/dashboard'))
+    if CheckUserIsStudent.check(userId):
+        session["userType"] = "Student"
+        return redirect(url_for('/student/dashboard'))
+    else:
+        session["userType"] = "Admin"
+        return redirect(url_for('/admin/dashboard'))
+
+
 
 
 @app.route("/logout")
@@ -56,6 +70,7 @@ def logout():
     #Remove user from session and return to home page
     session.pop('username', None)
     session.pop('userId', None)
+    session.pop("userType", None)
     return redirect(url_for('home'))
 
 @app.route("/login/createaccount", methods=['GET', 'POST'])
