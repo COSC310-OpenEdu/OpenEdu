@@ -1,107 +1,172 @@
 main {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 .grade {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.gradeGroup, .gradeItem {
-    background-color: var(--modal);
-    margin: 2em 2em 0em 2em;
-    display: flex;
-    justify-content: flex-start;
-    padding: 1em;
-    border: var(--outlineColor) solid 0.1em;
-    border-radius: 0.5em;
-    overflow: auto;
+.gradeGroup,
+.gradeItem,
+.studentList {
+  background-color: var(--modal);
+  margin: 2em;
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  border: var(--outlineColor) solid 0.1em;
+  border-radius: 0.5em;
+  overflow: auto;
 }
 
 .gradeGroup {
-    z-index: 1;
+  z-index: 1;
+  margin-bottom: 0.1em;
 }
 
 .gradeTitle {
-    font-size: large;
+  font-size: large;
+  margin-left: 0; /* Ensures no additional margin on the left */
 }
 
 .gradeItem {
-    margin: 0em 2em 0em 4em;
-    animation-duration: 0.48s;
-    animation-name: slidein;
-    animation-direction: alternate;
-    z-index: 0;
+  margin: 0.1em 2em 0em 4em;
+  animation-duration: 0.48s;
+  animation-name: slidein;
+  animation-direction: alternate;
+  z-index: 0;
+}
+
+/* It's identical to gradeItem/courseName
+   The only change is that studentList is slightly to the right
+*/
+.studentList {
+  margin: 0em 2em 0em 6em;
+  animation-duration: 0.48s;
+  animation-name: slidein;
+  animation-direction: alternate;
+  z-index: 0;
+  display: flex; /* Adjust layout to align items */
+  align-items: center; /* Align items vertically */
+}
+
+/* By default, the courses and student list should be hidden */
+.studentList,
+.gradeItem {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, visibility 0s linear 0.5s;
+  visibility: hidden;
+}
+
+/* Adjust spacing for each content inside a student */
+.studentList span {
+  margin: 0em 3em;
+}
+
+/* Initial styling for both buttons */
+
+.denyButton,
+.approveButton {
+  color: white;
+  font-size: medium;
+  border: none;
+  padding: 0.5em 2em;
+  margin: 0 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Deny button exclusive properties */
+.denyButton {
+  background-color: #ff5449;
+  /* Moves buttons to the right. */
+  margin-left: auto;
+}
+
+/* Approve button exclusive properties */
+.approveButton {
+  background-color: #b3cbcb;
 }
 
 :root {
-    --slide: 0em;
+  --slide: 0em;
 }
-
 
 .header {
-    margin: 2em 3em -1em 5.5em;
-    display: flex;
-    justify-content: flex-start;
-    font-size: 1em;
+  margin: 2em;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1em;
 }
 
-.gradeGroup span, .gradeItem span, .header span {
-    width: 8em;
-    text-align: center;
+.gradeGroup span,
+.gradeItem span,
+.header span {
+  width: 8em;
+  text-align: center;
 }
 
-.gradeGroup :first-child, .gradeItem :first-child {
-    text-align: left;
-    padding-left: 0em;
+.gradeGroup :first-child,
+.gradeItem :first-child {
+  text-align: left;
+  padding-left: 0;
 }
 
 .gradeGroup:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.gradeItem :first-child, .header :first-child {
-    text-align: left;
-    width: 20em; /* Changed from fixed width to auto */
-    padding-left: 0em;
+/* Adjusted width for the first child to ensure alignment */
+.gradeItem :first-child,
+.header :first-child {
+  text-align: left;
+  width: auto; /* Changed from fixed width to auto */
+  padding-left: 0;
 }
 
-.gradeGroup :nth-last-child(1), .gradeItem :nth-last-child(1) {
-    text-align: right;
-    width: 12em;
-    padding-right: 2.5em;
-}
-
+/* Adjusted width for the last child to ensure alignment */
+.gradeGroup :nth-last-child(1),
+.gradeItem :nth-last-child(1),
 .header :nth-last-child(1) {
-    text-align: right;
-    width: 15em;
+  text-align: right;
+  width: auto; /* Adjust as needed */
+  padding-right: 0;
 }
 
 .hide {
-    display: none;
-    height: 0;
+  /* display: none;
+  height: 0; */
+  visibility: visible;
+  transition: visibility 0s linear 0s, max-height 0.48s ease-out;
 }
 
-/* Animations */
+.expanded {
+  max-height: 500px; /* Adjust based on your content size */
+  transition: max-height 0.5s ease-in, visibility 0s linear 0s;
+  visibility: visible;
+}
 
+/* Animations - kept as is */
 @keyframes slidein {
-    from {
-        position: relative;
-        top: var(--slide);
-    }
-    to {
-        position: relative;
-        top: 0em;
-    }
+  from {
+    position: relative;
+    top: var(--slide);
+  }
+  to {
+    position: relative;
+    top: 0em;
+  }
 }
 
 @keyframes slideout {
-    from {
-        position: relative;
-        top: 0em;
-    }
-    to {
-        position: relative;
-        top: var(--slide);
-    }
+  from {
+    position: relative;
+    top: 0em;
+  }
+  to {
+    position: relative;
+    top: var(--slide);
+  }
 }
