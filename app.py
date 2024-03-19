@@ -52,6 +52,8 @@ def addUserToSession(username, password):
     session['username'] = request.form['uname']
     session['userId'] = userId
     #Checks for User type and redirect accordingly
+    if userId is None:
+        return redirect(url_for('home'))
     if CheckUserIsInstructor.check(userId):
         session["userType"] = "Instructor"
         #URL will be /teacher/dashboard once implemented

@@ -5,7 +5,7 @@ import mysql
 class CheckUserIsInstructor(DatabaseCheck):
     @classmethod
     def check(self, userId):
-        statement = "SELECT * FROM Instructor WHERE userId = %s"
+        statement = "SELECT userId FROM Instructor WHERE userId = %s"
 
         cursor = DatabaseManager.getDatabaseCursor();
         cursor.execute(statement, (userId,))
