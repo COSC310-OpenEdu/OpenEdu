@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/aside.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
     <script>
@@ -73,87 +72,59 @@
     </script>
 </head>
 <body>
-    <body>
-        <!-- Navigation bar -->
-        <!-- Left Column -->
-        <nav>
-            <!-- Contains the top aligned elements (Generic) -->
-            <div id="Top">
-                <a href=""><div class="MenuItem" id="Logo">Logo</div></a>
-                <a href=""><div class="MenuItem" id="Home">Home</div></a>
-                <a href=""><div class="MenuItem" id="Search">Search</div></a>
+    <!-- Main body of page -->
+    <div id="body">
+        <div class="overlay"></div>
+        <form action="{{ url_for('createAccount')}}" method="post" class="center">
+            <div class="FormLine FormHeader">
+                <legend>Sign Up</legend>
             </div>
-    
-            <!-- Contains the bottom aligned elements (Page specific) -->
-            <div id="Bottom">
-                <a href="{{url_for('login')}}"><div class="MenuItem" id="Logout">Login</div></a>
+            
+            <div class="FormLine">
+                <select name="accountType" id="accountType">
+                    <option value="select" selected>Account Type</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                </select> <br>
             </div>
-        </nav>
-    
-        <!-- Information about user -->
-        <!-- Right column -->
-        <aside>
-            <div id="asideItem">Title</div>
-            <div id="asideItem">Description</div>
-            <div id="asideItem">Links</div>
-            <div id="asideFooter"></div>
-        </aside>
-    
-        <!-- Main body of page -->
-        <div id="body">
-            <div class="overlay"></div>
-            <form action="{{ url_for('createAccount')}}" method="post" class="center">
-                <div class="FormLine FormHeader">
-                    <legend>Sign Up</legend>
+            
+            <div class="FormLine">
+                <label for="email">Email</label> <br>
+                <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
+            </div>
+
+            <div class="FormLine">
+                <div class="left">
+                    <label for="fname">First Name</label> <br>
+                    <input type="text" name="fname" id="fname" placeholder="First Name">
                 </div>
-                
-                <div class="FormLine">
-                    <select name="accountType" id="accountType">
-                        <option value="select" selected>Account Type</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="student">Student</option>
-                    </select> <br>
-                </div>
-                
-                <div class="FormLine">
-                    <label for="email">Email</label> <br>
-                    <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
+                <div class="right">
+                    <label for="lname">Last Name</label> <br>
+                    <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
                 </div>
 
-                <div class="FormLine">
-                    <div class="left">
-                        <label for="fname">First Name</label> <br>
-                        <input type="text" name="fname" id="fname" placeholder="First Name">
-                    </div>
-                    <div class="right">
-                        <label for="lname">Last Name</label> <br>
-                        <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
-                    </div>
+            </div>
 
+            <div class="FormLine">
+                <label for="text">Username</label> <br>
+                <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+            </div>
+
+            <div class="FormLine">
+                <label for="password">Password</label> <br>
+                <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+            </div>
+
+            <div class="FormLine buttons">
+                <div class="left">
+                    <button onclick="javasrcipt:window.history.back();">Cancel</button>
                 </div>
-
-                <div class="FormLine">
-                    <label for="text">Username</label> <br>
-                    <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+                <div class="right">
+                    <button type="submit" class="right">Sign Up</button> <br>
                 </div>
+            </div>
+        </form>
 
-                <div class="FormLine">
-                    <label for="password">Password</label> <br>
-                    <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
-                </div>
-
-                <div class="FormLine buttons">
-                    <div class="left">
-                        <button onclick="javasrcipt:window.history.back();">Cancel</button>
-                    </div>
-                    <div class="right">
-                        <button type="submit" class="right">Sign Up</button> <br>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-
-    </body>
+    </div>
 </body>
 </html>
