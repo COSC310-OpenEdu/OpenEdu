@@ -72,20 +72,6 @@ def createAccount():
         return redirect(url_for('login'))
         
 
-@app.route("/authenticate", methods=['POST'])
-def authenticate():
-    #Check if the information the user submitted is in the database
-    form = request.form;
-    validLogin = UsernamePasswordCheck.check((form['uname'],form['password']));
-
-    #If exists, Log the user in. Otherwise stay on the login page.
-    if validLogin:
-        #Create User class that stores data for current logged-in user
-        SData = SelectStudentUserPass.query((form['uname'],form['password']));
-        currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5]) 
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('login'))
     
 @app.route("/seeGrades", methods=['GET'])
 def seeGrades(): 
