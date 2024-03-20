@@ -28,6 +28,8 @@
     flex-direction: row;
     margin-left: auto;
     gap: 16px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Quiz question flex container */
@@ -61,6 +63,7 @@
 
 form {
     padding: 0;
+    background-color: transparent;
     min-width: 500px;
     overflow: auto;
     scroll-behavior: smooth;

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Assignment</title>
+    <title>Create Quiz</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <script src="{{ url_for('static', filename='js/pageBody.js')}}" type="text/javascript" defer></script>
     <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
-    <script src="{{ url_for('static', filename='js/button.js')}}" type="text/javascript" defer></script>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
-    <script>
+
+    <script type="text/javascript">
         let questionNumber = 1;
         function addQuestion() {
 
@@ -27,10 +28,10 @@
                         Question `+ questionNumber + `
                     </div>
                     <div class="question">
-                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" required/>
+                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="questionText`+ questionNumber +`" required/>
                     </div>
                     <div class="question">
-                        <input placeholder="Answer" class="border-box" type="text" id="answer`+ questionNumber +`" required/>
+                        <input placeholder="Answer" class="border-box" type="text" id="answer`+ questionNumber +`" name="answer`+ questionNumber +`" required/>
                     </div>
                 </div>`
                 );
@@ -49,8 +50,8 @@
         <div class="navbar-top">
             <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
             <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="/teacher/dashboard" id="Home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+            <a href="{{url_for('teacherHome')}}" id="Home"><span class="material-symbols-outlined">home</span>Home</a>
+            <a href="#" id="Courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
             <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
         </div>
         <!-- Contains the bottom aligned elements -->
@@ -68,9 +69,9 @@
         </span>
         
         <!-- Primary column containing question builder -->
-        <div slot="contents" class="primary-container">
+        <form slot="contents" class="primary-container" action="{{ url_for('publishQuiz')}}" id="questionForm" method="post" name="questionForm">
             <div class="form-header">
-                <input id="quizId" class="border-box" placeholder="Quiz Name">
+                    <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required>
                 <div class="form-header-right">
                     <!-- Select menu and add button for question type -->
                     <select class="border-box" required id="questionSelectBox">
@@ -78,14 +79,13 @@
                         <option value="text box">Text Box</option>
                     </select>
                     <!-- Button for adding questions -->
-                    <button-component onclick="addQuestion()" id="addQuestion">
-                        <span slot="button-icon">add</span>
-                        <span slot="button-text">Add Question</span>
-                    </button-component>
+                    <button type="button" onclick="addQuestion()" id="addQuestion">
+                        <span class="material-symbols-outlined">add</span>
+                        <span>Add Question</span>
+                    </button>
                 </div>
             </div>
-            <form action="" id="questionForm" method="post"></form>
-        </div>
+        </form>
 
         <!-- Secondary column containing list of links to each question added to form -->
         <div slot="contents" class="secondary-container">
@@ -96,16 +96,16 @@
 
             <div class="footer">
                 <!-- Cancel button, redirects to assignments tab -->
-                <button-component>
-                    <span slot="button-icon">close</span>
-                    <span slot="button-text">Cancel</span>
-                </button-component>
+                <button>
+                    <span class="material-symbols-outlined">close</span>
+                    <span>Cancel</span>
+                </button>
             
                 <!-- Button for publishing the assignment -->
-                <button-component>
-                    <span slot="button-icon">assignment_add</span>
-                    <span slot="button-text">Publish</span>
-                </button-component>
+                <button type="submit" form="questionForm">
+                    <span class="material-symbols-outlined">assignment_add</span>
+                    <span>Publish</span>
+                </button>
             </div>
    </body-component>
 </body>

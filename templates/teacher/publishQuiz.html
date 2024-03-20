@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>COSC 310 Publish Quiz</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
     <script src="{{ url_for('static', filename='js/pageBody.js')}}" type="text/javascript" defer></script>
-    <script src="{{ url_for('static', filename='js/courseCard.js')}}" type="text/javascript" defer></script>
-    <script>
-        const courseList = JSON.parse('{{ courses|tojson|safe }}');
-    </script>
+    <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
 </head>
-<body style="display: flex; flex-direction: row; overflow: hidden;">
+<body style="display: flex; flex-direction: row; ">
     <!-- Navigation bar -->
     <nav class="navbar">
         <!-- Contains the top aligned elements -->
         <div class="navbar-top">
             <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
             <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="/teacher/dashboard" id="Home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+            <a href="{{url_for('teacherHome')}}" id="Home"><span class="material-symbols-outlined">home</span>Home</a>
+            <a href="#" id="Courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
             <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
         </div>
         <!-- Contains the bottom aligned elements -->
@@ -30,24 +26,22 @@
             <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
         </div>
     </nav>
-    
-    <!-- Main body of page -->
-    <!-- Contains a list of courses being taught by a teacher -->
-    <body-component>
-        <span slot="header">Dashboard</span>
 
-        <!-- this makes a link for every course in the database currently-->
-        <!-- change later -->
-        {% for course in courses %}
-        <span slot="contents" >
-            <a href="{{ course }}/dashboard">
-            <course-card-component id="{{ course }}">
-                <span slot="courseId">{{ course[0:4] + " " + course[4:]}}</span>
-                <span slot="courseName"></span>
-            </course-card-component>
-            </a>
+    <!-- Main body of page -->
+    <!-- Contains a list of files uploaded by the teacher -->
+    <body-component>
+        <span slot="header">COSC 310 101</span> <!-- course name in header needs to be changed depending on course clicked -->
+        <span slot="secondHeader">
+            <header-component></header-component>
         </span>
-        {% endfor %}
+
+        <span slot="contents">just some text</span>
+        <!-- This just prints the key value pairs submitted from the createQuiz form -->
+        <span slot="contents">
+            {% for key,value in questionForm.items() %}
+            <strong>{{key}}</strong>: {{value}}
+            {% endfor %}
+        </span>
     </body-component>
 </body>
 </html>

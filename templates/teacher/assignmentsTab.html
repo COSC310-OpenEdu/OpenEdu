@@ -7,10 +7,9 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
     <script src="{{ url_for('static', filename='js/pageBody.js')}}" type="text/javascript" defer></script>
     <script src="{{ url_for('static', filename='js/courseHeader.js')}}" type="text/javascript" defer></script>
-    <script src="{{ url_for('static', filename='js/button.js')}}" type="text/javascript" defer></script>
 </head>
 <body style="display: flex; flex-direction: row; overflow: hidden;">
     <!-- Navigation bar -->
@@ -19,8 +18,8 @@
         <div class="navbar-top">
             <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
             <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="/teacher/dashboard" id="Home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+            <a href="{{url_for('teacherHome')}}" id="Home"><span class="material-symbols-outlined">home</span>Home</a>
+            <a href="#" id="Courses" class="active"><span class="material-symbols-outlined active">library_books</span>Courses</a>
             <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
         </div>
         <!-- Contains the bottom aligned elements -->
@@ -38,19 +37,19 @@
         </span>
         <span slot="contents">
             <a href="#">
-                <button-component>
-                <span slot="button-icon">edit</span>
-                <span slot="button-text">Create Assignment</span>
-                </button-component>
+                <button>
+                <span class="material-symbols-outlined">edit</span>
+                <span>Create Assignment</span>
+                </button>
             </a>
         </span>
         </a>
         <span slot="contents">
             <a href="assignments/createQuiz">
-                <button-component>
-                    <span slot="button-icon">edit</span>
-                    <span slot="button-text">Create Quiz</span>
-                </button-component>
+                <button>
+                    <span class="material-symbols-outlined">edit</span>
+                    <span>Create Quiz</span>
+                </button>
             </a>
         </span>
     </body-component>
