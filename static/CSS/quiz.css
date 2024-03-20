@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    overflow: auto;
 }
 
 /* Quiz header that contains quiz name input */
