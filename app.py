@@ -10,6 +10,7 @@ from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
 from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
+from src.Database.Query.SelectCoursesTaughtByIntructor import SelectCoursesTaughtByInstructor
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -119,13 +120,10 @@ def createQuiz():
 
 @app.route("/teacher/homepage", methods = ['POST','GET'])
 def teacherHome():
-    # temporarily getting a list of all courses
-    courses = []
-    for i in range(1,5):
-        courseId = i
-        courseName = SelectCourseQuery.query((courseId,))
-        courses.append(courseName[0])
+    courseData = SelectCoursesTaughtByInstructor.queryAll(session["userId"])
+    courses = SelectCoursesTaughtByInstructor.extractCourseNames(courseData)
     return render_template("teacher/homepage.html", courses = courses)
+
 
 @app.route("/teacher/COSC310/dashboard")
 def teacherCourseDash():

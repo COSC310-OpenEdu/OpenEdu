@@ -12,3 +12,9 @@ class SelectCoursesTaughtByInstructor(DatabaseQueryAll):
         
         DatabaseManager.closeConnection();
         return studentData
+    
+    def extractCourseNames(courseData):
+        courseNames = []
+        for i in range(0,len(courseData)):
+            courseNames.append(courseData[i][1])
+        return courseNames
