@@ -6,6 +6,7 @@
 .grade {
     display: flex;
     flex-direction: column;
+    
 }
 
 
@@ -60,7 +61,7 @@
     }
 }
 
-.header {
+.gradesheader {
     margin: 2em 3em -1em 5.5em;
     display: flex;
     justify-content: flex-start;
@@ -69,24 +70,24 @@
 }
 
 
-.gradeGroup span, .gradeItem span, .header span, .gradeItem2 span, .gradeGroup2 span {
+.gradeGroup span, .gradeItem span, .gradesheader span, .gradeItem2 span, .gradeGroup2 span {
     
     width: 8em;
     text-align: center;
 }
 
-.gradeGroup :first-child, .header :first-child {
+.gradeGroup :first-child, .gradesheader :first-child {
    text-align: left;
    width:25em;
    padding-left: 0em;
 }
 
 
-.gradeGroup:hover {
+.gradeGroup:hover, .gradeGroup2:hover {
     cursor:pointer;
 }
 
-.gradeItem :first-child, .header :first-child, .gradeItem2 :first-child {
+.gradeItem :first-child, .gradesheader :first-child, .gradeItem2 :first-child {
     text-align: left;
     width: 15em;
     padding-left: 0em;
@@ -99,11 +100,11 @@
     width: 19em;
 }
 
-.gradeGroup :first-child, .header :first-child {
+.gradeGroup :first-child, .gradesheader :first-child {
     width: 18.75em;
 }
 
-.gradeGroup :nth-last-child(1), .header :nth-last-child(1) {
+.gradeGroup :nth-last-child(1), .gradesheader :nth-last-child(1) {
 text-align: right;
 width: 12em;
 padding-right: 1em;
@@ -118,7 +119,7 @@ margin-left: 3em;
 }
  
 
-.gradeGroup :nth-last-child(1), .header :nth-last-child(1) {
+.gradeGroup :nth-last-child(1), .gradesheader :nth-last-child(1) {
     text-align: right;
     width: 15em;
 }
@@ -126,7 +127,7 @@ margin-left: 3em;
 
 
 
-.gradeGroup :nth-child(2), .header :nth-child(2) {
+.gradeGroup :nth-child(2), .gradesheader :nth-child(2) {
     width: 27em;
 }
 
@@ -144,7 +145,7 @@ margin-left: 3em;
 }
 
 .gradeItem2 :nth-child(2) {
-    width: 26em;
+    width: 20em;
 }
 
 .hide {
