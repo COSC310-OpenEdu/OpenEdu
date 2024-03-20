@@ -1,0 +1,17 @@
+button {
+    width: fit-content;
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    background-color: #F8F8F8;
+    border-radius: 8px;
+    padding: 10px 16px 10px 16px;
+    border: 1px #8C8C8C solid;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+button:hover {
+  background-color: #B4CBC9;
+}

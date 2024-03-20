@@ -1,13 +1,16 @@
-main {
-    overflow-y:scroll;
-}
 
+
+.main-container {
+    overflow: auto;
+}
 .grade {
     display: flex;
     flex-direction: column;
+    
 }
 
-.gradeGroup, .gradeItem {
+
+.gradeGroup, .gradeItem, .gradeItem2, .gradeGroup2 {
     background-color: var(--modal);
     margin: 2em 2em 0em 2em;
     display: flex;
@@ -17,8 +20,8 @@ main {
     border-radius: 0.5em;
     overflow: auto;
 }
-.gradeGroup {
-    z-index: 1;
+.gradeGroup, .gradeGroup2 {
+    z-index: 2;
 }
 
 .gradeTitle{
@@ -31,8 +34,18 @@ main {
     animation-name: slidein;
     animation-direction: alternate;
     
+    z-index: 1;
+}
+
+.gradeItem2 {
+    margin: 0em 2em 0em 6em;
+    animation-duration: 0.48s;
+    animation-name: slidein;
+    animation-direction: alternate;
+    
     z-index: 0;
 }
+
 :root {
     --slide:0em;
 }
@@ -48,7 +61,7 @@ main {
     }
 }
 
-.header {
+.gradesheader {
     margin: 2em 3em -1em 5.5em;
     display: flex;
     justify-content: flex-start;
@@ -56,53 +69,84 @@ main {
     font-size: 1em;
 }
 
-.gradeGroup span, .gradeItem span, .header span {
+
+.gradeGroup span, .gradeItem span, .gradesheader span, .gradeItem2 span, .gradeGroup2 span {
     
     width: 8em;
     text-align: center;
 }
 
-.gradeGroup :first-child {
+.gradeGroup :first-child, .gradesheader :first-child {
    text-align: left;
    width:25em;
    padding-left: 0em;
 }
 
-.gradeGroup:hover {
+
+.gradeGroup:hover, .gradeGroup2:hover {
     cursor:pointer;
 }
 
-.gradeItem :first-child, .header :first-child {
+.gradeItem :first-child, .gradesheader :first-child, .gradeItem2 :first-child {
     text-align: left;
     width: 15em;
     padding-left: 0em;
 }
 
-.gradeGroup :first-child {
-    width: 15.5em;
+
+
+
+.gradeItem :first-child {
+    width: 19em;
 }
 
-.gradeGroup :nth-last-child(1), .gradeItem :nth-last-child(1) {
+.gradeGroup :first-child, .gradesheader :first-child {
+    width: 18.75em;
+}
+
+.gradeGroup :nth-last-child(1), .gradesheader :nth-last-child(1) {
 text-align: right;
 width: 12em;
-padding-right: 2.5em;
+padding-right: 1em;
+margin-left: 3em;
+}
+
+.gradeItem :last-child, .gradeItem2 :last-child {
+    width: 17em;
+    padding-right: 1em;
+    margin-left: 1em;
+    text-align: right;
 }
  
-.gradeGroup :nth-last-child(1) {
-    padding-right: 1em;
-}
-.header :nth-last-child(1), .gradeGroup :nth-last-child(1) {
+
+.gradeGroup :nth-last-child(1), .gradesheader :nth-last-child(1) {
     text-align: right;
     width: 15em;
 }
 
-.header :nth-child(2) {
-    width: 20em;
-}
-.gradeGroup :nth-child(2) {
-    width: 25em;
+
+
+
+.gradeGroup :nth-child(2), .gradesheader :nth-child(2) {
+    width: 27em;
 }
 
+.gradeItem :nth-child(2) {
+    width: 27em;
+}
+
+
+.gradeGroup2 :first-child{
+    width: 17em;
+}
+
+.gradeItem2 :first-child {
+    width: 17em;
+}
+
+.gradeItem2 :nth-child(2) {
+    width: 20em;
+}
 
 .hide {
     display: none;
