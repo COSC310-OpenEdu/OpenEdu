@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
@@ -109,18 +109,36 @@ def seeGrades():
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
 
-@app.route("/createAssignment", methods = ['POST', 'GET'])
-def createAssignment():
-   if request.method == 'GET':
-       return render_template("createAssignment.html")
-   if request.method == 'POST':
-       questionForm = request.form
-       return render_template('assignmentOverview.html', questionForm = questionForm)
+@app.route("/teacher/COSC310/assignments/createQuiz", methods = ['POST', 'GET'])
+def createQuiz():
+    if request.method == 'GET':
+        return render_template("teacher/createQuiz.html")
+    if request.method == 'POST':
+        questionForm = request.form
+        return render_template("teacher/publishQuiz.html", questionForm=questionForm)
 
-@app.route("/createAssignment/overview", methods = ['POST', 'GET'])
-def assignmentData():
-   questionForm = request.form
-   return render_template("assignmentOverview.html", questionForm = questionForm)
+@app.route("/teacher/homepage", methods = ['POST','GET'])
+def teacherHome():
+    # temporarily getting a list of all courses
+    courses = []
+    for i in range(1,5):
+        courseId = i
+        courseName = SelectCourseQuery.query((courseId,))
+        courses.append(courseName[0])
+    return render_template("teacher/homepage.html", courses = courses)
+
+@app.route("/teacher/COSC310/dashboard")
+def teacherCourseDash():
+    return render_template("teacher/courseDashboard.html")
+
+@app.route("/teacher/COSC310/assignments")
+def teacherCourseAssignments():
+    return render_template("teacher/assignmentsTab.html")
+
+@app.route("/teacher/COSC310/publishQuiz", methods = ['POST', 'GET'])
+def publishQuiz():
+    questionForm = request.form
+    return render_template("teacher/publishQuiz.html", questionForm=questionForm)
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
 def courseDashboard(courseId):

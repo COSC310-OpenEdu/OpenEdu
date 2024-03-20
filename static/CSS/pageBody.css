@@ -1,0 +1,46 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    padding: 36px;
+    width: Calc(100vw - 152px);
+    height: Calc(100vh - 72px);
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    background-color: #F8F8F8;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.header {
+    background-color: #B4CBC9;
+    height: fit-content;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    padding: 36px;
+    align-items: center;
+    font-size: 24px;
+    font-family: Roboto, sans-serif;
+    font-weight: 700;
+    position: sticky;
+    overflow: hidden;
+}
+
+.container-body {
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding: 60px;
+    gap: 36px;
+    overflow: auto;
+}
+
+.overflow {
+    display: flex;
+    flex-wrap: wrap;
+}

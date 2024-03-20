@@ -1,0 +1,156 @@
+/* Container for questions */
+.primary-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+}
+
+/* Quiz header that contains quiz name input */
+.form-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: auto;
+    height: fit-content;
+    padding: 30px 40px 30px 40px;
+    border: 1px solid #8C8C8C;
+    border-radius: 8px;
+    gap: 16px;
+}
+
+/* Right side of header with add question button */
+.form-header-right {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Quiz question flex container */
+.question-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: auto;
+    height: fit-content;
+    border: 1px solid #8C8C8C;
+    border-radius: 8px;
+    margin: 0 0 18px 0;
+    min-width: 650px;
+ }
+
+/* Question header for holding question number, points, and delete button */
+.question-container-header {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    height: 30px;
+    padding: 18px 40px 18px 40px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    border-bottom:  1px solid #8C8C8C;
+    background-color: #F8F8F8;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background-color: transparent;
+    overflow: auto;
+    scroll-behavior: smooth;
+    width: auto;
+    height: auto;
+}
+
+select {
+    text-decoration: none;
+    margin: 0;
+    width: fit-content;
+    height: 46px;
+}
+
+#quizId {
+    text-decoration: none;
+    margin: 0;
+    width: fit-content;
+    height: 24px;
+}
+
+.border-box {
+    background-color: #F8F8F8;
+    border-radius: 8px;
+    padding: 10px 16px 10px 16px;
+    border: 1px #8C8C8C solid;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for text box question and answers */
+.question {
+    margin: 0;
+    min-width: 400px;
+    height: 20;
+    padding: 10px 40px 10px 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.question input {
+    width: 500px;
+}
+
+/* Container for list of question links */
+.secondary-container {
+    display: flex;
+    flex-direction: column;
+    flex: 0;
+    width: fit-content;
+    height: fit-content;
+    border: 1px #8C8C8C solid;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.header {
+    display: flex;
+    background-color: #B4CBC9;
+    padding: 10px 40px 10px 40px;
+    height: 40px;
+    width: auto;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    font-size: 20px;
+    font-weight: 700;
+    align-items: center;
+}
+
+.list-body {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 40px 10px 40px;
+    gap: 10px
+}
+
+.list-body a:hover {
+    color: #99B0AE;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
