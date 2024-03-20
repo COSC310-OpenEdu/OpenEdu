@@ -2,9 +2,7 @@
 .primary-container {
     display: flex;
     flex-direction: column;
-    flex: auto;
-    gap: 18px;
-    width: fit-content
+    flex: 1;
 }
 
 /* Quiz header that contains quiz name input */
@@ -15,11 +13,11 @@
     align-items: center;
     background-color: white;
     width: auto;
-    min-width: 650px;
     height: fit-content;
     padding: 30px 40px 30px 40px;
     border: 1px solid #8C8C8C;
     border-radius: 8px;
+    gap: 16px;
 }
 
 /* Right side of header with add question button */
@@ -62,9 +60,10 @@
 }
 
 form {
+    display: flex;
+    flex-direction: column;
     padding: 0;
     background-color: transparent;
-    min-width: 500px;
     overflow: auto;
     scroll-behavior: smooth;
     width: auto;
@@ -112,8 +111,8 @@ select {
 .secondary-container {
     display: flex;
     flex-direction: column;
-    flex: auto;
-    width: auto;
+    flex: 0;
+    width: fit-content;
     height: fit-content;
     border: 1px #8C8C8C solid;
     border-radius: 8px;
