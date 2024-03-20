@@ -19,12 +19,14 @@ app.secret_key = "a"
 def home():
     # Test the database connection
     
-    if (session.get("username") != None):
-        
-        courses = SelectRegisteredCourses.query((session['userId']))
-        return render_template("courses.html", courses=courses)
-    else:
-        return render_template("template.html")
+        if (session.get("userType") == "Student"):
+            courses = SelectRegisteredCourses.query((session['userId']))
+            return render_template("courses.html", courses=courses)
+        elif (session.get("userType") == "Instructor"):
+            return teacherHome()
+        else:
+            return render_template("template.html")
+
     
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -120,25 +122,26 @@ def createQuiz():
 @app.route("/teacher/homepage", methods = ['POST','GET'])
 def teacherHome():
     # temporarily getting a list of all courses
-    courses = []
-    for i in range(1,5):
-        courseId = i
-        courseName = SelectCourseQuery.query((courseId,))
-        courses.append(courseName[0])
+    courses = SelectCourseQuery.query((session['userId'],))
+    
     return render_template("teacher/homepage.html", courses = courses)
 
-@app.route("/teacher/COSC310/dashboard")
-def teacherCourseDash():
-    return render_template("teacher/courseDashboard.html")
+@app.route("/teacher/<courseId>/dashboard", methods = ['GET'])
+def teacherCourseDash(courseId):
+    return render_template("teacher/courseDashboard.html", courseId=courseId)
 
-@app.route("/teacher/COSC310/assignments")
-def teacherCourseAssignments():
-    return render_template("teacher/assignmentsTab.html")
+@app.route("/teacher/<courseId>/assignments", methods = ['GET'])
+def teacherCourseAssignments(courseId):
+    return render_template("teacher/assignmentsTab.html", courseId=courseId)
 
-@app.route("/teacher/COSC310/publishQuiz", methods = ['POST', 'GET'])
-def publishQuiz():
+@app.route("/teacher/<courseId>/grading", methods = ['GET'])
+def teacherCourseGrading(courseId):
+    return render_template("teacher/grading.html", courseId=courseId)
+
+@app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
+def publishQuiz(courseId):
     questionForm = request.form
-    return render_template("teacher/publishQuiz.html", questionForm=questionForm)
+    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
 def courseDashboard(courseId):

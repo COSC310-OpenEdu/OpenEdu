@@ -23,9 +23,9 @@
         <!-- change later -->
         {% for course in courses %}
         <span slot="contents" >
-            <a href="{{ course }}/dashboard">
-            <course-card-component id="{{ course }}">
-                <span slot="courseId">{{ course[0:4] + " " + course[4:] }}</span>
+            <a href="{{url_for('teacherCourseDash', courseId=course[0])}}">
+            <course-card-component id="{{ course[1] }}">
+                <span slot="courseId">{{ course[1][0:4] + " " + course[1][4:] }}</span>
                 <span slot="courseName"></span>
             </course-card-component>
             </a>

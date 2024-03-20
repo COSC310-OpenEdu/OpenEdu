@@ -36,9 +36,9 @@
             
             <!-- Secondary header for course pages -->
             <header>
-                <a href="{{url_for('teacherCourseDash')}}" id="Dashboard" class="active">Dashboard</a>
-                <a href="{{url_for('teacherCourseAssignments')}}" id="Assignments">Assignments</a>
-                <a href="#" id="Grading">Grading</a>
+                <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard" class="active">Dashboard</a>
+                <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
+                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
                 <a href="#" id="People">People</a>
             </header>
 
