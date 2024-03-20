@@ -39,10 +39,18 @@
                 if (email.value.trim() == "") {
                     e.preventDefault();
                     email.classList.add('highlight');
+
                 }
+
+                // Check email format
                 if (!email.value.trim().match(re)) {
                     e.preventDefault();
                     email.classList.add('highlight');
+
+                    // Add warning text to the email div
+                    let warning = document.createElement('div');
+                    warning.textContent = 'Invalid Email Entered';
+                    document.querySelector("#emailDiv").appendChild(warning);
                 }
 
                 // Check first name
@@ -120,7 +128,7 @@
                     </select> <br>
                 </div>
                 
-                <div class="FormLine">
+                <div class="FormLine" id="emailDiv">
                     <label for="email">Email</label> <br>
                     <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
                 </div>
