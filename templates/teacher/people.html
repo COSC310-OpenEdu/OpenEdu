@@ -41,36 +41,33 @@
             <header>
                 <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
                 <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
-                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading" class="active">Grading</a>
-                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
+                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
+                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People" class="active">People</a>
             </header>
 
             <div class="main-container">
                 <div class="gradesheader">
-                    <span>Grade Item</span>
-                    <span>Submission</span><span>Grade</span><span>Percentage</span>
+                    <span></span>
+                    <span></span><span></span><span></span>
                 </div> 
+                
                 <div class="grades">
-                <div class="grade"id="assignments">
+                {% for instructor in instructors %}
+                <div class="grade">
                     <div class = "gradeGroup">
-                        <span class="gradeTitle">&#9660; Assignments</span>
-                        <span></span><span></span><span></span>
-                        
+                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                        <span style="width: 10em; margin-right: 20em;">{{ instructor[1] }} {{ instructor[2] }}</span><span></span><span>Instructor</span>
                     </div>
-                    <div class="grade" id="test">
-                        <div class = "gradeGroup2 gradeItem">
-                            <span class="gradeTitle">&#9660; Assignment 1</span>
-                            <span></span><span></span><span></span>
-                        </div>
-                        <div class="gradeItem2">     
-                            <span>Student 1</span>
-                            <span class="material-symbols-outlined">link</span><span>90/100</span><span>90%</span>
-                        </div>
-                    </div>
-                    <!-- Creates a new row for every assignment -->
-                    
-                    
                 </div>
+                {% endfor %}
+                {% for person in people %}
+                <div class="grade">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                        <span style="width: 10em; margin-right: 20em;">{{ person[1] }} {{ person[2] }}</span><span></span><span>Student</span>
+                    </div>
+                </div>
+                {% endfor %}
                 </div>
             </div>
         </div>

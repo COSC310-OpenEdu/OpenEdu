@@ -10,6 +10,8 @@ from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
 from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
+from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
+from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -137,6 +139,12 @@ def teacherCourseAssignments(courseId):
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
     return render_template("teacher/grading.html", courseId=courseId)
+
+@app.route("/teacher/<courseId>/people", methods = ['GET'])
+def teacherCoursePeople(courseId):
+    instructors = SelectInstructorsForCourse.queryAll((courseId,))
+    people = SelectPeopleInCourse.queryAll((courseId,))
+    return render_template("teacher/people.html", courseId=courseId, people=people, instructors=instructors)
 
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId):

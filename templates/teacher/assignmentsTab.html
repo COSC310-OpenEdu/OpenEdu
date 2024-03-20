@@ -39,7 +39,7 @@
                 <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
                 <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments" class="active">Assignments</a>
                 <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
-                <a href="#" id="People">People</a>
+                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
             </header>
 
             <div class="container-body">
@@ -49,7 +49,7 @@
                     <span>Create Assignment</span>
                     </button>
                 </a>
-                <a href="{{url_for('createQuiz')}}">
+                <a href="{{url_for('createQuiz', courseId=courseId)}}">
                     <button>
                         <span class="material-symbols-outlined">edit</span>
                         <span>Create Quiz</span>
