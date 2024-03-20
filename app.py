@@ -58,7 +58,7 @@ def addUserToSession(username, password):
     if CheckUserIsInstructor.check(userId):
         session["userType"] = "Instructor"
         #URL will be /teacher/dashboard once implemented
-        return redirect(url_for('home'))
+        return redirect(url_for('teacherHome'))
     if CheckUserIsStudent.check(userId):
         session["userType"] = "Student"
         #URL will be /student/dashboard once implemented

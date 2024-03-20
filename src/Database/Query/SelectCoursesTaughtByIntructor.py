@@ -13,6 +13,7 @@ class SelectCoursesTaughtByInstructor(DatabaseQueryAll):
         DatabaseManager.closeConnection();
         return studentData
     
+    #Helper method to get just the course names from the queryAll output
     def extractCourseNames(courseData):
         courseNames = []
         for i in range(0,len(courseData)):
