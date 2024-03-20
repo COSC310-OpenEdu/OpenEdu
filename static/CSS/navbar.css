@@ -2,9 +2,10 @@
 .navbar {
     display: flex;
     flex-direction: column;
-    background-color: var(--primary);
+    background-color: #B4CBC9;
     height: 100vh;
     width: 80px;
+    justify-content: space-between;
 }
 
 /* Navigation menu links */
@@ -12,8 +13,11 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    width: 80px;
+    height: 48px;
+    justify-content: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 /* Current navigation menu link */
@@ -23,7 +27,7 @@
 
 /* Navigation menu links on hover */
 .navbar a:hover:not(.active) {
-    background-color: var(--darkVariant);
+    background-color: #99B0AE;
     color: white;
 }
 
@@ -31,12 +35,10 @@
 .navbar-top {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
 }
 
 /* Bottom navigation menu */
 .navbar-bottom {
     display: flex;
     flex-direction: column;
-    margin-top: auto;
 }

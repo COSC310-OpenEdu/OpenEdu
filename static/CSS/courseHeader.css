@@ -1,0 +1,32 @@
+    /* Header flex container */
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: 1px #8C8C8C solid;
+        padding: 0 36px 0 36px;
+        gap: 18px;
+    }
+
+    /* Header menu links */
+    header a {
+        text-decoration: none;
+        color: black;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        padding: 18px 36px 18px 36px;
+        border-bottom: 12px solid rgb(0 0 0 / 0%);
+        font-family: Roboto, sans-serif;
+    }
+
+    /* Current header menu link */
+    header a.active {
+        border-bottom: 12px #B4CBC9 solid;
+    }
+
+    /* Header menu links on hover */
+    header a:hover:not(.active) {
+        border-bottom: 12px #99B0AE solid;
+    }

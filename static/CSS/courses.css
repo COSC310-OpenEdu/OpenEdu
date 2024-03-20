@@ -1,0 +1,45 @@
+.course {
+    background-color: var(--modal);
+    width: 18em;
+    height: 17em;
+    margin: 2em;
+    margin-top: 4em;
+    margin-bottom: 0em;
+    margin-right: 1em;
+    border-radius: 1em;
+}
+
+.courseRow {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main-container {
+    overflow: auto;
+    
+}
+
+.coursesGroup {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+
+.banner {
+    background-color: red;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    width: 100%;
+    padding-top: 6em;
+    height: 6.5em;
+    margin-bottom: 0.5em;
+}zz
+
+.course p {
+    margin-left: 0.5em;
+}
+
+.container-header {
+    font-weight: bold;
+    font-size:larger;
+}
