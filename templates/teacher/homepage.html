@@ -1,56 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageBody.css') }}"> 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+{% block head %}
+    {{ super() }}
     <script src="{{ url_for('static', filename='js/courseCard.js')}}" type="text/javascript" defer></script>
-    <script>
-        const courseList = JSON.parse('{{ courses|tojson|safe }}');
-    </script>
-</head>
-<body style="display: flex; flex-direction: row; overflow: hidden;">
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <!-- Contains the top aligned elements -->
-        <div class="navbar-top">
-            <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
-            <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="{{url_for('teacherHome')}}" id="Home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
-            <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
-        </div>
-        <!-- Contains the bottom aligned elements -->
-        <div class="navbar-bottom">
-            <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
-        </div>
-    </nav>
-    
-    <!-- Main body of page -->
-    <!-- Contains a list of courses being taught by a teacher -->
-    <div class="page-container">
-        <div class="container">
-            <div class="header">Dashboard</div>
-            <div class="container-body overflow">
-                <!-- this makes a link for every course in the database currently-->
-                <!-- change later -->
-                {% for course in courses %}
-                <span slot="contents" >
-                    <a href="{{ course }}/dashboard">
-                    <course-card-component id="{{ course }}">
-                        <span slot="courseId">{{ course[0:4] + " " + course[4:]}}</span>
-                        <span slot="courseName"></span>
-                    </course-card-component>
-                    </a>
-                </span>
-                {% endfor %}
-            </div>
-        </div>
+    <script> const courseList = JSON.parse('{{ courses|tojson|safe }}'); </script>
+    <script> document.getElementById("home").setAttribute('href', "{{ url_for('teacherHome') }}");</script>
+{% endblock %}
+{% block pageHeader %}Homepage{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{url_for('teacherHome')}}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <div class="container-body overflow">
+        <!-- this makes a link for every course in the database currently-->
+        <!-- change later -->
+        {% for course in courses %}
+        <span slot="contents" >
+            <a href="{{ course }}/dashboard">
+            <course-card-component id="{{ course }}">
+                <span slot="courseId">{{ course[0:4] + " " + course[4:] }}</span>
+                <span slot="courseName"></span>
+            </course-card-component>
+            </a>
+        </span>
+        {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

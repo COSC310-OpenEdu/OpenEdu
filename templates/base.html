@@ -12,23 +12,16 @@
     {% endblock %}
 </head>
 <body style="display: flex; flex-direction: row; overflow: hidden;">
+    
     <!-- Navigation bar -->
     <nav class="navbar">
         <!-- Contains the top aligned elements -->
         <div class="navbar-top">
-            {% block navTop %}
-            <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-            <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
-            <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
-            {% endblock %}
+            {% block navTop %}{% endblock %}
         </div>
         <!-- Contains the bottom aligned elements -->
         <div class="navbar-bottom">
-            {% block navBottom %}
-            <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
-            {% endblock %}
+            {% block navBottom %}{% endblock %}
         </div>
     </nav>
 
@@ -36,9 +29,7 @@
     <div class="page-container">
         <div class="container">
             <div class="header">{% block pageHeader %}{% endblock %}</div>
-            {% block content %}
-                <div class="container-body"></div>
-            {% endblock %}
+            {% block content %}{% endblock %}
         </div>
     </div>
 </body>
