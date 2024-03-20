@@ -134,6 +134,7 @@ def teacherCourseAssignments():
 
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
+    
     return render_template("teacher/grading.html", courseId=courseId)
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
