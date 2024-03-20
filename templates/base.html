@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale=1.0>
+    {% block head %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/general.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/pageBody.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    {% endblock %}
+</head>
+<body style="display: flex; flex-direction: row; overflow: hidden;">
+    <!-- Navigation bar -->
+    <nav class="navbar">
+        <!-- Contains the top aligned elements -->
+        <div class="navbar-top">
+            {% block navTop %}
+            <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+            <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+            <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+            <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+            <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+            {% endblock %}
+        </div>
+        <!-- Contains the bottom aligned elements -->
+        <div class="navbar-bottom">
+            {% block navBottom %}
+            <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
+            {% endblock %}
+        </div>
+    </nav>
+
+    <!-- Main body of page -->
+    <div class="page-container">
+        <div class="container">
+            <div class="header">{% block pageHeader %}{% endblock %}</div>
+            {% block content %}
+                <div class="container-body"></div>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
