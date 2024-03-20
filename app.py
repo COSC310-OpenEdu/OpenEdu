@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
@@ -110,21 +110,24 @@ def seeGrades():
 
 
 @app.route("/teacher/COSC310/assignments/createQuiz", methods = ['POST', 'GET'])
-def createAssignment():
-   if request.method == 'GET':
-       return render_template("teacher/createQuiz.html")
+def createQuiz():
+    if request.method == 'GET':
+        return render_template("teacher/createQuiz.html")
+    if request.method == 'POST':
+        questionForm = request.form
+        return render_template("teacher/publishQuiz.html", questionForm=questionForm)
 
-@app.route("/teacher/dashboard", methods = ['POST','GET'])
-def teacherDash():
+@app.route("/teacher/homepage", methods = ['POST','GET'])
+def teacherHome():
     # temporarily getting a list of all courses
     courses = []
     for i in range(1,5):
         courseId = i
         courseName = SelectCourseQuery.query((courseId,))
         courses.append(courseName[0])
-    return render_template("teacher/dashboard.html", courses = courses)
+    return render_template("teacher/homepage.html", courses = courses)
 
-@app.route("/teacher/COSC310/dashboard", methods = ['POST','GET'])
+@app.route("/teacher/COSC310/dashboard")
 def teacherCourseDash():
     return render_template("teacher/courseDashboard.html")
 
@@ -132,10 +135,17 @@ def teacherCourseDash():
 def teacherCourseAssignments():
     return render_template("teacher/assignmentsTab.html")
 
+<<<<<<< HEAD
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
     
     return render_template("teacher/grading.html", courseId=courseId)
+=======
+@app.route("/teacher/COSC310/publishQuiz", methods = ['POST', 'GET'])
+def publishQuiz():
+    questionForm = request.form
+    return render_template("teacher/publishQuiz.html", questionForm=questionForm)
+>>>>>>> 104e1b0cb3a1bc1b7538caf73d83825864f8df77
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
 def courseDashboard(courseId):
