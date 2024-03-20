@@ -47,37 +47,22 @@ def login():
 
 
 def addUserToSession(username, password):
-    #Adds username and userId to session
-    StudentData = SelectStudentUserPass.query((username, password));
-    userId = StudentData[0]
-    session['username'] = request.form['uname']
-    session['userId'] = userId
-    #Checks for User type and redirect accordingly
-    if userId is None:
-        return redirect(url_for('home'))
-    if CheckUserIsInstructor.check(userId):
-        session["userType"] = "Instructor"
-        #URL will be /teacher/dashboard once implemented
-        return redirect(url_for('home'))
-    if CheckUserIsStudent.check(userId):
-        session["userType"] = "Student"
-        #URL will be /student/dashboard once implemented
-        return redirect(url_for('home'))
-    else:
-        session["userType"] = "Admin"
-        #URL will be /admin/dashboard once implemented
-        return redirect(url_for('home'))
+    # Adds username and userId to session
+    StudentData = SelectStudentUserPass.query((username, password))
+    session["username"] = request.form["uname"]
+    session["userId"] = StudentData[0]
+    return redirect(url_for("home"))
 
 
 
 
 @app.route("/logout")
 def logout():
-    #Remove user from session and return to home page
-    session.pop('username', None)
-    session.pop('userId', None)
-    session.pop("userType", None)
-    return redirect(url_for('home'))
+    # Remove user from session and return to home page
+    session.pop("username", None)
+    session.pop("userId", None)
+    return redirect(url_for("home"))
+
 
 @app.route("/login/createaccount", methods=["GET", "POST"])
 def createAccount():
@@ -101,13 +86,27 @@ def createAccount():
         return redirect(url_for("login"))
 
 
-    
-@app.route("/seeGrades", methods=['GET'])
-def seeGrades(): 
-    studentId = '1'
-    assignmentId = '1'
-    courseId = '1'
- 
+@app.route("/authenticate", methods=["POST"])
+def authenticate():
+    # Check if the information the user submitted is in the database
+    form = request.form
+    validLogin = UsernamePasswordCheck.check((form["uname"], form["password"]))
+    # If exists, Log the user in. Otherwise stay on the login page.
+    if validLogin:
+        # Create User class that stores data for current logged-in user
+        SData = SelectStudentUserPass.query((form["uname"], form["password"]))
+        currentUser = User(SData[0], SData[1], SData[2], SData[3], SData[4], SData[5])
+        return redirect(url_for("home"))
+    else:
+        return redirect(url_for("login"))
+
+
+@app.route("/seeGrades", methods=["GET"])
+def seeGrades():
+    studentId = "1"
+    assignmentId = "1"
+    courseId = "1"
+
     # Query for getting grades for every assignment in a class for a given student
     grades = SelectGradeForStudent.queryAll(
         (
@@ -145,5 +144,7 @@ def courseDashboard(courseId):
 @app.route("/courseRegistration")
 def courseRegistration():
     return render_template("courseRegistration.html")
+
+
 if __name__ == "__main__":
     app.run()
