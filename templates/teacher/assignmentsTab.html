@@ -6,7 +6,8 @@
     <title>COSC 310 Assignments</title>
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageBody.css') }}">    
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageBody.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
 
@@ -34,7 +35,15 @@
     <div class="page-container">
         <div class="container">
             <div class="header">COSC 310 101 / Assignments</div>
-            <header-component></header-component>
+
+            <!-- Secondary header for course pages -->
+            <header>
+                <a href="#" id="Dashboard">Dashboard</a>
+                <a href="#" id="Assignments" class="active">Assignments</a>
+                <a href="#" id="Grading">Grading</a>
+                <a href="#" id="People">People</a>
+            </header>
+
             <div class="container-body">
                 <a href="#">
                     <button>
