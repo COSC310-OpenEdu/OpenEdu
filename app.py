@@ -147,5 +147,10 @@ def publishQuiz(courseId):
 def courseDashboard(courseId):
     return render_template("courseDashboard.html", courseId=courseId)
 
+@app.route("/approveRegistration")
+def courseRegistration():
+    return render_template("approveRegistration.html")
+
+
 if __name__ == "__main__":
     app.run()
