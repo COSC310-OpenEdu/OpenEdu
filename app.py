@@ -114,7 +114,7 @@ def seeGrades():
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
 def createQuiz(courseId):
     if request.method == 'GET':
-        return render_template("teacher/createQuiz.html")
+        return render_template("teacher/createQuiz.html", courseId=courseId)
     if request.method == 'POST':
         questionForm = request.form
         return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)

@@ -9,12 +9,12 @@
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
     <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}
     <!-- Secondary header for course pages -->

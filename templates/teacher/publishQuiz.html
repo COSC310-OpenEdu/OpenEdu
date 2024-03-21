@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}COSC 310 Publish Quiz{% endblock %}
+{% block title %}Publish Quiz{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">
 {% endblock %}
-{% block pageHeader %}COSC 310 / Assignments / Create Quiz / Publish Quiz{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments / Create Quiz / Publish Quiz{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -13,14 +13,14 @@
     <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{url_for('teacherCourseDash')}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments')}}" id="Assignments" class="active">Assignments</a>
-        <a href="#" id="Grading">Grading</a>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments" class="active">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
         <a href="#" id="People">People</a>
     </header>
     <div class="container-body">

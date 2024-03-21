@@ -4,7 +4,6 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='js/courseCard.js')}}" type="text/javascript" defer></script>
     <script> const courseList = JSON.parse('{{ courses|tojson|safe }}'); </script>
-    <script> document.getElementById("home").setAttribute('href', "{{ url_for('teacherHome') }}");</script>
 {% endblock %}
 {% block pageHeader %}Homepage{% endblock %}
 {% block navTop %}
@@ -15,7 +14,7 @@
     <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}
     <div class="container-body overflow">
