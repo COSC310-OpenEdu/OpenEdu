@@ -147,12 +147,12 @@ def publishQuiz(courseId):
 def courseDashboard(courseId):
     return render_template("courseDashboard.html", courseId=courseId)
 
-@app.route("/approveRegistration")
+@app.route("/admin/approveRegistration")
 def courseRegistration():
-    return render_template("approveRegistration.html")
+    return render_template("admin/approveRegistration.html")
 
 @app.route("/admin/createCourse")
-def admin():
+def createCourse():
     return render_template("admin/createCourse.html")
 
 

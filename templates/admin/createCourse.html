@@ -16,8 +16,8 @@
 {% block content %}
     <!-- Secondary header -->
     <header>
-        <a href="" id="CreateCourse" class="active">Create Course</a>
-        <a href="" id="Registration">Course Registration</a>
+        <a href="{{ url_for('createCourse') }}" id="CreateCourse" class="active">Create Course</a>
+        <a href="{{ url_for('courseRegistration') }}" id="Registration">Approve Registration</a>
     </header>
     <div class="container-body">
 
