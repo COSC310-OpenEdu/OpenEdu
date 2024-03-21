@@ -25,7 +25,7 @@ def home():
         elif (session.get("userType") == "Instructor"):
             return teacherHome()
         else:
-            return render_template("template.html")
+            return render_template("openEduHome.html")
 
     
 @app.route("/login", methods=['GET', 'POST'])

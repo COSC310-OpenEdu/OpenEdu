@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}OpenEdu{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block pageHeader %}Welcome to OpenEdu!{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('login') }}" id="log"><span class="material-symbols-outlined">login</span>Login</a>
+{% endblock %}
+{% block content %}
+    <div class="container-body overflow" style="flex-direction: column; gap: 8px;">
+        <h1><span class="material-symbols-outlined">shield_person</span> Log in as an admin to:</h1>
+            <ul>
+                <li>Create courses,</li>
+                <li>Register students.</li>
+            </ul>
+        <h1><span class="material-symbols-outlined">supervisor_account</span> Log in as a teacher to:</h1>
+            <ul>
+                <li>Upload files for student learning,</li>
+                <li>Create assignments and quizzes,</li>
+                <li>Grade assignments and give students feedback.</li>
+            </ul>
+        <h1><span class="material-symbols-outlined">person_raised_hand</span> Log in as a student to:</h1>
+            <ul>
+                <li>Request registration in courses,</li>
+                <li>Submit assignments and quizzes,</li>
+                <li>See your grades.</li>
+            </ul>
+    </div>
+{% endblock %}
