@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Create Course{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}"> 
+{% endblock %}
+{% block pageHeader %}Create Course{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header -->
+    <header>
+        <a href="" id="CreateCourse" class="active">Create Course</a>
+        <a href="" id="Registration">Course Registration</a>
+    </header>
+    <div class="container-body">
+
+    </div>
+{% endblock %}

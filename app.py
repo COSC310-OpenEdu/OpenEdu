@@ -151,6 +151,10 @@ def courseDashboard(courseId):
 def courseRegistration():
     return render_template("approveRegistration.html")
 
+@app.route("/admin/createCourse")
+def admin():
+    return render_template("admin/createCourse.html")
+
 
 if __name__ == "__main__":
     app.run()
