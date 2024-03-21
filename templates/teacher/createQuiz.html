@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Quiz</title>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+{% extends "base.html" %}
+{% block title %}Create Quiz{% endblock %}
+{% block head %}
+    {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageBody.css') }}"> 
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script type="text/javascript">
         let questionNumber = 1;
         function addQuestion() {
@@ -40,86 +34,69 @@
             }
         }
     </script>
-</head>
-<body style="display: flex; flex-direction: row; ">
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <!-- Contains the top aligned elements -->
-        <div class="navbar-top">
-            <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
-            <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="{{url_for('teacherHome')}}" id="Home"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-            <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
-        </div>
-        <!-- Contains the bottom aligned elements -->
-        <div class="navbar-bottom">
-            <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
-        </div>
-    </nav>
+{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments / Create Quiz{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" class="active" id="Assignments">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
+        <a href="#" id="People">People</a>
+    </header>
+   <!-- Contains quiz building section --> 
+    <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
+        <!-- Primary column containing question builder -->
+        <div class="primary-container">
+            <form action="{{ url_for('publishQuiz', courseId=courseId)}}" id="questionForm" method="post" name="questionForm">
+                <div class="form-header">
+                    <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required>
+                    <div class="form-header-right">
+                        <!-- Select menu for question type -->
+                        <select class="border-box" required id="questionSelectBox">
+                            <option value="">- Question Type -</option>
+                            <option value="text box">Text Box</option>
+                        </select>
 
-   <!-- Main body of page -->
-   <!-- Contains assignment/quiz building section -->
-    <div class="page-container">
-        <div class="container">
-            <div class="header">COSC 310 101 / Assignments / Create Quiz</div>
-
-            <!-- Secondary header for course pages -->
-            <header>
-                <a href="{{url_for('teacherCourseDash')}}" id="Dashboard">Dashboard</a>
-                <a href="{{url_for('teacherCourseAssignments')}}" id="Assignments" class="active">Assignments</a>
-                <a href="#" id="Grading">Grading</a>
-                <a href="#" id="People">People</a>
-            </header>
-            
-            <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
-                <!-- Primary column containing question builder -->
-                <div class="primary-container">
-                    <form action="{{ url_for('publishQuiz')}}" id="questionForm" method="post" name="questionForm">
-                        <div class="form-header">
-                            <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required>
-                            <div class="form-header-right">
-    
-                            <!-- Select menu and for question type -->
-                            <select class="border-box" required id="questionSelectBox">
-                                <option value="">- Question Type -</option>
-                                <option value="text box">Text Box</option>
-                            </select>
-    
-                            <!-- Button for adding questions -->
-                            <button type="button" onclick="addQuestion()">
-                                <span class="material-symbols-outlined">add</span>
-                                <span>Add Question</span>
-                            </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-                <!-- Secondary column containing list of links to each question added to form -->
-                <div class="secondary-container">
-                    <div class="header">Questions</div>
-
-                    <!-- Container body that is populated with links to each question -->
-                    <div class="list-body" id="questionList"></div>
-
-                    <div class="footer">
-                        <!-- Cancel button, redirects to assignments tab -->
-                        <button>
-                            <span class="material-symbols-outlined">close</span>
-                            <span>Cancel</span>
-                        </button>
-                    
-                        <!-- Button for publishing the assignment -->
-                        <button type="submit" form="questionForm">
-                            <span class="material-symbols-outlined">assignment_add</span>
-                            <span>Publish</span>
+                        <!-- Button for adding questions -->
+                        <button type="button" onclick="addQuestion()">
+                            <span class="material-symbols-outlined">add</span>
+                            <span>Add Question</span>
                         </button>
                     </div>
                 </div>
+            </form>
+        </div>
+        <!-- Secondary column containing list of links to each question added to form -->
+        <div class="secondary-container">
+            <div class="header">Questions</div>
+
+            <!-- Container body that is populated with links to each question -->
+            <div class="list-body" id="questionList"></div>
+
+            <div class="footer">
+                <!-- Cancel button, redirects to assignments tab -->
+                <button>
+                    <span class="material-symbols-outlined">close</span>
+                    <span>Cancel</span>
+                </button>
+            
+                <!-- Button for publishing the assignment -->
+                <button type="submit" form="questionForm">
+                    <span class="material-symbols-outlined">assignment_add</span>
+                    <span>Publish</span>
+                </button>
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
