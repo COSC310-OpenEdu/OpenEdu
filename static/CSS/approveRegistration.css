@@ -94,13 +94,6 @@ main {
   --slide: 0em;
 }
 
-.header {
-  margin: 2em;
-  display: flex;
-  justify-content: flex-start;
-  font-size: 1em;
-}
-
 .gradeGroup span,
 .gradeItem span,
 .header span {

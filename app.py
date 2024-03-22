@@ -25,7 +25,7 @@ def home():
         elif (session.get("userType") == "Instructor"):
             return teacherHome()
         else:
-            return render_template("template.html")
+            return render_template("openEduHome.html")
 
     
 @app.route("/login", methods=['GET', 'POST'])
@@ -147,9 +147,13 @@ def publishQuiz(courseId):
 def courseDashboard(courseId):
     return render_template("courseDashboard.html", courseId=courseId)
 
-@app.route("/approveRegistration")
+@app.route("/admin/approveRegistration")
 def courseRegistration():
-    return render_template("approveRegistration.html")
+    return render_template("admin/approveRegistration.html")
+
+@app.route("/admin/createCourse")
+def createCourse():
+    return render_template("admin/createCourse.html")
 
 
 if __name__ == "__main__":

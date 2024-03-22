@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Approve Registration{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}"> 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../static//CSS/approveRegistration.css"
+    />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let groups = document.querySelectorAll(".grade");
+
+        groups.forEach((group) => {
+          let button = group.querySelector(".gradeGroup");
+
+          button.addEventListener("click", function () {
+            let items = group.querySelectorAll(".gradeItem, .studentList");
+
+            items.forEach((item) => {
+              if (item.classList.contains("expanded")) {
+                item.classList.remove("expanded");
+              } else {
+                item.classList.add("expanded");
+              }
+            });
+          });
+        });
+      });
+    </script>
+{% endblock %}
+{% block pageHeader %}Approve Registration{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header -->
+    <header>
+        <a href="{{ url_for('createCourse') }}" id="CreateCourse">Create Course</a>
+        <a href="{{ url_for('courseRegistration') }}" id="Registration" class="active">Approve Registration</a>
+    </header>
+
+      <div class="grade" id="assignments">
+        <div class="gradeGroup">
+          <!-- Session name -->
+          <!--Also, &#9660 is the cool arrow that Jeremy put in! -->
+          <span class="gradeTitle">&#9660; 2024 Summer</span>
+        </div>
+
+        <!-- First Course -->
+        <div class="courseContainer">
+          <div class="gradeItem">
+            <span>COSC 111</span>
+          </div>
+          <!-- Student List for COSC 111 -->
+          <div class="studentList">
+            <!-- Student Details and Buttons -->
+
+            <span>Student Name</span>
+            <span>Student ID</span>
+            <span>Year Level</span>
+
+            <!-- Buttons to deny/accept student-->
+            <button class="denyButton">Deny</button>
+            <button class="approveButton">Approve</button>
+          </div>
+        </div>
+
+        <!-- Second Course -->
+        <div class="courseContainer">
+          <div class="gradeItem">
+            <span>COSC 211</span>
+          </div>
+          <!-- Student List for COSC 211 -->
+          <div class="studentList">
+            <!-- Student Details and Buttons -->
+
+            <span>Student Name</span>
+            <span>Student ID</span>
+            <span>Year Level</span>
+
+            <!-- Buttons to deny/accept student-->
+            <button class="denyButton">Deny</button>
+            <button class="approveButton">Approve</button>
+          </div>
+          <div class="studentList">
+            <!-- Student Details and Buttons -->
+
+            <span>Student Name</span>
+            <span>Student ID</span>
+            <span>Year Level</span>
+
+            <!-- Buttons to deny/accept student-->
+            <button class="denyButton">Deny</button>
+            <button class="approveButton">Approve</button>
+          </div>
+        </div>
+
+        <!-- Add more courses in similar structure! Will have to implement backend -->
+      </div>
+
+      <!-- For testing! Will remove later -->
+
+{% endblock %}
