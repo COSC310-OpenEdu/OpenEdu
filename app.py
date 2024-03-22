@@ -113,13 +113,13 @@ def seeGrades():
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
 
-@app.route("/teacher/COSC310/assignments/createQuiz", methods = ['POST', 'GET'])
-def createQuiz():
+@app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
+def createQuiz(courseId):
     if request.method == 'GET':
-        return render_template("teacher/createQuiz.html")
+        return render_template("teacher/createQuiz.html", courseId=courseId)
     if request.method == 'POST':
         questionForm = request.form
-        return render_template("teacher/publishQuiz.html", questionForm=questionForm)
+        return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
 @app.route("/teacher/homepage", methods = ['POST','GET'])
 def teacherHome():
@@ -154,6 +154,11 @@ def publishQuiz(courseId):
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
 def courseDashboard(courseId):
     return render_template("courseDashboard.html", courseId=courseId)
+
+@app.route("/approveRegistration")
+def courseRegistration():
+    return render_template("approveRegistration.html")
+
 
 if __name__ == "__main__":
     app.run()

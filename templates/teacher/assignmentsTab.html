@@ -1,62 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSC 310 Assignments</title>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageBody.css') }}">
+{% extends "base.html" %}
+{% block title %}Assignments{% endblock %}
+{% block head %}
+    {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
-</head>
-<body style="display: flex; flex-direction: row; overflow: hidden;">
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <!-- Contains the top aligned elements -->
-        <div class="navbar-top">
-            <a href="#" id="Logo"><span class="material-symbols-outlined size-36">school</span></a>
-            <a href="#" id="Account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-            <a href="{{url_for('teacherHome')}}" id="Home"><span class="material-symbols-outlined">home</span>Home</a>
-            <a href="#" id="Courses" class="active"><span class="material-symbols-outlined active">library_books</span>Courses</a>
-            <a href="#" id="Search"><span class="material-symbols-outlined">search</span>Search</a>
-        </div>
-        <!-- Contains the bottom aligned elements -->
-        <div class="navbar-bottom">
-            <a href="{{url_for('logout')}}" id="Logout"><span class="material-symbols-outlined">logout</span>Logout</a>
-        </div>
-    </nav>
-
-    <!-- Main body of page -->
-    <!-- Contains a list of courses being taught by a teacher -->
-    <div class="page-container">
-        <div class="container">
-            <div class="header">COSC 310 101 / Assignments</div>
-
-            <!-- Secondary header for course pages -->
-            <header>
-                <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
-                <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments" class="active">Assignments</a>
-                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
-                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
-            </header>
-
-            <div class="container-body">
-                <a href="#">
-                    <button>
-                    <span class="material-symbols-outlined">edit</span>
-                    <span>Create Assignment</span>
-                    </button>
-                </a>
-                <a href="{{url_for('createQuiz', courseId=courseId)}}">
-                    <button>
-                        <span class="material-symbols-outlined">edit</span>
-                        <span>Create Quiz</span>
-                    </button>
-                </a>
-            </div>
-        </div>
+{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments" class="active">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
+        <a href="#" id="People">People</a>
+    </header>
+    <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
+    <div class="container-body">
+        <a href="#">
+            <button>
+                <span class="material-symbols-outlined">edit</span>
+                <span>Create Assignment</span>
+            </button>
+        </a>
+        <a href="{{url_for('createQuiz', courseId=courseId)}}">
+            <button>
+                <span class="material-symbols-outlined">edit</span>
+                <span>Create Quiz</span>
+            </button>
+        </a>
     </div>
-</body>
-</html>
+{% endblock %}
