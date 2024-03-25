@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Assignments{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Dashboard{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -18,12 +18,12 @@
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard" class="active">Dashboard</a>
-        <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
+        <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments" class="active">Assignments</a>
         <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades">Grades</a>
         <a href="" id="People">People</a>
     </header>
-    <!-- Contains a list of files uploaded by the teacher -->
+    <!-- Contains a list of assignments created by the teacher -->
     <div class="container-body">
 
     </div>

@@ -154,6 +154,10 @@ def courseRegistration():
 def createCourse():
     return render_template("admin/createCourse.html")
 
+@app.route("/student/<courseId>/assignments", methods = ['GET'])
+def seeAssignments(courseId):
+    return render_template("student/seeAssignments.html", courseId=courseId)
+
 
 if __name__ == "__main__":
     app.run()

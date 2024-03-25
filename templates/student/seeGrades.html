@@ -55,7 +55,7 @@
     <!-- Secondary header for course pages -->
     <header>
         <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard">Dashboard</a>
-        <a href="" id="Assignments">Assignments</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
         <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades" class="active">Grades</a>
         <a href="" id="People">People</a>
     </header>
