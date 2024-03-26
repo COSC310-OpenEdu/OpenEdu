@@ -29,7 +29,6 @@
         function createElements(data) {
 
             jsonData = JSON.parse(data)
-            console.log(jsonData);
 
             document.getElementById('courses').innerHTML = '';   
 
@@ -54,6 +53,11 @@
                 joinButton = document.createElement('button');
                 joinButton.innerHTML = 'Request to join';
                 joinButton.classList.add('join');
+                joinButton.addEventListener('click', function(){
+                    joinCourse(jsonData[i][0] + '');
+                });
+
+
                 courseInfo.appendChild(joinButton);
 
                 div.addEventListener('click', function(){
@@ -70,6 +74,12 @@
             document.getElementById(courseInfoId).classList.toggle('hidden')
         }
 
+        function joinCourse(courseId) {
+            $.post('/Course/'+ courseId+'/join')
+                .done( function (){
+                    alert('Successfully Requested Course');
+                });
+        }
 
         document.addEventListener("DOMContentLoaded", function(){
             loadPage('');

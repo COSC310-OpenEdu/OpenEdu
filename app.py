@@ -12,6 +12,7 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Search.CourseSearch import CourseSearch
 
 currentUser = None #Start with no user logged in
@@ -122,7 +123,16 @@ def search():
         return CourseSearch.search(searchTerm)
 
 @app.route('/Course/<courseId>/join', methods = ['POST'])
-def joinCourse():
+def joinCourse(courseId):
+    userId = session['userId']
+    
+    # Student must be signed in to join a course
+    if userId == None:
+        return redirect(url_for('login'))
+    
+    AddCourseRequest.update((userId, courseId))
+    
+    return {}
     
 
 
