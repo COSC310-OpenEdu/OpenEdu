@@ -80,6 +80,15 @@ CREATE TABLE IF NOT EXISTS Attend (
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 );
 
+CREATE TABLE IF NOT EXISTS CourseRequests (
+    studentId   INTEGER NOT NULL,
+    courseId    INTEGER NOT NULL,
+
+    PRIMARY KEY (studentId, courseId),
+    FOREIGN KEY (studentId) REFERENCES Student(userId),
+    FOREIGN KEY (courseId) REFERENCES Course(courseId)
+);
+
 CREATE TABLE IF NOT EXISTS Instructs (
     instructorId    INTEGER NOT NULL,
     courseId        INTEGER NOT NULL,
