@@ -12,6 +12,7 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -138,7 +139,8 @@ def teacherCourseAssignments(courseId):
 
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
-    return render_template("teacher/grading.html", courseId=courseId)
+    grades = SelectGradesForCourse.queryAll((courseId,))
+    return render_template("teacher/grading.html", courseId=courseId, grades=grades)
 
 @app.route("/teacher/<courseId>/people", methods = ['GET'])
 def teacherCoursePeople(courseId):
