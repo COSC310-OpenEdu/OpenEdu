@@ -1,7 +1,7 @@
 USE openEDU;
 
 SET foreign_key_checks = 0;
-DROP TABLE IF EXISTS User, Course, Department, Student, Instructor, Admin, Assignment, Grades, Attend, Instructs, Question, Solution;
+DROP TABLE IF EXISTS User, Course, Department, Student, Instructor, Admin, Assignment, Grades, Attend, Instructs, Question, Solution, CourseRequests;
 SET foreign_key_checks = 1;
 
 
@@ -21,6 +21,13 @@ CREATE TABLE IF NOT EXISTS User (
 CREATE TABLE IF NOT EXISTS Course (
     courseId    INTEGER NOT NULL AUTO_INCREMENT,
     name        VARCHAR(20),
+    description VARCHAR(100),
+    credits     INTEGER,
+    session     INTEGER,
+    term        INTEGER,
+    day         INTEGER,
+    startTime   INTEGER,
+    endTime     INTEGER,
 
     PRIMARY KEY (courseId)
 );
@@ -59,15 +66,13 @@ CREATE TABLE IF NOT EXISTS Admin (
 
 CREATE TABLE IF NOT EXISTS Assignment (
     assignmentId    INTEGER NOT NULL AUTO_INCREMENT,
-    studentId       INTEGER NOT NULL,
     courseId        INTEGER NOT NULL,
     name            VARCHAR(20),
     files           BLOB,
     fileLocator     VARCHAR(20),
     dueDate         DATETIME,
 
-    PRIMARY KEY (assignmentId, studentId, courseId),
-    FOREIGN KEY (studentId) REFERENCES Student(userId),
+    PRIMARY KEY (assignmentId, courseId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
 );
 
@@ -137,10 +142,10 @@ CREATE TABLE IF NOT EXISTS Grades (
 );
 
 -- Insert Courses
-INSERT INTO Course (name) VALUES ('COSC303');
-INSERT INTO Course (name) VALUES ('COSC310');
-INSERT INTO Course (name) VALUES ('COSC304');
-INSERT INTO Course (name) VALUES ('COSC404');
+INSERT INTO Course (name, description, credits, session, term) VALUES ('COSC303', 'Numerical Analysis',3,1,2);
+INSERT INTO Course (name, description, credits, session, term) VALUES ('COSC310', 'Software Engineering',3,1,2);
+INSERT INTO Course (name, description, credits, session, term) VALUES ('COSC304', 'Introduction to Databases',3,1,1);
+INSERT INTO Course (name, description, credits, session, term) VALUES ('COSC404', 'Database implementation',3,1,2);
 
 
 -- Insert Departments
@@ -150,20 +155,20 @@ INSERT INTO Department (name) VALUES ('STAT');
 
 
 -- Insert Student
-INSERT INTO User (firstName, lastName, email, password) VALUES ('James', 'Smith', 'jSmith@Example.com', 'jsmith1234');
+INSERT INTO User (firstName, lastName, username, email, password) VALUES ('James', 'Smith', 'jsmith', 'jSmith@Example.com', 'jsmith1234');
 INSERT INTO Student (userId, year, program) VALUES (LAST_INSERT_ID(), 3, 'Computer Science');
 
-INSERT INTO User (firstName, lastName, email, password) VALUES ('Bill', 'Murry', 'bMurry@Example.com', 'bmurry1234');
+INSERT INTO User (firstName, lastName, username, email, password) VALUES ('Bill', 'Murry', 'bmurray', 'bMurry@Example.com', 'bmurry1234');
 INSERT INTO Student (userId, year, program) VALUES (LAST_INSERT_ID(), 2, 'Computer Science');
 
 
 -- Insert Instructor
-INSERT INTO User (firstName, lastName, email, password) VALUES ('Jim', 'Bob', 'jb@Example.com', 'jbob1234');
+INSERT INTO User (firstName, lastName, username, email, password) VALUES ('Jim', 'Bob', 'jimbob', 'jb@Example.com', 'jbob1234');
 INSERT INTO Instructor (userId, deptName) VALUES (LAST_INSERT_ID(), 'COSC');
 
 
 -- Insert Admin
-INSERT INTO User (firstName, lastName, email, password) VALUES ('Fred', 'Eman', 'fe@Example.com', 'feman1234');
+INSERT INTO User (firstName, lastName, username, email, password) VALUES ('Fred', 'Eman', 'feman', 'fe@Example.com', 'feman1234');
 INSERT INTO Admin (userId, deptName) VALUES (LAST_INSERT_ID(), 'COSC');
 
 
@@ -182,9 +187,9 @@ INSERT INTO Instructs (instructorId, courseId) VALUES (3,4);
 
 
 -- Insert Assignments
-INSERT INTO Assignment (studentId, courseId) VALUES (1,1);
-INSERT INTO Assignment (studentId, courseId) VALUES (1,2);
-INSERT INTO Assignment (studentId, courseId) VALUES (2,1);
+INSERT INTO Assignment (courseId) VALUES (1);
+INSERT INTO Assignment (courseId) VALUES (1);
+INSERT INTO Assignment (courseId) VALUES (2);
 
 -- Insert Questions 
 INSERT INTO Question (assignmentId, questionId, questionText, questionAnswer, longQuestion) VALUES (1, 1, "This is a question 1", "This is the answer 1", 0);
