@@ -7,8 +7,15 @@ class SelectCourseQueryAll(DatabaseQueryAll):
     def queryAll(cls, dataTuple) -> list:
         cursor = DatabaseManager.getDatabaseCursor()
         
-        sql = "SELECT courseId, name, credits, session, term, startTime, endTime FROM Course;"
-        cursor.execute(sql)
+        searchTerm = dataTuple[0];
+        if (searchTerm == None): 
+            sql = "SELECT courseId, name, description, credits, session, term, startTime, endTime FROM Course;"
+            cursor.execute(sql)
+        else:
+            searchTerm =  '%' + searchTerm + '%'
+            sql = "SELECT courseId, name, description, credits, session, term, startTime, endTime FROM Course WHERE name LIKE %s;"
+            cursor.execute(sql, (searchTerm,))
+        
         courseData = cursor.fetchall();
         
         DatabaseManager.closeConnection()
