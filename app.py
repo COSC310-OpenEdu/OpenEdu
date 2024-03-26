@@ -12,6 +12,7 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Search.CourseSearch import CourseSearch
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -114,7 +115,16 @@ def seeGrades():
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
-    return render_template('search.html')
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        searchTerm = request.form['searchTerm']
+        return CourseSearch.search(searchTerm)
+
+@app.route('/Course/<courseId>/join', methods = ['POST'])
+def joinCourse():
+    
+
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
 def createQuiz(courseId):
