@@ -104,9 +104,9 @@ CREATE TABLE IF NOT EXISTS Instructs (
 );
 
 CREATE TABLE IF NOT EXISTS Question(
-    courseId        INT NOT NULL,
-    questionId      INT NOT NULL,
-    assignmentId    INT NOT NULL,
+    courseId        INTEGER NOT NULL,
+    questionId      INTEGER NOT NULL,
+    assignmentId    INTEGER NOT NULL,
     questionText    VARCHAR(200),
     questionAnswer  VARCHAR(200),
     longQuestion    BIT,
@@ -117,31 +117,28 @@ CREATE TABLE IF NOT EXISTS Question(
 );
 
 CREATE TABLE IF NOT EXISTS Solution (
-    assignmentId INT NOT NULL,
-    questionId INT NOT NULL,
-    studentId INT NOT NULL,
-    courseId INT NOT NULL,
+    courseId INTEGER NOT NULL,
+    questionId INTEGER NOT NULL,
+    assignmentId INTEGER NOT NULL,
+    studentId INTEGER NOT NULL,
     studentAnswer VARCHAR(1000),
 
-    PRIMARY KEY (questionId, studentId, assignmentId, courseId),
-    FOREIGN KEY (questionId, assignmentId, courseId) REFERENCES Question(questionId, assignmentId, courseId),
+    PRIMARY KEY (courseId, questionId, assignmentId, studentId),
+    FOREIGN KEY (courseId,questionId, assignmentId) REFERENCES Question(courseId,questionId, assignmentId),
     FOREIGN KEY (studentId) REFERENCES Student(userId)
 );
 
 CREATE TABLE IF NOT EXISTS Grades (
-    courseId        INT NOT NULL,
+    courseId        INTEGER NOT NULL,
     questionId      INTEGER NOT NULL,
-    studentId       INTEGER NOT NULL,
     assignmentId    INTEGER NOT NULL,
+    studentId       INTEGER NOT NULL,
     instructorId    INTEGER NOT NULL,
     grade           FLOAT(6,3),
     comment         VARCHAR(50),
 
-    PRIMARY KEY (questionId, studentId, assignmentId, instructorId, courseId),
-    FOREIGN KEY (courseId) REFERENCES Course(courseId),
-    FOREIGN KEY (questionId) REFERENCES Question(questionId),
-    FOREIGN KEY (studentId) REFERENCES Student(userId),
-    FOREIGN KEY (assignmentId) REFERENCES Assignment(assignmentId),
+    PRIMARY KEY (courseId, questionId, assignmentId, studentId, instructorId),
+    FOREIGN KEY (courseId, questionId, assignmentId, studentId) REFERENCES Solution (courseId, questionId, assignmentId, studentId),
     FOREIGN KEY (instructorId) REFERENCES Instructor(userId)
 );
 
@@ -196,9 +193,9 @@ INSERT INTO Assignment (courseId) VALUES (1);
 INSERT INTO Assignment (courseId) VALUES (2);
 
 -- Insert Questions 
-INSERT INTO Question (assignmentId, questionId, courseId, questionText, questionAnswer, longQuestion) VALUES (1, 1, "This is a question 1", "This is the answer 1", 0);
-INSERT INTO Question (assignmentId, questionId, courseId,  questionText, questionAnswer, longQuestion) VALUES (1, 2, "This is a question 2", "This is the answer 2", 1);
-INSERT INTO Question (assignmentId, questionId, courseId,  questionText, questionAnswer, longQuestion) VALUES (1, 3, "This is a question 3", "This is the answer 3", 0);
+INSERT INTO Question (assignmentId, questionId, courseId, questionText, questionAnswer, longQuestion) VALUES (1, 1, 1, "This is a question 1", "This is the answer 1", 0);
+INSERT INTO Question (assignmentId, questionId, courseId,  questionText, questionAnswer, longQuestion) VALUES (1, 2, 1, "This is a question 2", "This is the answer 2", 1);
+INSERT INTO Question (assignmentId, questionId, courseId,  questionText, questionAnswer, longQuestion) VALUES (1, 3, 1, "This is a question 3", "This is the answer 3", 0);
 
 -- INSERT Solutions
 INSERT INTO Solution (assignmentId, questionId, courseId,  studentId, studentAnswer) VALUES (1,1,1,1,"The solution 1 Student 1");
