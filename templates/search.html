@@ -7,12 +7,73 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageContent.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/searchCourses.css') }}">
+  
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         function search() {
+            searchTerm = $('#input').val();
 
+            loadPage(searchTerm)
         }
+
+        function loadPage(searchTerm) {
+            $.post('search', {'searchTerm': searchTerm})
+                .done(function(data) {
+                    createElements(data);
+                })
+        }
+
+        function createElements(data) {
+
+            jsonData = JSON.parse(data)
+            console.log(jsonData);
+
+            document.getElementById('courses').innerHTML = '';   
+
+            console.log(jsonData.length)
+            for (let i = 0; i < jsonData.length; i++) {
+                
+                div = document.createElement('div');
+                div.classList.add('course');
+                
+                headerdiv = document.createElement('div');
+                headerdiv.classList.add('courseTitle');
+                headerdiv.innerHTML = jsonData[i][1] + ' | ' + jsonData[i][2];
+                div.appendChild(headerdiv);
+
+                courseInfo = document.createElement('div');
+                courseInfo.classList.add('courseInfo');
+                courseInfo.classList.add('hidden');
+                courseInfo.innerHTML = 'Credits: ' + jsonData[i][3] + ' | Session: ' + jsonData[i][4] + ' | Term: ' + jsonData[i][5];
+                courseInfo.id = 'courseInfo-' + i;
+                div.appendChild(courseInfo);
+                
+                joinButton = document.createElement('button');
+                joinButton.innerHTML = 'Request to join';
+                joinButton.classList.add('join');
+                courseInfo.appendChild(joinButton);
+
+                div.addEventListener('click', function(){
+                    toggleHidden('courseInfo-' + i);
+                });
+
+
+                 
+                document.getElementById('courses').appendChild(div);
+            }
+        }
+
+        function toggleHidden(courseInfoId) {
+            document.getElementById(courseInfoId).classList.toggle('hidden')
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function(){
+            loadPage('');
+        });
     </script>
 </head>
 <body>
@@ -62,10 +123,12 @@
         <div class="container-header">
             <h1>Search for courses:</h1>
             
-            <input type="text" id="input">
-            <button onclick="search()">
-                <span class="material-symbols-outlined">search</span>Search
-            </button>
+            <div>
+                <input type="text" id="input">
+                <button onclick="search()">
+                    <span class="material-symbols-outlined">search</span>Search
+                </button>
+            </div>
         </div>
         <div id="courses">
 
