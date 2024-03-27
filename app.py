@@ -12,6 +12,7 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -149,6 +150,7 @@ def teacherCoursePeople(courseId):
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId):
     questionForm = request.form
+    AddQuizToDatabase.update(questionForm)
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
