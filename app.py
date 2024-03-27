@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
@@ -103,17 +103,15 @@ def createAccount():
     
 @app.route("/student/<courseId>/grades", methods=['GET'])
 def seeGrades(courseId): 
-    studentId = '1'
-    assignmentId = '1'
  
     # Query for getting grades for every assignment in a class for a given student
-    grades = SelectGradeForStudent.queryAll((studentId, assignmentId,));
-    
-    # Query for getting the course name
+    grades = SelectGradeForStudent.queryAll((session['userId'], courseId,));
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    questions = SelectQuestionsForCourse.queryAll((courseId,))
 
     
     # Go to See Grades page
-    return render_template("student/seeGrades.html", grades=grades, courseId=courseId)
+    return render_template("student/seeGrades.html", grades=grades, username=session['username'], courseId=courseId, assignments=assignments, questions=questions)
 
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
@@ -127,6 +125,7 @@ def createQuiz(courseId):
 @app.route("/teacher/homepage", methods = ['POST','GET'])
 def teacherHome():
     # temporarily getting a list of all courses
+    
     courses = SelectCourseQuery.query((session['userId'],))
     
     return render_template("teacher/homepage.html", courses = courses)
@@ -158,6 +157,13 @@ def teacherCoursePeople(courseId):
     people = SelectPeopleInCourse.queryAll((courseId,))
     
     return render_template("teacher/people.html", courseId=courseId, people=people, instructors=instructors)
+
+@app.route("/student/<courseId>/people", methods = ['GET'])
+def studentCoursePeople(courseId):
+    instructors = SelectInstructorsForCourse.queryAll((courseId,))
+    people = SelectPeopleInCourse.queryAll((courseId,))
+    
+    return render_template("student/people.html", courseId=courseId, people=people, instructors=instructors)
 
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId):

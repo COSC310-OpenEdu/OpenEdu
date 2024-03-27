@@ -40,7 +40,7 @@
         <!-- this makes a link for every course in the database currently-->
         <!-- change later -->
         {% for course in courses %}
-        <a href="{{url_for('teacherCourseDash', courseId=course[1])}}" class="course">
+        <a href="{{url_for('teacherCourseDash', courseId=course[0])}}" class="course">
             <div class="banner"></div>
             <div class="course-info">
                 <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>

@@ -21,7 +21,7 @@
         <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard" class="active">Dashboard</a>
         <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
         <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades">Grades</a>
-        <a href="" id="People">People</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId) }}" id="People">People</a>
     </header>
     <!-- Contains a list of files uploaded by the teacher -->
     <div class="container-body">

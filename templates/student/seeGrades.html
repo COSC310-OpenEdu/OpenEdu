@@ -12,7 +12,17 @@
            
             let buttons = [];
             let toggle = true;
-            
+            var assignments = document.getElementsByClassName("g");
+            for (let i = 0; i < assignments.length; i++) {
+                let questions = assignments[i].querySelectorAll(" .avg");
+                let avg = 0;
+                for (let j = 0; j<questions.length; j++) {
+                    avg += parseFloat(questions[j].id);
+                }
+                avg = avg/questions.length;
+                assignments[i].querySelector(" .total2").innerHTML = (Math.round(avg*100)/100) + "%";
+                assignments[i].querySelector(" .total").innerHTML = (Math.round(avg*100)/100) +"/100";
+            }
             // Adds hide class to each gradeItem
             for (let i = 0; i < groups.length; i++) {
                 buttons.push(groups[i].children[0]);
@@ -40,7 +50,7 @@
         });
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grades{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grades for {{ username }}{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -57,42 +67,35 @@
         <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard">Dashboard</a>
         <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
         <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades" class="active">Grades</a>
-        <a href="" id="People">People</a>
+        <a href="{{url_for('studentCoursePeople', courseId=courseId)}}" id="People">People</a>
     </header>
 
     <div class="container-body" style="flex-direction: column; gap: 0;">
         <div class="gradesheader">
             <span>Grade Item</span>
-            <span>Grade</span><span>Max</span><span>Percentage</span>
+            <span>Grade</span><span>Percentage</span><span>Comment</span>
         </div> 
         <div class="grades">
-        <div class="grade"id="assignments">
-            <div class = "gradeGroup">
-                <span class="gradeTitle">&#9660; Assignments</span>
-                <span>60</span><span>0-100</span><span>100%</span>
+            {% for assignment in assignments %}
+            <div class="grade g"id="{{assignment[0]}}">
+                <div class = "gradeGroup">
+                    <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
+                    <span class="total"></span><span class="total2"></span><span></span>
+                </div>
+                {% for grade in grades %}
+                    {% if (grade[0] == assignment[0]) %}
+                        <div class="grade">
+                        <div class="gradeItem question">     
+                            <span>Question {{ grade[1] }} ({{ grade[2] }})</span>
+                            <span class="avg" id="{{grade[4]}}">{{grade[4]}}/100</span><span class="avg2">{{grade[4]}}%</span><span>{{grade[5]}}</span>
+                        </div>
+                        
+                    </div>
+                    {% endif %}
+                {% endfor %}
                 
             </div>
-            
-            <!-- Creates a new row for every assignment -->
-            {% for item in grades %}
-            <div class="gradeItem">     
-                <span>{{ item[1] }}</span>
-                <span>{{ item[2] }}</span><span>100</span><span>{{ 100*item[2] / 100 }}%</span>
-            </div>
             {% endfor %}
-            <div class="grade" id="test">
-                <div class = "gradeGroup2 gradeItem">
-                    <span class="gradeTitle">&#9660; Assignments</span>
-                    <span>60</span><span>0-100</span><span>100%</span>
-                    
-                </div>
-                {% for item in grades %}
-            <div class="gradeItem2">     
-                <span>{{ item[1] }}</span>
-                <span>{{ item[2] }}</span><span>100</span><span>{{ 100*item[2] / 100 }}%</span>
-            </div>
-            {% endfor %}
-            </div>
         </div>
         </div>
     </div>
