@@ -5,7 +5,44 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
     <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../../static/JS/seeGrades.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var questions = document.getElementsByClassName("avg");
+            var questions2 = document.getElementsByClassName("avg2");
+            average();
+        
+            function average() {
+                for (let i = 0; i < questions.length; i++) {
+                    let grades = document.getElementsByClassName(questions[i].id);
+                    let avg = 0;
+                    for (let j = 0; j < grades.length; j++) {
+                        avg += parseFloat(grades[j].value);
+                    }
+                    questions[i].innerHTML = "Average: "+ (avg/grades.length) + "%";
+                    questions2[i].innerHTML = "Average: "+ (avg/grades.length);
+                }
+            }
+        
+            var inputs = $("input");
+            inputs.on("blur", function() {
+                let qId = this.id[0];
+                let aId = this.id[1];
+                let sId = this.id[2];
+                const url = {{ url_for("updateGrade")|tojson }};
+                var updated = $.post(url, {"courseId":1, "questionId":qId, "assignmentId":aId, "studentId":sId, "grade":this.value});
+                updated.done(function(data) {
+                    console.log(data);
+                    average();
+                })
+                //$.post("{{url_for('updateGrade')}}", {courseId:1, questionId:qId, assignmentId:aId, studentId:sId});
+            });
+        
+        });
+    </script>
 {% endblock %}
 {% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grading{% endblock %}
 {% block navTop %}
@@ -32,22 +69,34 @@
             <span>Submission</span><span>Grade</span><span>Percentage</span>
         </div> 
         <div class="grades">
-        <div class="grade"id="assignments">
-            <div class = "gradeGroup">
-                <span class="gradeTitle">&#9660; Assignments</span>
-                <span></span><span></span><span></span>
-                
-            </div>
-            <div class="grade" id="test">
-                <div class = "gradeGroup2 gradeItem">
-                    <span class="gradeTitle">&#9660; Assignment 1</span>
+            
+            {% for assignment in assignments %}
+            <div class="grade">
+                <div class = "gradeGroup">
+                    <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
                     <span></span><span></span><span></span>
                 </div>
-                <div class="gradeItem2">     
-                    <span>Student 1</span>
-                    <span class="material-symbols-outlined">link</span><span>90/100</span><span>90%</span>
-                </div>
+                {% for question in questions %}
+                    {% if (question[2] == assignment[0]) %}
+                        <div class="grade">
+                        <div class="gradeItem gradeGroup2 question">     
+                            <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
+                            <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}"></span>
+                        </div>
+                        {% for grade in grades %}
+                            {% if (grade[0] == question[0] and grade[5] == assignment[0])%}
+                                <div class="gradeItem2">     
+                                    <span>{{grade[1]}} {{grade[2]}}</span>
+                                    <span class="material-symbols-outlined">link</span><input id="{{question[0]}}{{assignment[0]}}{{grade[4]}}" class="{{question[0]}}" type="text" value="{{grade[6]}}" /><span>/100</span><span>{{grade[6]}}%</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                
             </div>
+            {% endfor %}
             <!-- Creates a new row for every assignment -->
             
             </div>

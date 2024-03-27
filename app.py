@@ -13,6 +13,9 @@ from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
 from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
+from src.Database.Query.SelectAssignmentsForCourse import SelectAssignmentsForCourse
+from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
+from src.Database.Update.UpdateGrade import UpdateGrade
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -139,13 +142,22 @@ def teacherCourseAssignments(courseId):
 
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     grades = SelectGradesForCourse.queryAll((courseId,))
-    return render_template("teacher/grading.html", courseId=courseId, grades=grades)
+    questions = SelectQuestionsForCourse.queryAll((courseId,))
+    return render_template("teacher/grading.html", courseId=courseId, grades=grades, assignments=assignments, questions=questions)
+
+@app.route("/updateGrade", methods = ['POST'])
+def updateGrade():
+    form = request.form
+    UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
+    return jsonify(form)
 
 @app.route("/teacher/<courseId>/people", methods = ['GET'])
 def teacherCoursePeople(courseId):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
     people = SelectPeopleInCourse.queryAll((courseId,))
+    
     return render_template("teacher/people.html", courseId=courseId, people=people, instructors=instructors)
 
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])

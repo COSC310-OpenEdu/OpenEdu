@@ -10,7 +10,7 @@ class SelectGradesForCourse(DatabaseQueryAll):
         sql = """SELECT Grades.questionId, firstName, lastName, questionText, Grades.studentId, Grades.assignmentId, grade, comment FROM Grades
                 JOIN Question ON Grades.questionId = Question.questionId AND Grades.assignmentId = Question.assignmentId
                 JOIN User ON User.userId = Grades.studentId
-                WHERE courseId = %s"""
+                WHERE Grades.courseId = %s"""
         cursor.execute(sql, (dataTuple))
         grades = cursor.fetchall()
         DatabaseManager.closeConnection()
