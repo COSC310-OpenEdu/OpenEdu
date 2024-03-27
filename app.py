@@ -10,6 +10,10 @@ from src.Database.Check.UsernamePasswordCheck import UsernamePasswordCheck
 from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCourses
 from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
+from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
+from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Search.CourseSearch import CourseSearch
 
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
@@ -109,6 +113,27 @@ def seeGrades(courseId):
     # Go to See Grades page
     return render_template("student/seeGrades.html", grades=grades, courseId=courseId)
 
+@app.route('/search', methods = ['POST', 'GET'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        searchTerm = request.form['searchTerm']
+        return CourseSearch.search(searchTerm)
+
+@app.route('/Course/<courseId>/join', methods = ['POST'])
+def joinCourse(courseId):
+    userId = session['userId']
+    
+    # Student must be signed in to join a course
+    if userId == None:
+        return redirect(url_for('login'))
+    
+    AddCourseRequest.update((userId, courseId))
+    
+    return {}
+    
+
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
 def createQuiz(courseId):
@@ -136,6 +161,12 @@ def teacherCourseAssignments(courseId):
 @app.route("/teacher/<courseId>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId):
     return render_template("teacher/grading.html", courseId=courseId)
+
+@app.route("/teacher/<courseId>/people", methods = ['GET'])
+def teacherCoursePeople(courseId):
+    instructors = SelectInstructorsForCourse.queryAll((courseId,))
+    people = SelectPeopleInCourse.queryAll((courseId,))
+    return render_template("teacher/people.html", courseId=courseId, people=people, instructors=instructors)
 
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId):

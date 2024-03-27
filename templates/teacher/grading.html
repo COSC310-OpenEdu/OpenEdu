@@ -24,7 +24,7 @@
         <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
         <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
         <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading" class="active">Grading</a>
-        <a href="#" id="People">People</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
     </header>
     <div class="main-container">
         <div class="gradesheader">

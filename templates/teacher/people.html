@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Assignments{% endblock %}
+{% block head %} 
+{{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
+    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
+    <script src="../../static/JS/seeGrades.js"></script>
+{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+
+            <!-- Secondary header for course pages -->
+            <header>
+                <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
+                <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
+                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
+                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People" class="active">People</a>
+            </header>
+
+            <div class="main-container">
+                <div class="gradesheader">
+                    <span></span>
+                    <span></span><span></span><span></span>
+                </div> 
+                
+                <div class="grades">
+                {% for instructor in instructors %}
+                <div class="grade">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                        <span style="width: 10em; margin-right: 20em;">{{ instructor[1] }} {{ instructor[2] }}</span><span></span><span>Instructor</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% for person in people %}
+                <div class="grade">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                        <span style="width: 10em; margin-right: 20em;">{{ person[1] }} {{ person[2] }}</span><span></span><span>Student</span>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+            {% endblock %}
