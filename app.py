@@ -132,6 +132,7 @@ def teacherHome():
 
 @app.route("/teacher/<courseId>/dashboard", methods = ['GET'])
 def teacherCourseDash(courseId):
+    
     return render_template("teacher/courseDashboard.html", courseId=courseId)
 
 @app.route("/teacher/<courseId>/assignments", methods = ['GET'])
@@ -184,7 +185,8 @@ def createCourse():
 
 @app.route("/student/<courseId>/assignments", methods = ['GET'])
 def seeAssignments(courseId):
-    return render_template("student/seeAssignments.html", courseId=courseId)
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments)
 
 
 if __name__ == "__main__":
