@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
@@ -27,7 +27,7 @@ def home():
     
         if (session.get("userType") == "Student"):
             courses = SelectRegisteredCourses.query((session['userId']))
-            return render_template("courses.html", courses=courses)
+            return render_template("/student/courses.html", courses=courses)
         elif (session.get("userType") == "Instructor"):
             return teacherHome()
         else:
@@ -101,20 +101,19 @@ def createAccount():
         
 
     
-@app.route("/seeGrades", methods=['GET'])
-def seeGrades(): 
+@app.route("/student/<courseId>/grades", methods=['GET'])
+def seeGrades(courseId): 
     studentId = '1'
     assignmentId = '1'
-    courseId = '1'
  
     # Query for getting grades for every assignment in a class for a given student
     grades = SelectGradeForStudent.queryAll((studentId, assignmentId,));
     
     # Query for getting the course name
-    courseName = SelectCourseQuery.query((courseId,))
+
     
     # Go to See Grades page
-    return render_template("seeGrades.html", grades=grades, courseName=courseName)
+    return render_template("student/seeGrades.html", grades=grades, courseId=courseId)
 
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods = ['POST', 'GET'])
@@ -165,9 +164,9 @@ def publishQuiz(courseId):
     questionForm = request.form
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
-@app.route("/courseDashboard/<courseId>", methods = ['GET'])
+@app.route("/student/<courseId>/dashboard", methods = ['GET'])
 def courseDashboard(courseId):
-    return render_template("courseDashboard.html", courseId=courseId)
+    return render_template("student/courseDashboard.html", courseId=courseId)
 
 @app.route("/admin/approveRegistration")
 def courseRegistration():
@@ -176,6 +175,10 @@ def courseRegistration():
 @app.route("/admin/createCourse")
 def createCourse():
     return render_template("admin/createCourse.html")
+
+@app.route("/student/<courseId>/assignments", methods = ['GET'])
+def seeAssignments(courseId):
+    return render_template("student/seeAssignments.html", courseId=courseId)
 
 
 if __name__ == "__main__":

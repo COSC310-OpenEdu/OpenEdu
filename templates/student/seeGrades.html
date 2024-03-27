@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Grades{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/seeGrades.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">  
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Create variables
+            let groups = document.getElementsByClassName("grade");
+            let assignmentButton = groups[0].children[0];
+           
+            let buttons = [];
+            let toggle = true;
+            
+            // Adds hide class to each gradeItem
+            for (let i = 0; i < groups.length; i++) {
+                buttons.push(groups[i].children[0]);
+                for (let j = 1; j < groups[i].children.length; j++) {
+                    groups[i].children[j].classList.add("hide");
+                }
+            }
+            
+            // When element is clicked, sets distance a variable for animation and unhides/hides gradeItems
+            function click(index) {
+                for (let i = 1; i < groups[index].children.length; i++) {
+                    let t = i*-3.3 + "";
+                    t += "em";
+                    groups[index].children[i].style.setProperty("--slide", t);
+                    toggle = groups[index].children[i].classList.toggle("hide");
+                    
+                }
+            }
+            // Creates onClick listeners for each gradeGroup
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function() {
+                    click(i);
+                });
+            }
+        });
+    </script>
+{% endblock %}
+{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grades{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades" class="active">Grades</a>
+        <a href="" id="People">People</a>
+    </header>
+
+    <div class="container-body" style="flex-direction: column; gap: 0;">
+        <div class="gradesheader">
+            <span>Grade Item</span>
+            <span>Grade</span><span>Max</span><span>Percentage</span>
+        </div> 
+        <div class="grades">
+        <div class="grade"id="assignments">
+            <div class = "gradeGroup">
+                <span class="gradeTitle">&#9660; Assignments</span>
+                <span>60</span><span>0-100</span><span>100%</span>
+                
+            </div>
+            
+            <!-- Creates a new row for every assignment -->
+            {% for item in grades %}
+            <div class="gradeItem">     
+                <span>{{ item[1] }}</span>
+                <span>{{ item[2] }}</span><span>100</span><span>{{ 100*item[2] / 100 }}%</span>
+            </div>
+            {% endfor %}
+            <div class="grade" id="test">
+                <div class = "gradeGroup2 gradeItem">
+                    <span class="gradeTitle">&#9660; Assignments</span>
+                    <span>60</span><span>0-100</span><span>100%</span>
+                    
+                </div>
+                {% for item in grades %}
+            <div class="gradeItem2">     
+                <span>{{ item[1] }}</span>
+                <span>{{ item[2] }}</span><span>100</span><span>{{ 100*item[2] / 100 }}%</span>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+        </div>
+    </div>
+{% endblock %}

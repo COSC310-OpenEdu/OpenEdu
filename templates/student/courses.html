@@ -28,19 +28,17 @@
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="{{ url_for('home') }}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
     <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
     <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
     <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
-{% block content %}
+{% block content %}   
     <div class="container-body overflow">
-        <!-- this makes a link for every course in the database currently-->
-        <!-- change later -->
         {% for course in courses %}
-        <a href="{{url_for('teacherCourseDash', courseId=course[1])}}" class="course">
+        <a href="{{ url_for('courseDashboard', courseId=course[1]) }}" class="course">
             <div class="banner"></div>
             <div class="course-info">
                 <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>
