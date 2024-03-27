@@ -11,7 +11,6 @@
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
     <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
     <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
     <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
@@ -22,7 +21,7 @@
         <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
         <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments" class="active">Assignments</a>
         <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
-        <a href="#" id="People">People</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
     </header>
     <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
     <div class="container-body">

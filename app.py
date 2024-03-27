@@ -22,6 +22,9 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
+from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Search.CourseSearch import CourseSearch
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -133,6 +136,27 @@ def seeGrades():
     # Go to See Grades page
     return render_template("seeGrades.html", grades=grades, courseName=courseName)
 
+@app.route('/search', methods = ['POST', 'GET'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        searchTerm = request.form['searchTerm']
+        return CourseSearch.search(searchTerm)
+
+@app.route('/Course/<courseId>/join', methods = ['POST'])
+def joinCourse(courseId):
+    userId = session['userId']
+    
+    # Student must be signed in to join a course
+    if userId == None:
+        return redirect(url_for('login'))
+    
+    AddCourseRequest.update((userId, courseId))
+    
+    return {}
+    
+
 
 @app.route("/teacher/<courseId>/assignments/createQuiz", methods=["POST", "GET"])
 def createQuiz(courseId):
@@ -180,10 +204,8 @@ def teacherCoursePeople(courseId):
 @app.route("/teacher/<courseId>/publishQuiz", methods=["POST", "GET"])
 def publishQuiz(courseId):
     questionForm = request.form
-    return render_template(
-        "teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId
-    )
-
+    AddQuizToDatabase.update(questionForm, courseId)
+    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
 @app.route("/courseDashboard/<courseId>", methods=["GET"])
 def courseDashboard(courseId):
