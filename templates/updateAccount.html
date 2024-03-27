@@ -46,21 +46,21 @@
         <!-- Contains the top aligned elements (Generic) -->
         <ul class="navbar-top">
             <li>
-                <a href="" id="Logo">
+                <a href="{{ url_for('home') }}" id="Logo">
                     <span class="material-symbols-outlined size-36">
                         school
                     </span>
                 </a>
             </li>
             <li>
-                <a href="" class="active" id="Home">
+                <a href="{{ url_for('home') }}" class="active" id="Home">
                     <span class="material-symbols-outlined">
                         home
                     </span>Home
                 </a>
             </li>
             <li>
-                <a href="" id="Search">
+                <a href="{{ url_for('search') }}" id="Search">
                     <span class="material-symbols-outlined">
                         search
                     </span>Search
@@ -71,7 +71,7 @@
         <!-- Contains the bottom aligned elements (Page specific) -->
         <ul class="navbar-bottom">
             <li>
-                <a href="{{url_for('login')}}" id="Logout">
+                <a href="{{url_for('logout')}}" id="Logout">
                     <span class="material-symbols-outlined">
                         login
                     </span>Login
