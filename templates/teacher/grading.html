@@ -13,8 +13,16 @@
         document.addEventListener("DOMContentLoaded", function() {
             var questions = document.getElementsByClassName("avg");
             var questions2 = document.getElementsByClassName("avg2");
+            var totalAvg = document.getElementsByClassName("g");
+            var total = document.getElementsByClassName("total");
+            var total2 = document.getElementsByClassName("total2");
+            
+            var totals = {};
+            for (let i = 0; i < totalAvg.length; i++) {
+                totals[totalAvg[i].id] = 0;
+            }
             average();
-        
+            totalAverage();
             function average() {
                 for (let i = 0; i < questions.length; i++) {
                     let grades = document.getElementsByClassName(questions[i].id);
@@ -22,8 +30,19 @@
                     for (let j = 0; j < grades.length; j++) {
                         avg += parseFloat(grades[j].value);
                     }
+                    
+                    totals[grades[0].id[1]] += (avg/grades.length)/$("#"+grades[0].id[1]+" .gradeGroup2").length;
+                    
                     questions[i].innerHTML = "Average: "+ (avg/grades.length) + "%";
                     questions2[i].innerHTML = "Average: "+ (avg/grades.length);
+
+                }
+            }
+
+            function totalAverage() {
+                for (let i = 0; i < total.length; i++) {
+                    total[i].innerHTML = "Class Avg: "+totals[totalAvg[i].id] +"%";
+                    total2[i].innerHTML = "Class Avg: "+totals[totalAvg[i].id];
                 }
             }
         
@@ -71,10 +90,10 @@
         <div class="grades">
             
             {% for assignment in assignments %}
-            <div class="grade">
+            <div class="grade g"id="{{assignment[0]}}">
                 <div class = "gradeGroup">
                     <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span></span><span></span>
+                    <span></span><span class="total2"></span><span class="total"></span>
                 </div>
                 {% for question in questions %}
                     {% if (question[2] == assignment[0]) %}
