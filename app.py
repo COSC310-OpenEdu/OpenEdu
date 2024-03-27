@@ -99,8 +99,8 @@ def createAccount():
         
 
     
-@app.route("/student/<courseId>/grades", methods=['GET'])
-def seeGrades(courseId): 
+@app.route("/student/<courseId>/<courseName>/grades", methods=['GET'])
+def seeGrades(courseId, courseName): 
     studentId = '1'
     assignmentId = '1'
  
@@ -108,10 +108,10 @@ def seeGrades(courseId):
     grades = SelectGradeForStudent.queryAll((studentId, assignmentId,));
     
     # Query for getting the course name
-
+    #courseName = SelectCourseQuery.query((courseId,))
     
     # Go to See Grades page
-    return render_template("student/seeGrades.html", grades=grades, courseId=courseId)
+    return render_template("student/seeGrades.html", grades=grades, courseId=courseId, courseName=courseName)
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
@@ -173,9 +173,9 @@ def publishQuiz(courseId):
     questionForm = request.form
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
-@app.route("/student/<courseId>/dashboard", methods = ['GET'])
-def courseDashboard(courseId):
-    return render_template("student/courseDashboard.html", courseId=courseId)
+@app.route("/student/<courseId>/<courseName>/dashboard", methods = ['GET'])
+def courseDashboard(courseId, courseName):
+    return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName)
 
 @app.route("/admin/approveRegistration")
 def courseRegistration():
@@ -185,9 +185,9 @@ def courseRegistration():
 def createCourse():
     return render_template("admin/createCourse.html")
 
-@app.route("/student/<courseId>/assignments", methods = ['GET'])
-def seeAssignments(courseId):
-    return render_template("student/seeAssignments.html", courseId=courseId)
+@app.route("/student/<courseId>/<courseName>/assignments", methods = ['GET'])
+def seeAssignments(courseId, courseName):
+    return render_template("student/seeAssignments.html", courseId=courseId, courseName=courseName)
 
 
 if __name__ == "__main__":
