@@ -4,6 +4,13 @@ import mysql
 
 class AddCourseRequest(DatabaseUpdate):
     
+    #
+    #   Adds a course request for a user in a given course
+    #   If a request already exisits do nothing
+    #   Input: dataTuple = (studentId, courseId)
+    #                    = The student and course being requested
+    #
+    
     @classmethod
     def update(cls, dataTuple):
         

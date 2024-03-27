@@ -13,12 +13,18 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+        //
+        // Handle user search request from user
+        //
         function search() {
             searchTerm = $('#input').val();
 
             loadPage(searchTerm)
         }
 
+        //
+        // Query the server and update the screen with a given search term
+        //
         function loadPage(searchTerm) {
             $.post('search', {'searchTerm': searchTerm})
                 .done(function(data) {
@@ -26,23 +32,28 @@
                 })
         }
 
+        //
+        // Create list elements with json formated course data
+        //
         function createElements(data) {
 
             jsonData = JSON.parse(data)
 
             document.getElementById('courses').innerHTML = '';   
 
-            console.log(jsonData.length)
+            // Create a list element for each course
             for (let i = 0; i < jsonData.length; i++) {
-                
+                // Main div
                 div = document.createElement('div');
                 div.classList.add('course');
                 
+                // Header
                 headerdiv = document.createElement('div');
                 headerdiv.classList.add('courseTitle');
                 headerdiv.innerHTML = jsonData[i][1] + ' | ' + jsonData[i][2];
                 div.appendChild(headerdiv);
 
+                // Course Information
                 courseInfo = document.createElement('div');
                 courseInfo.classList.add('courseInfo');
                 courseInfo.classList.add('hidden');
@@ -50,30 +61,33 @@
                 courseInfo.id = 'courseInfo-' + i;
                 div.appendChild(courseInfo);
                 
+                // Join button in course infomation
                 joinButton = document.createElement('button');
                 joinButton.innerHTML = 'Request to join';
                 joinButton.classList.add('join');
+                courseInfo.appendChild(joinButton);
+
+                // Handle join course request
                 joinButton.addEventListener('click', function(){
                     joinCourse(jsonData[i][0] + '');
                 });
 
-
-                courseInfo.appendChild(joinButton);
-
+                // Toggle the visablity of the course information div
                 div.addEventListener('click', function(){
                     toggleHidden('courseInfo-' + i);
                 });
 
-
-                 
                 document.getElementById('courses').appendChild(div);
             }
         }
 
+        // Toggles the visability of a given course info div
+        // Selected by 'courseInfo-' + courseId
         function toggleHidden(courseInfoId) {
             document.getElementById(courseInfoId).classList.toggle('hidden')
         }
 
+        // Tells the server that the student would like to join the course
         function joinCourse(courseId) {
             $.post('/Course/'+ courseId+'/join')
                 .done( function (){
@@ -81,6 +95,7 @@
                 });
         }
 
+        // On page load get all courses
         document.addEventListener("DOMContentLoaded", function(){
             loadPage('');
         });
