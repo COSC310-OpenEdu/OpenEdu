@@ -6,10 +6,9 @@ from datetime import datetime
 
 class AddQuizToDatabase(DatabaseUpdate):
     @classmethod 
-    def update(cls, form):
+    def update(cls, form, courseId):
 
         quizname = form["quizId"]
-        courseId = 2 #This is temporary until form includes courseNumber
 
         #Add QuizName to Database
         cursor = DatabaseManager.getDatabaseCursor()

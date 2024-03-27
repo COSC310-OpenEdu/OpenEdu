@@ -150,7 +150,7 @@ def teacherCoursePeople(courseId):
 @app.route("/teacher/<courseId>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId):
     questionForm = request.form
-    AddQuizToDatabase.update(questionForm)
+    AddQuizToDatabase.update(questionForm, courseId)
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
 
 @app.route("/courseDashboard/<courseId>", methods = ['GET'])
