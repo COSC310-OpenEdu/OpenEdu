@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Approve Registration{% endblock %}
 {% block head %}
-    {{ super() }}
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}"> 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="../static//CSS/approveRegistration.css"
-    />
-    <script>
+  {{ super() }}
+  <link rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static',filename='CSS/courseHeader.css') }}">
+  <link rel="stylesheet"
+        type="text/css"
+        href="../static//CSS/approveRegistration.css" />
+  <script>
       document.addEventListener("DOMContentLoaded", function () {
         let groups = document.querySelectorAll(".grade");
 
@@ -28,45 +28,45 @@
           });
         });
       });
-    </script>
+  </script>
 {% endblock %}
 {% block pageHeader %}Approve Registration{% endblock %}
 {% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
+  <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+  <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+  <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
 {% endblock %}
 {% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+  <a href="{{ url_for("logout") }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}
-    <!-- Secondary header -->
-    <header>
-        <a href="{{ url_for('createCourse') }}" id="CreateCourse">Create Course</a>
-        <a href="{{ url_for('courseRegistration') }}" id="Registration" class="active">Approve Registration</a>
-    </header>
-
-    {% for session, requests in course_requests.items() %}
+  <!-- Secondary header -->
+  <header>
+    <a href="{{ url_for("createCourse") }}" id="CreateCourse">Create Course</a>
+    <a href="{{ url_for("courseRegistration") }}"
+       id="Registration"
+       class="active">Approve Registration</a>
+  </header>
+  {% for session, requests in course_requests.items() %}
     <div class="grade">
-        <div class="gradeGroup">
-            <span class="gradeTitle">&#9660; {{ session }}</span>
-        </div>
-        {% for request in requests %}
+      <div class="gradeGroup">
+        <span class="gradeTitle">&#9660; {{ session }}</span>
+      </div>
+      {% for request in requests %}
         <div class="courseContainer">
-            <div class="gradeItem">
-                <span>{{ request[2] }}</span> <!-- Course Name -->
-            </div>
-            <div class="studentList">
-                <span>{{ request[4] }} {{ request[5] }}</span> <!-- Student Name -->
-                <button class="denyButton" onclick="denyRequest({{ request[0] }}, {{ request[1] }})">Deny</button>
-                <button class="approveButton" onclick="approveRequest({{ request[0] }}, {{ request[1] }})">Approve</button>
-            </div>
+          <div class="gradeItem">
+            <span>{{ request[4] }}</span> <!-- Course Name -->
+          </div>
+          <div class="studentList">
+            <!-- Display userId, Name, and Year Level -->
+            <span>Student ID: {{ request[0] }} Name: {{ request[1] }} {{ request[2] }} (Year: {{ request[3] }})</span>
+            <button class="denyButton"
+                    onclick="denyRequest({{ request[0] }}, {{ request[1] }})">Deny</button>
+            <button class="approveButton"
+                    onclick="approveRequest({{ request[0] }}, {{ request[1] }})">Approve</button>
+          </div>
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
-{% endfor %}
-
-
-    
-
+  {% endfor %}
 {% endblock %}

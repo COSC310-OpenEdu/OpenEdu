@@ -6,18 +6,19 @@ class CourseRequestManager:
         try:
             cursor = DatabaseManager.getDatabaseCursor()
             cursor.execute("""
-                SELECT cr.studentId, cr.courseId, c.name, c.session, u.firstName, u.lastName
+                SELECT u.userId, u.firstName, u.lastName, s.year, c.name, c.session
                 FROM CourseRequests cr
                 JOIN Course c ON cr.courseId = c.courseId
                 JOIN User u ON cr.studentId = u.userId
-                ORDER BY c.session, c.courseId
+                JOIN Student s ON u.userId = s.userId
+                ORDER BY c.session, c.courseId, u.lastName, u.firstName
             """)
             requests = cursor.fetchall()
             
             session_mapping = {0: 'Fall', 1: 'Winter', 2: 'Summer'}
             grouped_requests = {}
             for request in requests:
-                session_name = session_mapping.get(request[3], 'Unknown')
+                session_name = session_mapping.get(request[5], 'Unknown')
                 if session_name not in grouped_requests:
                     grouped_requests[session_name] = []
                 grouped_requests[session_name].append(request)
