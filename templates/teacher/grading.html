@@ -30,19 +30,20 @@
                     for (let j = 0; j < grades.length; j++) {
                         avg += parseFloat(grades[j].value);
                     }
+                    avg = avg/grades.length;
                     
-                    totals[grades[0].id[1]] += (avg/grades.length)/$("#"+grades[0].id[1]+" .gradeGroup2").length;
-                    
-                    questions[i].innerHTML = "Average: "+ (avg/grades.length) + "%";
-                    questions2[i].innerHTML = "Average: "+ (avg/grades.length);
+                    totals[grades[0].id[1]] += avg/$("#"+grades[0].id[1]+" .gradeGroup2").length;
+                    avg = Math.round(avg*100)/100;
+                    questions[i].innerHTML = "Average: "+ avg + "%";
+                    questions2[i].innerHTML = "Average: "+ avg;
 
                 }
             }
 
             function totalAverage() {
                 for (let i = 0; i < total.length; i++) {
-                    total[i].innerHTML = "Class Avg: "+totals[totalAvg[i].id] +"%";
-                    total2[i].innerHTML = "Class Avg: "+totals[totalAvg[i].id];
+                    total[i].innerHTML = "Class Avg: "+Math.round(totals[totalAvg[i].id]*100)/100 +"%";
+                    total2[i].innerHTML = "Class Avg: "+Math.round(totals[totalAvg[i].id]*100)/100;
                 }
             }
         
@@ -106,7 +107,7 @@
                             {% if (grade[0] == question[0] and grade[5] == assignment[0])%}
                                 <div class="gradeItem2">     
                                     <span>{{grade[1]}} {{grade[2]}}</span>
-                                    <span class="material-symbols-outlined">link</span><input id="{{question[0]}}{{assignment[0]}}{{grade[4]}}" class="{{question[0]}}" type="text" value="{{grade[6]}}" /><span>/100</span><span>{{grade[6]}}%</span>
+                                    <span class="material-symbols-outlined">link</span><input id="{{question[0]}}{{assignment[0]}}{{grade[4]}}" class="{{question[0]}}" type="number" value="{{grade[6]}}" /><span>/100</span><span>{{grade[6]}}%</span>
                                 </div>
                             {% endif %}
                         {% endfor %}
