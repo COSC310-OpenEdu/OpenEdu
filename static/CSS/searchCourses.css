@@ -8,6 +8,7 @@
     background-color: var(--contentBox);
     border: 1pt var(--outlineColor) solid;
     border-radius: 0.25em;
+    cursor: pointer;
 }
 
 .courseInfo {
@@ -16,6 +17,7 @@
     background-color: var(--contentBox);
     border: 1pt var(--outlineColor) solid;
     border-radius: 0.25em;
+    cursor: pointer;
 }
 
 .hidden {
