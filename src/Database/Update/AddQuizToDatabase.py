@@ -2,18 +2,23 @@ from src.Database.Update.DatabaseUpdate import DatabaseUpdate
 from src.Database.DatabaseManager import DatabaseManager
 import mysql
 from src.Database.Update.AddQuestionToDatabase import AddQuestionoDatabase
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class AddQuizToDatabase(DatabaseUpdate):
     @classmethod 
     def update(cls, form, courseId):
+        #This method adds a quiz to the database. It stores the quiz name in the
+        #assignment table with a duedate. Then each question contained in the quiz
+        #is individually added to the quiz database
 
         quizname = form["quizId"]
 
         #Add QuizName to Database
         cursor = DatabaseManager.getDatabaseCursor()
         statement = "INSERT INTO Assignment(courseId, name, dueDate) VALUES (%s, %s, %s)"
-        quizInfo = (courseId, quizname, datetime.now())
+        #one week from now
+        dueDate = datetime.now() + timedelta(weeks=1)
+        quizInfo = (courseId, quizname, dueDate)
         cursor.execute(statement, quizInfo)
 
         DatabaseManager.commit()
@@ -30,6 +35,7 @@ class AddQuizToDatabase(DatabaseUpdate):
         questionNumber = 1
         for questionKey, answerKey in zip(questionKeys, answerKeys):
 
+            #Get next question and answer
             question = form[questionKey]
             answer = form[answerKey]
 
