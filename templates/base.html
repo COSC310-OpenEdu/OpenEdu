@@ -1,36 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width", initial-scale=1.0>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0" />
     {% block head %}
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/general.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/pageBody.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    {% endblock %}
-</head>
-<body style="display: flex; flex-direction: row; overflow: hidden;">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='CSS/general.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='CSS/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='CSS/pageBody.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
     
+
+    {% endblock %}
+
+    <!-- Inline Custom CSS to Override Bootstrap Styles -->
+    <style>
+      /* Custom CSS to override Bootstrap link color */
+      .navbar a {
+        color: inherit; /* This will make the link use the color of its parent, or you can set a specific color */
+        text-decoration: none; /* Removes underline from links */
+      }
+
+      .navbar a:hover,
+      .navbar a:focus {
+        color: inherit; /* Color on hover or focus */
+        text-decoration: none; /* Removes underline on hover or focus */
+      }
+    </style>
+  </head>
+  <body style="display: flex; flex-direction: row; overflow: hidden">
     <!-- Navigation bar -->
     <nav class="navbar">
-        <!-- Contains the top aligned elements -->
-        <div class="navbar-top">
-            {% block navTop %}{% endblock %}
-        </div>
-        <!-- Contains the bottom aligned elements -->
-        <div class="navbar-bottom">
-            {% block navBottom %}{% endblock %}
-        </div>
+      <!-- Contains the top aligned elements -->
+      <div class="navbar-top">{% block navTop %}{% endblock %}</div>
+      <!-- Contains the bottom aligned elements -->
+      <div class="navbar-bottom">{% block navBottom %}{% endblock %}</div>
     </nav>
 
     <!-- Main body of page -->
     <div class="page-container">
-        <div class="container">
-            <div class="header">{% block pageHeader %}{% endblock %}</div>
-            {% block content %}{% endblock %}
-        </div>
+      <div class="container">
+        <div class="header">{% block pageHeader %}{% endblock %}</div>
+        {% block content %}{% endblock %}
+      </div>
     </div>
-</body>
+
+    
+  </body>
 </html>
