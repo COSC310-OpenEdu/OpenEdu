@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, flash
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
+from src.Database.Update.createCourse import CreateCourse
 from src.Database.Query.SelectCourseQuery import SelectCourseQuery
 from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
@@ -12,7 +13,7 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
-
+from src.Database.Query.SelectCourseTermsSessions import SelectCourseTermsSessions
 currentUser = None #Start with no user logged in
 app = Flask(__name__)
 app.secret_key = "a"
@@ -159,9 +160,27 @@ def courseDashboard(courseId):
 def courseRegistration():
     return render_template("admin/approveRegistration.html")
 
-@app.route("/admin/createCourse")
+@app.route("/admin/createCourse", methods=['GET', 'POST'])
 def createCourse():
-    return render_template("admin/createCourse.html")
+    if request.method == 'POST':
+        # Extract form data
+        form = request.form
+        courseData = (form['courseName'], form['description'], form['credits'], form['session'], form['term'], form['day'], form['startTime'], form['endTime'])
+
+        # Update Database with course information
+        try:
+            CreateCourse.update(courseData)
+            flash('Course created successfully!', 'success') 
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'error')  
+            return render_template("admin/createCourse.html")
+
+        # Redirect to the same page for another entry
+        return redirect(url_for('createCourse'))
+    else:
+        sessions = SelectCourseTermsSessions.get_sessions()
+        terms = SelectCourseTermsSessions.get_terms()
+        return render_template("admin/createCourse.html", sessions=sessions, terms=terms)
 
 
 if __name__ == "__main__":
