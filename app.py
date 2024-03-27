@@ -80,7 +80,7 @@ def addUserToSession(username, password):
     else:
         session["userType"] = "Admin"
         # URL will be /admin/dashboard once implemented
-        return redirect(url_for("home"))
+        return redirect(url_for("createCourse"))
 
 
 @app.route("/logout")
