@@ -46,65 +46,27 @@
         <a href="{{ url_for('courseRegistration') }}" id="Registration" class="active">Approve Registration</a>
     </header>
 
-      <div class="grade" id="assignments">
+    {% for session, requests in course_requests.items() %}
+    <div class="grade">
         <div class="gradeGroup">
-          <!-- Session name -->
-          <!--Also, &#9660 is the cool arrow that Jeremy put in! -->
-          <span class="gradeTitle">&#9660; 2024 Summer</span>
+            <span class="gradeTitle">&#9660; {{ session }}</span>
         </div>
-
-        <!-- First Course -->
+        {% for request in requests %}
         <div class="courseContainer">
-          <div class="gradeItem">
-            <span>COSC 111</span>
-          </div>
-          <!-- Student List for COSC 111 -->
-          <div class="studentList">
-            <!-- Student Details and Buttons -->
-
-            <span>Student Name</span>
-            <span>Student ID</span>
-            <span>Year Level</span>
-
-            <!-- Buttons to deny/accept student-->
-            <button class="denyButton">Deny</button>
-            <button class="approveButton">Approve</button>
-          </div>
+            <div class="gradeItem">
+                <span>{{ request[2] }}</span> <!-- Course Name -->
+            </div>
+            <div class="studentList">
+                <span>{{ request[4] }} {{ request[5] }}</span> <!-- Student Name -->
+                <button class="denyButton" onclick="denyRequest({{ request[0] }}, {{ request[1] }})">Deny</button>
+                <button class="approveButton" onclick="approveRequest({{ request[0] }}, {{ request[1] }})">Approve</button>
+            </div>
         </div>
+        {% endfor %}
+    </div>
+{% endfor %}
 
-        <!-- Second Course -->
-        <div class="courseContainer">
-          <div class="gradeItem">
-            <span>COSC 211</span>
-          </div>
-          <!-- Student List for COSC 211 -->
-          <div class="studentList">
-            <!-- Student Details and Buttons -->
 
-            <span>Student Name</span>
-            <span>Student ID</span>
-            <span>Year Level</span>
-
-            <!-- Buttons to deny/accept student-->
-            <button class="denyButton">Deny</button>
-            <button class="approveButton">Approve</button>
-          </div>
-          <div class="studentList">
-            <!-- Student Details and Buttons -->
-
-            <span>Student Name</span>
-            <span>Student ID</span>
-            <span>Year Level</span>
-
-            <!-- Buttons to deny/accept student-->
-            <button class="denyButton">Deny</button>
-            <button class="approveButton">Approve</button>
-          </div>
-        </div>
-
-        <!-- Add more courses in similar structure! Will have to implement backend -->
-      </div>
-
-      <!-- For testing! Will remove later -->
+    
 
 {% endblock %}

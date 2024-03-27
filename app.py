@@ -25,6 +25,7 @@ from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCo
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Search.CourseSearch import CourseSearch
+from src.Database.Query.GetCourseRequests import CourseRequestManager
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -214,7 +215,8 @@ def courseDashboard(courseId):
 
 @app.route("/admin/approveRegistration")
 def courseRegistration():
-    return render_template("admin/approveRegistration.html")
+    course_requests = CourseRequestManager.get_course_requests()
+    return render_template("admin/approveRegistration.html", course_requests=course_requests)
 
 
 @app.route("/admin/createCourse", methods=["POST", "GET"])
