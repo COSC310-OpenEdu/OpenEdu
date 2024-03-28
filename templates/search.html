@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageContent.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/searchCourses.css') }}">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        //
+        // Handle user search request from user
+        //
+        function search() {
+            searchTerm = $('#input').val();
+
+            loadPage(searchTerm)
+        }
+
+        //
+        // Query the server and update the screen with a given search term
+        //
+        function loadPage(searchTerm) {
+            $.post('search', {'searchTerm': searchTerm})
+                .done(function(data) {
+                    createElements(data);
+                })
+        }
+
+        //
+        // Create list elements with json formated course data
+        //
+        function createElements(data) {
+
+            jsonData = JSON.parse(data)
+
+            document.getElementById('courses').innerHTML = '';   
+
+            // Create a list element for each course
+            for (let i = 0; i < jsonData.length; i++) {
+                // Main div
+                div = document.createElement('div');
+                div.classList.add('course');
+                
+                // Header
+                headerdiv = document.createElement('div');
+                headerdiv.classList.add('courseTitle');
+                headerdiv.innerHTML = jsonData[i][1] + ' | ' + jsonData[i][2];
+                div.appendChild(headerdiv);
+
+                // Course Information
+                courseInfo = document.createElement('div');
+                courseInfo.classList.add('courseInfo');
+                courseInfo.classList.add('hidden');
+                courseInfo.innerHTML = 'Credits: ' + jsonData[i][3] + ' | Session: ' + jsonData[i][4] + ' | Term: ' + jsonData[i][5];
+                courseInfo.id = 'courseInfo-' + i;
+                div.appendChild(courseInfo);
+                
+                // Join button in course infomation
+                joinButton = document.createElement('button');
+                joinButton.innerHTML = 'Request to join';
+                joinButton.classList.add('join');
+                courseInfo.appendChild(joinButton);
+
+                // Handle join course request
+                joinButton.addEventListener('click', function(){
+                    joinCourse(jsonData[i][0] + '');
+                });
+
+                // Toggle the visablity of the course information div
+                div.addEventListener('click', function(){
+                    toggleHidden('courseInfo-' + i);
+                });
+
+                document.getElementById('courses').appendChild(div);
+            }
+        }
+
+        // Toggles the visability of a given course info div
+        // Selected by 'courseInfo-' + courseId
+        function toggleHidden(courseInfoId) {
+            document.getElementById(courseInfoId).classList.toggle('hidden')
+        }
+
+        // Tells the server that the student would like to join the course
+        function joinCourse(courseId) {
+            $.post('/Course/'+ courseId+'/join')
+                .done( function (){
+                    alert('Successfully Requested Course');
+                });
+        }
+
+        // On page load get all courses
+        document.addEventListener("DOMContentLoaded", function(){
+            loadPage('');
+        });
+    </script>
+</head>
+<body>
+<div class="flex-container">
+    <!-- Navigation bar -->
+    <!-- Left Column -->
+    <nav class="navbar">
+        <!-- Contains the top aligned elements (Generic) -->
+        <ul class="navbar-top">
+            <li>
+                <a href="{{ url_for('home')}}" id="Logo">
+                    <span class="material-symbols-outlined size-36">
+                        school
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('home')}}" id="Home">
+                    <span class="material-symbols-outlined">
+                        home
+                    </span>Home
+                </a>
+            </li>
+            <li>
+                <a href="" class="active" id="Search">
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>Search
+                </a>
+            </li>
+        </ul>
+
+        <!-- Contains the bottom aligned elements (Page specific) -->
+        <ul class="navbar-bottom">
+            <li>
+                <a href="{{url_for('logout')}}" id="Logout">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main body of page -->
+    <div class="main-container">
+        <div class="container-header">
+            <h1>Search for courses:</h1>
+            
+            <div>
+                <input type="text" id="input" placeholder="Search...">
+                <button onclick="search()">
+                    <span class="material-symbols-outlined">search</span>Search
+                </button>
+            </div>
+        </div>
+        <div id="courses">
+
+        </div>
+    </div>
+    
+</body>
+</html>

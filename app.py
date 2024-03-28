@@ -1,8 +1,18 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    session,
+    jsonify,
+    flash,
+)
 
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
+from src.Database.Update.createCourse import CreateCourse
 from src.Database.Query.SelectCourseQuery import SelectCourseQuery
 from src.Database.Query.SelectGradeForStudent import SelectGradeForStudent
 from src.Database.Query.SelectStudentUserPass import SelectStudentUserPass
@@ -16,89 +26,106 @@ from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
 from src.Database.Query.SelectAssignmentsForCourse import SelectAssignmentsForCourse
 from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
 from src.Database.Update.UpdateGrade import UpdateGrade
+from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
+from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Search.CourseSearch import CourseSearch
 
-currentUser = None #Start with no user logged in
+currentUser = None  # Start with no user logged in
 app = Flask(__name__)
 app.secret_key = "a"
+
 
 @app.route("/")
 def home():
     # Test the database connection
-    
-        if (session.get("userType") == "Student"):
-            courses = SelectRegisteredCourses.query((session['userId']))
-            return render_template("/student/courses.html", courses=courses)
-        elif (session.get("userType") == "Instructor"):
-            return teacherHome()
-        else:
-            return render_template("openEduHome.html")
 
-    
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    if(request.method == 'GET'):
-        return render_template("login.html");
+    if session.get("userType") == "Student":
+        courses = SelectRegisteredCourses.query((session["userId"]))
+        return render_template("courses.html", courses=courses)
+    elif session.get("userType") == "Instructor":
+        return teacherHome()
     else:
-         #Get inputted username and password from user
-        username = request.form.get('uname')
-        password = request.form.get('password')
+        return render_template("openEduHome.html")
 
-        #Check if user exists in database
-        validLogin = UsernamePasswordCheck.check((username, password));
 
-        #If exists, bring back to home page, ow stay on login page
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        # Get inputted username and password from user
+        username = request.form.get("uname")
+        password = request.form.get("password")
+
+        # Check if user exists in database
+        validLogin = UsernamePasswordCheck.check((username, password))
+        # If exists, bring back to home page, ow stay on login page
         if validLogin:
             return addUserToSession(username, password)
         else:
             error = "Invalid username and password"
-            return render_template("login.html", error=error);
+            return render_template("login.html", error=error)
+
 
 def addUserToSession(username, password):
-    #Adds username and userId to session
-    StudentData = SelectStudentUserPass.query((username, password));
+    # Adds username and userId to session
+    StudentData = SelectStudentUserPass.query((username, password))
     userId = StudentData[0]
-    session['username'] = request.form['uname']
-    session['userId'] = userId
-    #Checks for User type and redirect accordingly
+    session["username"] = request.form["uname"]
+    session["userId"] = userId
+    # Checks for User type and redirect accordingly
     if userId is None:
-        return redirect(url_for('home'))
+        return redirect(url_for("home"))
     if CheckUserIsInstructor.check(userId):
         session["userType"] = "Instructor"
-        #URL will be /teacher/dashboard once implemented
-        return redirect(url_for('home'))
+        # URL will be /teacher/dashboard once implemented
+        return redirect(url_for("home"))
     if CheckUserIsStudent.check(userId):
         session["userType"] = "Student"
-        #URL will be /student/dashboard once implemented
-        return redirect(url_for('home'))
+        # URL will be /student/dashboard once implemented
+        return redirect(url_for("home"))
     else:
         session["userType"] = "Admin"
-        #URL will be /admin/dashboard once implemented
-        return redirect(url_for('home'))
-
-
+        # URL will be /admin/dashboard once implemented
+        return redirect(url_for("createCourse"))
 
 
 @app.route("/logout")
 def logout():
-    #Remove user from session and return to home page
-    session.pop('username', None)
-    session.pop('userId', None)
+    # Remove user from session and return to home page
+    session.pop("username", None)
+    session.pop("userId", None)
     session.pop("userType", None)
-    return redirect(url_for('home'))
+    return redirect(url_for("home"))
 
-@app.route("/login/createaccount", methods=['GET', 'POST'])
+
+@app.route("/login/createaccount", methods=["GET", "POST"])
 def createAccount():
-    if (request.method == 'GET'):
-        return render_template("accountCreation.html");
-    else: # Post request
+    if request.method == "GET":
+        return render_template("accountCreation.html")
+    else:  # Post request
         # Update Database with user inputted information
-        form = request.form;
-        CreateAccount.update((form['accountType'],form['fname'],form['lname'],form['email'],form['password'], form['uname']));
-                
+        form = request.form
+        CreateAccount.update(
+            (
+                form["accountType"],
+                form["fname"],
+                form["lname"],
+                form["email"],
+                form["password"],
+                form["uname"],
+            )
+        )
         # Forward to the login page
 
-        return redirect(url_for('login'))
-        
+        return redirect(url_for("login"))
+
+
+@app.route("/seeGrades", methods=["GET"])
+def seeGrades():
+    studentId = "1"
+    assignmentId = "1"
+    courseId = "1"
 
     
 @app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
@@ -121,8 +148,40 @@ def createQuiz(courseId, courseName):
     if request.method == 'POST':
         questionForm = request.form
         return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
+@app.route('/search', methods = ['POST', 'GET'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        searchTerm = request.form['searchTerm']
+        return CourseSearch.search(searchTerm)
 
-@app.route("/teacher/homepage", methods = ['POST','GET'])
+@app.route('/Course/<courseId>/join', methods = ['POST'])
+def joinCourse(courseId):
+    userId = session['userId']
+    
+    # Student must be signed in to join a course
+    if userId == None:
+        return redirect(url_for('login'))
+    
+    AddCourseRequest.update((userId, courseId))
+    
+    return {}
+    
+
+
+@app.route("/teacher/<courseId>/assignments/createQuiz", methods=["POST", "GET"])
+def createQuiz(courseId):
+    if request.method == "GET":
+        return render_template("teacher/createQuiz.html", courseId=courseId)
+    if request.method == "POST":
+        questionForm = request.form
+        return render_template(
+            "teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId
+        )
+
+
+@app.route("/teacher/homepage", methods=["POST", "GET"])
 def teacherHome():
     # temporarily getting a list of all courses
     
@@ -175,13 +234,35 @@ def publishQuiz(courseId, courseName):
 def courseDashboard(courseId,courseName):
     return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName)
 
+
 @app.route("/admin/approveRegistration")
 def courseRegistration():
     return render_template("admin/approveRegistration.html")
 
-@app.route("/admin/createCourse")
+
+@app.route("/admin/createCourse", methods=["POST", "GET"])
 def createCourse():
-    return render_template("admin/createCourse.html")
+    if request.method == "POST":
+        # Extract form data using .get() to avoid BadRequestKeyError
+        form = request.form
+        courseName = form.get("courseName", "")
+        description = form.get("description", "")
+        credits = int(form.get("credits", 0))
+        session = int(form.get("session", 0))
+        term = int(form.get("term", 0))
+
+        courseData = (courseName, description, credits, session, term)
+        # Update Database with course information
+        try:
+            CreateCourse.update(courseData)
+            flash("Course created successfully!", "success")
+        except Exception as e:
+            flash(f"An error occurred: {str(e)}", "error")
+            return render_template("admin/createCourse.html")
+
+        return redirect(url_for("createCourse"))
+    else:
+        return render_template("admin/createCourse.html")
 
 @app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
 def seeAssignments(courseId, courseName):
@@ -190,4 +271,5 @@ def seeAssignments(courseId, courseName):
 
 
 if __name__ == "__main__":
+    app.debug = True
     app.run()

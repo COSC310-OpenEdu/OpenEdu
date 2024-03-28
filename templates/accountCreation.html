@@ -81,7 +81,16 @@
                     password.classList.add('highlight');
                 }
             });
+
+
+            document.getElementById('Cancel').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                window.location.replace("{{ url_for('login') }}");
+            })
         });
+
+    
     </script>
 </head>
 <body>
@@ -131,7 +140,7 @@
 
             <div class="FormLine buttons">
                 <div class="left">
-                    <button onclick="javasrcipt:window.history.back();">Cancel</button>
+                    <button id="Cancel">Cancel</button>
                 </div>
                 <div class="right">
                     <button type="submit" class="right">Sign Up</button> <br>
