@@ -22,6 +22,10 @@ from src.Database.Check.CheckUserIsStudent import CheckUserIsStudent
 from src.Database.Check.CheckUserIsInstructor import CheckUserIsInstructor
 from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
+from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
+from src.Database.Query.SelectAssignmentsForCourse import SelectAssignmentsForCourse
+from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
+from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Search.CourseSearch import CourseSearch
@@ -37,7 +41,7 @@ def home():
 
     if session.get("userType") == "Student":
         courses = SelectRegisteredCourses.query((session["userId"]))
-        return render_template("courses.html", courses=courses)
+        return render_template("student/courses.html", courses=courses)
     elif session.get("userType") == "Instructor":
         return teacherHome()
     else:
@@ -117,24 +121,29 @@ def createAccount():
         return redirect(url_for("login"))
 
 
-@app.route("/seeGrades", methods=["GET"])
-def seeGrades():
-    studentId = "1"
-    assignmentId = "1"
-    courseId = "1"
 
+    
+@app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
+def seeGrades(courseId, courseName): 
+ 
     # Query for getting grades for every assignment in a class for a given student
-    grades = SelectGradeForStudent.queryAll(
-        (
-            studentId,
-            assignmentId,
-        )
-    )
-    # Query for getting the course name
-    courseName = SelectCourseQuery.query((courseId,))
+    grades = SelectGradeForStudent.queryAll((session['userId'], courseId,));
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    questions = SelectQuestionsForCourse.queryAll((courseId,))
 
+    
     # Go to See Grades page
-    return render_template("seeGrades.html", grades=grades, courseName=courseName)
+    return render_template("student/seeGrades.html", grades=grades, courseName=courseName, username=session['username'], courseId=courseId, assignments=assignments, questions=questions)
+
+
+@app.route("/teacher/<courseId>-<courseName>/assignments/createQuiz", methods = ['POST', 'GET'])
+def createQuiz(courseId, courseName):
+    if request.method == 'GET':
+        return render_template("teacher/createQuiz.html", courseId=courseId, courseName=courseName)
+    if request.method == 'POST':
+        questionForm = request.form
+        return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
+    
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
@@ -155,61 +164,61 @@ def joinCourse(courseId):
     AddCourseRequest.update((userId, courseId))
     
     return {}
-    
-
-
-@app.route("/teacher/<courseId>/assignments/createQuiz", methods=["POST", "GET"])
-def createQuiz(courseId):
-    if request.method == "GET":
-        return render_template("teacher/createQuiz.html", courseId=courseId)
-    if request.method == "POST":
-        questionForm = request.form
-        return render_template(
-            "teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId
-        )
 
 
 @app.route("/teacher/homepage", methods=["POST", "GET"])
 def teacherHome():
     # temporarily getting a list of all courses
-    courses = SelectCourseQuery.query((session["userId"],))
+    
+    courses = SelectCourseQuery.query((session['userId'],))
+    
+    return render_template("teacher/homepage.html", courses = courses)
 
-    return render_template("teacher/homepage.html", courses=courses)
+@app.route("/teacher/<courseId>-<courseName>/dashboard", methods = ['GET'])
+def teacherCourseDash(courseId, courseName):
+    
+    return render_template("teacher/courseDashboard.html", courseId=courseId, courseName=courseName)
 
+@app.route("/teacher/<courseId>-<courseName>/assignments", methods = ['GET'])
+def teacherCourseAssignments(courseId, courseName):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    return render_template("teacher/assignmentsTab.html", courseId=courseId, courseName=courseName, assignments=assignments)
 
-@app.route("/teacher/<courseId>/dashboard", methods=["GET"])
-def teacherCourseDash(courseId):
-    return render_template("teacher/courseDashboard.html", courseId=courseId)
+@app.route("/teacher/<courseId>-<courseName>/grading", methods = ['GET'])
+def teacherCourseGrading(courseId, courseName):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    grades = SelectGradesForCourse.queryAll((courseId,))
+    questions = SelectQuestionsForCourse.queryAll((courseId,))
+    return render_template("teacher/grading.html", courseId=courseId, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
 
+@app.route("/updateGrade", methods = ['POST'])
+def updateGrade():
+    form = request.form
+    UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
+    return jsonify(form)
 
-@app.route("/teacher/<courseId>/assignments", methods=["GET"])
-def teacherCourseAssignments(courseId):
-    return render_template("teacher/assignmentsTab.html", courseId=courseId)
-
-
-@app.route("/teacher/<courseId>/grading", methods=["GET"])
-def teacherCourseGrading(courseId):
-    return render_template("teacher/grading.html", courseId=courseId)
-
-
-@app.route("/teacher/<courseId>/people", methods=["GET"])
-def teacherCoursePeople(courseId):
+@app.route("/teacher/<courseId>-<courseName>/people", methods = ['GET'])
+def teacherCoursePeople(courseId, courseName):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
     people = SelectPeopleInCourse.queryAll((courseId,))
-    return render_template(
-        "teacher/people.html", courseId=courseId, people=people, instructors=instructors
-    )
+    
+    return render_template("teacher/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors)
 
+@app.route("/student/<courseId>-<courseName>/people", methods = ['GET'])
+def studentCoursePeople(courseId, courseName):
+    instructors = SelectInstructorsForCourse.queryAll((courseId,))
+    people = SelectPeopleInCourse.queryAll((courseId,))
+    
+    return render_template("student/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors)
 
-@app.route("/teacher/<courseId>/publishQuiz", methods=["POST", "GET"])
-def publishQuiz(courseId):
+@app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods = ['POST', 'GET'])
+def publishQuiz(courseId, courseName):
     questionForm = request.form
-    AddQuizToDatabase.update(questionForm, courseId)
-    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId)
+    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
 
-@app.route("/courseDashboard/<courseId>", methods=["GET"])
-def courseDashboard(courseId):
-    return render_template("courseDashboard.html", courseId=courseId)
+@app.route("/student/<courseId>-<courseName>/dashboard", methods = ['GET'])
+def courseDashboard(courseId,courseName):
+    return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName)
 
 
 @app.route("/admin/approveRegistration")
@@ -240,6 +249,11 @@ def createCourse():
         return redirect(url_for("createCourse"))
     else:
         return render_template("admin/createCourse.html")
+
+@app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
+def seeAssignments(courseId, courseName):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName)
 
 
 if __name__ == "__main__":
