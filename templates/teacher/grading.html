@@ -11,18 +11,22 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Create variables for DOM elements
             var questions = document.getElementsByClassName("avg");
             var questions2 = document.getElementsByClassName("avg2");
             var totalAvg = document.getElementsByClassName("g");
             var total = document.getElementsByClassName("total");
             var total2 = document.getElementsByClassName("total2");
             
+            // Object for average grades for assignments
             var totals = {};
             for (let i = 0; i < totalAvg.length; i++) {
                 totals[totalAvg[i].id] = 0;
             }
             average();
             totalAverage();
+            
+            // Determines the average grade for a question, and shows the results
             function average() {
                 for (let i = 0; i < questions.length; i++) {
                     let grades = document.getElementsByClassName(questions[i].id);
@@ -40,6 +44,7 @@
                 }
             }
 
+            // Shows the average grade for an assignments
             function totalAverage() {
                 for (let i = 0; i < total.length; i++) {
                     total[i].innerHTML = "Class Avg: "+Math.round(totals[totalAvg[i].id]*100)/100 +"%";
@@ -47,6 +52,7 @@
                 }
             }
         
+            // Function for updating the Grade table when a user clicks off the text box
             var inputs = $("input");
             inputs.on("blur", function() {
                 let qId = this.id[0];
@@ -58,13 +64,12 @@
                     console.log(data);
                     average();
                 })
-                //$.post("{{url_for('updateGrade')}}", {courseId:1, questionId:qId, assignmentId:aId, studentId:sId});
             });
         
         });
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grading{% endblock %}
+{% block pageHeader %}{{ courseName }} / Grading{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -78,10 +83,10 @@
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading" class="active">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading" class="active">Grading</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
     </header>
     <div class="main-container">
         <div class="gradesheader">

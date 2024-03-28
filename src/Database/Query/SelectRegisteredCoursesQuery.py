@@ -5,7 +5,7 @@ import mysql
 class SelectRegisteredCourses(DatabaseQuery):
     @classmethod
     def query(cls, dataTuple) -> tuple:
-        registeredCourses = "SELECT Attend.CourseId, name, session, term FROM Attend JOIN Course ON Attend.CourseId = Course.courseId WHERE studentId = %s"
+        registeredCourses = "SELECT Attend.CourseId, name, description, session, term FROM Attend JOIN Course ON Attend.CourseId = Course.courseId WHERE studentId = %s"
         studentId = dataTuple
         try:
             cursor = DatabaseManager.getDatabaseCursor()

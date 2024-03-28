@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
     <script src="../../static/JS/seeGrades.js"></script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments{% endblock %}
+{% block pageHeader %}{{ courseName }} / Assignments{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -22,10 +22,10 @@
 
             <!-- Secondary header for course pages -->
             <header>
-                <a href="{{url_for('courseDashboard', courseId=courseId)}}" id="Dashboard">Dashboard</a>
-                <a href="{{url_for('seeAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
-                <a href="{{url_for('seeGrades', courseId=courseId)}}" id="Grading">Grading</a>
-                <a href="{{url_for('studentCoursePeople', courseId=courseId)}}" id="People" class="active">People</a>
+                <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades">Grades</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People" class="active">People</a>
             </header>
 
             <div class="main-container">

@@ -13,7 +13,7 @@
             let buttons = [];
             let toggle = true;
             var assignments = document.getElementsByClassName("g");
-            // Calculates average grade your assignment
+            // Calculates average grade for your assignment
             for (let i = 0; i < assignments.length; i++) {
                 let questions = assignments[i].querySelectorAll(" .avg");
                 let avg = 0;
@@ -51,7 +51,7 @@
         });
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grades for {{ username }}{% endblock %}
+{% block pageHeader %}{{ courseName }} / Grades for {{ username }}{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -65,10 +65,10 @@
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{ url_for('courseDashboard', courseId=courseId) }}" id="Dashboard">Dashboard</a>
-        <a href="{{ url_for('seeAssignments', courseId=courseId) }}" id="Assignments">Assignments</a>
-        <a href="{{ url_for('seeGrades', courseId=courseId) }}" id="Grades" class="active">Grades</a>
-        <a href="{{url_for('studentCoursePeople', courseId=courseId)}}" id="People">People</a>
+        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades" class="">Grades</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People">People</a>
     </header>
 
     <div class="container-body" style="flex-direction: column; gap: 0;">
@@ -81,7 +81,7 @@
             <div class="grade g"id="{{assignment[0]}}">
                 <div class = "gradeGroup">
                     <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span class="total"></span class="total2"><span></span>
+                    <span></span><span class="total"></span><span class="total2"></span>
                 </div>
                 {% for grade in grades %}
                     {% if (grade[0] == assignment[0]) %}
