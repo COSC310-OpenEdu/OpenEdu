@@ -55,7 +55,12 @@ form .right {
 }
 
 form .right button {
-    background-color: var(--darkVariant);
+    background-color: #B4CBC9;
+}
+
+form .right button:hover {
+    background-color: #99B0AE;
+    color: white;
 }
 
 form .left {
