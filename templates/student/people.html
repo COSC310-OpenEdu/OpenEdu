@@ -7,11 +7,11 @@
     <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
     <script src="../../static/JS/seeGrades.js"></script>
 {% endblock %}
-{% block pageHeader %}{{ courseName }} / People{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / People{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="{{url_for('home')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
     <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
     <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
@@ -33,7 +33,7 @@
                     <span></span>
                     <span></span><span></span><span></span>
                 </div> 
-                
+                <!-- Display every instructor in course -->
                 <div class="grades">
                 {% for instructor in instructors %}
                 <div class="grade">
@@ -43,6 +43,7 @@
                     </div>
                 </div>
                 {% endfor %}
+                <!-- Display every student enrolled in course -->
                 {% for person in people %}
                 <div class="grade">
                     <div class = "gradeGroup">

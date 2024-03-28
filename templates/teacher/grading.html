@@ -20,6 +20,7 @@
             
             // Object for average grades for assignments
             var totals = {};
+            // Set every assignmentId key value pair to 0
             for (let i = 0; i < totalAvg.length; i++) {
                 totals[totalAvg[i].id] = 0;
             }
@@ -31,13 +32,15 @@
                 for (let i = 0; i < questions.length; i++) {
                     let grades = document.getElementsByClassName(questions[i].id);
                     let avg = 0;
+                    // For every question, add the grade to the average
                     for (let j = 0; j < grades.length; j++) {
                         avg += parseFloat(grades[j].value);
                     }
                     avg = avg/grades.length;
-                    
+                    // For total assignment grade, adds question average divided by number of questions to the value associated with the current assignmentId
                     totals[grades[0].id[1]] += avg/$("#"+grades[0].id[1]+" .gradeGroup2").length;
                     avg = Math.round(avg*100)/100;
+                    // Adds average to desired element on page
                     questions[i].innerHTML = "Average: "+ avg + "%";
                     questions2[i].innerHTML = "Average: "+ avg;
 
@@ -55,12 +58,16 @@
             // Function for updating the Grade table when a user clicks off the text box
             var inputs = $("input");
             inputs.on("blur", function() {
+                // The id for input area is questionId+assignmentId+studentId, so it just pulls from that
                 let qId = this.id[0];
                 let aId = this.id[1];
                 let sId = this.id[2];
+                // Sets URL for updatingGrade
                 const url = {{ url_for("updateGrade")|tojson }};
+                // Does an AJAX POST requset to updateGrade, updating grade in the process
                 var updated = $.post(url, {"courseId":1, "questionId":qId, "assignmentId":aId, "studentId":sId, "grade":this.value});
                 updated.done(function(data) {
+                    // When finished, run the average function again to update the averages
                     console.log(data);
                     average();
                 })
@@ -69,7 +76,7 @@
         });
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseName }} / Grading{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grading{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -93,13 +100,14 @@
             <span>Submission</span><span>Grade</span><span>Percentage</span>
         </div> 
         <div class="grades">
-            
+            <!-- For every assignment in course, create a new dropdown list-->
             {% for assignment in assignments %}
             <div class="grade g"id="{{assignment[0]}}">
                 <div class = "gradeGroup">
                     <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
                     <span></span><span class="total2"></span><span class="total"></span>
                 </div>
+                <!-- For every question in assignment, create a drop down list containing each student-->
                 {% for question in questions %}
                     {% if (question[2] == assignment[0]) %}
                         <div class="grade">
@@ -107,6 +115,7 @@
                             <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
                             <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}"></span>
                         </div>
+                        <!-- For every student, display their results to the question with an input box to update their grade -->
                         {% for grade in grades %}
                             {% if (grade[0] == question[0] and grade[5] == assignment[0])%}
                                 <div class="gradeItem2">     
@@ -121,7 +130,7 @@
                 
             </div>
             {% endfor %}
-            <!-- Creates a new row for every assignment -->
+            
             
             </div>
         </div>

@@ -41,7 +41,7 @@ def home():
 
     if session.get("userType") == "Student":
         courses = SelectRegisteredCourses.query((session["userId"]))
-        return render_template("courses.html", courses=courses)
+        return render_template("student/courses.html", courses=courses)
     elif session.get("userType") == "Instructor":
         return teacherHome()
     else:
@@ -181,7 +181,8 @@ def teacherCourseDash(courseId, courseName):
 
 @app.route("/teacher/<courseId>-<courseName>/assignments", methods = ['GET'])
 def teacherCourseAssignments(courseId, courseName):
-    return render_template("teacher/assignmentsTab.html", courseId=courseId, courseName=courseName)
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    return render_template("teacher/assignmentsTab.html", courseId=courseId, courseName=courseName, assignments=assignments)
 
 @app.route("/teacher/<courseId>-<courseName>/grading", methods = ['GET'])
 def teacherCourseGrading(courseId, courseName):

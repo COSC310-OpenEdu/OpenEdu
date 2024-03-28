@@ -13,14 +13,16 @@
             let buttons = [];
             let toggle = true;
             var assignments = document.getElementsByClassName("g");
-            // Calculates average grade for your assignment
+            // Calculates average grade for every assignment
             for (let i = 0; i < assignments.length; i++) {
                 let questions = assignments[i].querySelectorAll(" .avg");
                 let avg = 0;
+                // For every question in assignment, add the grade to the average
                 for (let j = 0; j<questions.length; j++) {
                     avg += parseFloat(questions[j].id);
                 }
                 avg = avg/questions.length;
+                // Set the HTML of desired areas to be equal to the average
                 assignments[i].querySelector(" .total2").innerHTML = (Math.round(avg*100)/100) + "%";
                 assignments[i].querySelector(" .total").innerHTML = (Math.round(avg*100)/100) +"/100";
             }
@@ -77,12 +79,14 @@
             <span></span><span>Grade</span><span>Percentage</span>
         </div> 
         <div class="grades">
+            <!-- For every assignment in course, create a dropdown menu -->
             {% for assignment in assignments %}
             <div class="grade g"id="{{assignment[0]}}">
                 <div class = "gradeGroup">
                     <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
                     <span></span><span class="total"></span><span class="total2"></span>
                 </div>
+                <!-- Show logged in student's grades for every question for a given assignment -->
                 {% for grade in grades %}
                     {% if (grade[0] == assignment[0]) %}
                         <div class="grade">

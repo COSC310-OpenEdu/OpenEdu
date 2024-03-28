@@ -35,7 +35,7 @@
         }
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseName }} / Assignments / Create Quiz{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Quiz{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -57,7 +57,7 @@
     <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
         <!-- Primary column containing question builder -->
         <div class="primary-container">
-            <form action="{{ url_for('publishQuiz', courseId=courseId)}}" id="questionForm" method="post" name="questionForm">
+            <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm">
                 <div class="form-header">
                     <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required>
                     <div class="form-header-right">

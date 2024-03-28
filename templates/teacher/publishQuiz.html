@@ -4,7 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">
 {% endblock %}
-{% block pageHeader %}{{ courseName }} / Assignments / Create Quiz / Publish Quiz{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Quiz / Publish Quiz{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
