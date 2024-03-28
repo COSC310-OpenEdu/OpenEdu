@@ -65,6 +65,16 @@
             <option value="2">2</option>
           </select>
         </div>
+
+        <!-- Instructor -->
+        <div>
+          <label for="instructor">Instructor</label>
+          <select name="instructor" id="instructor">
+            {% for i in range(0,len(instructorIds)) %}
+              <option value ="{{instructorIds[i]}}">{{instructorNames[i]}}</option>
+            {% endfor %}
+          </select>
+        </div>
         <!-- Submit Button -->
         <div>
           <button type="submit">Create Course</button>
