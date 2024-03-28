@@ -13,6 +13,7 @@
             let buttons = [];
             let toggle = true;
             var assignments = document.getElementsByClassName("g");
+            // Calculates average grade your assignment
             for (let i = 0; i < assignments.length; i++) {
                 let questions = assignments[i].querySelectorAll(" .avg");
                 let avg = 0;
@@ -73,21 +74,21 @@
     <div class="container-body" style="flex-direction: column; gap: 0;">
         <div class="gradesheader">
             <span>Grade Item</span>
-            <span>Grade</span><span>Percentage</span><span>Comment</span>
+            <span></span><span>Grade</span><span>Percentage</span>
         </div> 
         <div class="grades">
             {% for assignment in assignments %}
             <div class="grade g"id="{{assignment[0]}}">
                 <div class = "gradeGroup">
                     <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span class="total"></span><span class="total2"></span><span></span>
+                    <span></span><span class="total"></span class="total2"><span></span>
                 </div>
                 {% for grade in grades %}
                     {% if (grade[0] == assignment[0]) %}
                         <div class="grade">
                         <div class="gradeItem question">     
                             <span>Question {{ grade[1] }} ({{ grade[2] }})</span>
-                            <span class="avg" id="{{grade[4]}}">{{grade[4]}}/100</span><span class="avg2">{{grade[4]}}%</span><span>{{grade[5]}}</span>
+                            <span></span><span class="avg" id="{{grade[4]}}">{{grade[4]}}/100</span><span class="avg2">{{grade[4]}}%</span>
                         </div>
                         
                     </div>

@@ -130,10 +130,10 @@ def teacherHome():
     
     return render_template("teacher/homepage.html", courses = courses)
 
-@app.route("/teacher/<courseId>/dashboard", methods = ['GET'])
-def teacherCourseDash(courseId):
+@app.route("/teacher/<courseId>-<courseName>/dashboard", methods = ['GET'])
+def teacherCourseDash(courseId, courseName):
     
-    return render_template("teacher/courseDashboard.html", courseId=courseId)
+    return render_template("teacher/courseDashboard.html", courseId=courseId, courseName=courseName)
 
 @app.route("/teacher/<courseId>/assignments", methods = ['GET'])
 def teacherCourseAssignments(courseId):

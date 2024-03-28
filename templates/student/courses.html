@@ -4,6 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courses.css') }}">
     <script>
+        // Assign colors to each course
         document.addEventListener("DOMContentLoaded", function() {
             let courses = document.getElementsByClassName("banner");
             let green = "rgba(207,234,195,255)";
