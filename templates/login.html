@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/pageContent.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
-
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/form.css') }}">
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('Cancel').addEventListener('click', function (e) {
@@ -19,92 +11,47 @@
         })
     })
     </script>
-
-</head>
-<body>
-<div class="flex-container">
-    <!-- Navigation bar -->
-    <!-- Left Column -->
-    <nav class="navbar">
-        <!-- Contains the top aligned elements (Generic) -->
-        <ul class="navbar-top">
-            <li>
-                <a href="" id="Logo">
-                    <span class="material-symbols-outlined size-36">
-                        school
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="" class="active" id="Home">
-                    <span class="material-symbols-outlined">
-                        home
-                    </span>Home
-                </a>
-            </li>
-            <li>
-                <a href="" id="Search">
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>Search
-                </a>
-            </li>
-        </ul>
-
-        <!-- Contains the bottom aligned elements (Page specific) -->
-        <ul class="navbar-bottom">
-            <li>
-                <a href="{{url_for('login')}}" id="Logout">
-                    <span class="material-symbols-outlined">
-                        login
-                    </span>Login
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main body of page -->
-    <div class="main-container">
-        <div id="body">
-            <div class="overlay"></div>
-            <form action="{{ url_for('login')}}" method="post" class="center">
-                <div class="FormLine FormHeader">
-                    <legend>Login
-                    {% if error %}
-                        <p><strong>Error:</strong> {{ error }}
-                    {% endif %}
-                        </legend>
-                </div>
-                
-                <div class="FormLine">
-                    <label for="text">Username</label> <br>
-                    <input type="text" name="uname" id="username" placeholder="Enter Username"> <br>
-                </div>
-
-                <div class="FormLine">
-                    <label for="password">Password</label> <br>
-                    <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
-                </div>
-
-                <div class="FormLine LineButton">
-                    <button type="submit">Login</button>
-                </div>
-
-                <div class="FormLine buttons">
-                    <div class="left">
-                        <button id="Cancel">Cancel</button>
-                    </div>
-                    <div class="right">
-                        <a href="{{ url_for('createAccount')}}" class="right" style="width: 80%;">Sign Up</a> <br>
-                        <a class="right" style="width: 80%;">Forgot Password?</a> <br>
-                    </div>
-                </div>
-
-            </form>
-
+{% endblock %}
+{% block pageHeader %}Login to OpenEdu{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('login') }}" id="log"><span class="material-symbols-outlined">login</span>Login</a>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <form action="{{ url_for('login')}}" method="post" class="center">
+        <div class="FormLine FormHeader">
+            <legend>Login
+            {% if error %}
+                <p><strong>Error:</strong> {{ error }}
+            {% endif %}
+                </legend>
+        </div>
+        
+        <div class="FormLine">
+            <label for="text">Username</label> <br>
+            <input type="text" name="uname" id="username" placeholder="Enter Username"> <br>
         </div>
 
-    </div>
+        <div class="FormLine">
+            <label for="password">Password</label> <br>
+            <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+        </div>
 
-</body>
-</html>
+        <div class="FormLine LineButton">
+            <button type="submit">Login</button>
+        </div>
+
+        <div class="FormLine buttons FormFooter">
+            <div class="left">
+                <button id="Cancel">Cancel</button>
+            </div>
+            <div class="right">
+                <a href="{{ url_for('createAccount')}}" class="right" style="width: 80%;">Sign Up</a> <br>
+                <a class="right" style="width: 80%;">Forgot Password?</a> <br>
+            </div>
+        </div>
+    </form>
+{% endblock %}
