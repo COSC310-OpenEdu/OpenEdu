@@ -121,11 +121,6 @@ def createAccount():
         return redirect(url_for("login"))
 
 
-@app.route("/seeGrades", methods=["GET"])
-def seeGrades():
-    studentId = "1"
-    assignmentId = "1"
-    courseId = "1"
 
     
 @app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
@@ -148,6 +143,8 @@ def createQuiz(courseId, courseName):
     if request.method == 'POST':
         questionForm = request.form
         return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
+    
+
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     if request.method == 'GET':
@@ -167,18 +164,6 @@ def joinCourse(courseId):
     AddCourseRequest.update((userId, courseId))
     
     return {}
-    
-
-
-@app.route("/teacher/<courseId>/assignments/createQuiz", methods=["POST", "GET"])
-def createQuiz(courseId):
-    if request.method == "GET":
-        return render_template("teacher/createQuiz.html", courseId=courseId)
-    if request.method == "POST":
-        questionForm = request.form
-        return render_template(
-            "teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId
-        )
 
 
 @app.route("/teacher/homepage", methods=["POST", "GET"])
