@@ -31,6 +31,8 @@ from src.Database.Query.SelectStudentQuery import SelectStudentQuery
 from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Database.Update.UpdateEmail import UpdateEmail
+from src.Database.Update.UpdatePassword import UpdatePassword
 from src.Search.CourseSearch import CourseSearch
 
 currentUser = None  # Start with no user logged in
@@ -128,13 +130,28 @@ def updateAccount():
     if request.method == 'GET':
         return render_template('student/updateAccount.html')
     else:
+        requestType = request.form['type'];
+        
+        # Password update request
+        if (requestType == 'password'):
+            successful = UpdatePassword.update((session['userId'], request.form['old'], request.form['new']))
+            
+            if (successful == False):
+                return jsonify({"error": 'Password Update Failed'}), 400
+            
+        # Email update Request
+        if (requestType == 'email'):
+            successful = UpdateEmail.update((session['userId'], request.form['email'])) 
+            
+            if (successful == False):
+                return jsonify({"error": 'Email Update Failed'}), 400           
+        
         return {}
-    
+        
 @app.route("/student/info", methods=['POST'])
 def studentInfo():
     # Returns firstname lastname and email to the given user id
     studentInfo = SelectStudentQuery.query((session['userId'],));
-    
     
     returnData = {
         'firstName': studentInfo[1],

@@ -18,7 +18,7 @@
 
         // Runs Ajax to load students information like name and email for the currently logged in user
         function loadPageData() {
-            $.post("{{ url_for('studentInfo') }}", )
+            $.post("{{ url_for('studentInfo') }}")
                 .done(function(data) {
                     // Receive the student infromation for the given user from the server
                     studentInfo = JSON.parse(data);
@@ -40,7 +40,7 @@
 
         // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
-            loadPageData(1);
+            loadPageData();
 
             document.querySelector('#curPassword').addEventListener('click', function (e){
                 removeHighlight(e.target);
@@ -73,13 +73,14 @@
                     } else {
                         // Create a request to the server to update password
                         data = {
-                            type: 'password',
-                            old: curPassword.value,
-                            new: newPassword.value
+                            'type': 'password',
+                            'old': curPassword.value,
+                            'new': newPassword.value
                         };
     
-                        $.post("{{ url_for('updateAccount') }}", JSON.stringify(data))
+                        $.post("{{ url_for('updateAccount') }}", data)
                             .done(function () {
+                                loadPageData();
                                 alert('Your password has been updated')
                             });
                     }
@@ -103,19 +104,17 @@
                     } else {
                         // Create a request to the server to update the email
                         data = {
-                            type: 'email',
-                            email: email.value.trim(),
+                            'type': 'email',
+                            'email': email.value.trim(),
                         };
     
-                        $.post("{{ url_for('updateAccount') }}", JSON.stringify(data))
+                        $.post("{{ url_for('updateAccount') }}", data)
                             .done(function () {
+                                loadPageData();
                                 alert('Your email has been updated');
                             });
                     } 
-
-                }
-
-                
+                }    
             });
 
             // Prevent the form from being submitted and redirect the user to the student dashboard
@@ -146,11 +145,11 @@
                 </div>
                 
                 <div class="FormLine">
-                    <p>Full Name: <span id="fullName">Aidan Morris</span></p>
+                    <p>Full Name: <span id="fullName"></span></p>
                 </div>
 
                 <div class="FormLine">
-                    <label for="email">Update Email: <span id="curEmail">test@email.com</span></label> <br>
+                    <label for="email">Update Email: <span id="curEmail"></span></label> <br>
                     <input type="email" name="email" id="email" placeholder="Change Email"> <br>
                 </div>
 
