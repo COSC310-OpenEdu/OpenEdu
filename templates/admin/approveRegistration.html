@@ -2,6 +2,7 @@
 {% block title %}Approve Registration{% endblock %}
 {% block head %}
   {{ super() }}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <link rel="stylesheet"
         type="text/css"
         href="{{ url_for('static',filename='CSS/courseHeader.css') }}">
@@ -28,6 +29,46 @@
           });
         });
       });
+
+      // Request to the server to approve the course request for the given student
+      function approveRequest(studentId, courseId) {
+        data = {
+          'type': 'approve',
+          'studentId': studentId,
+          'courseId': courseId
+        };
+
+        $.post("{{ url_for('courseRegistration') }}", data)
+          .done(function(){
+            alert('The request user has been approved');
+            refreshPage();
+          })
+          .fail(function(){
+            alert('An error with the server has occured');
+          });
+      }
+
+      // Request the server to deny the course request for the given student
+      function denyRequest(studentId, courseId) {
+        data = {
+          'type': 'deny',
+          'studentId': studentId,
+          'courseId': courseId
+        };
+
+        $.post("{{ url_for('courseRegistration') }}", data)
+          .done(function(){
+            alert('The students request has been denyied');
+            refreshPage();
+          })
+          .fail(function(){
+            alert('An error with the server has occured');
+          });
+      }
+
+      function refreshPage(){
+        window.location.reload();
+      }
   </script>
 {% endblock %}
 {% block pageHeader %}Approve Registration{% endblock %}
@@ -47,26 +88,28 @@
        id="Registration"
        class="active">Approve Registration</a>
   </header>
-  {% for session, requests in course_requests.items() %}
+  <div class="courses">
+    {% for session, requests in course_requests.items() %}
     <div class="grade">
       <div class="gradeGroup">
         <span class="gradeTitle">&#9660; {{ session }}</span>
       </div>
       {% for request in requests %}
-        <div class="courseContainer">
-          <div class="gradeItem">
-            <span>{{ request[4] }}</span> <!-- Course Name -->
-          </div>
-          <div class="studentList">
-            <!-- Display userId, Name, and Year Level -->
-            <span>Student ID: {{ request[0] }} Name: {{ request[1] }} {{ request[2] }} (Year: {{ request[3] }})</span>
-            <button class="denyButton"
-                    onclick="denyRequest({{ request[0] }}, {{ request[1] }})">Deny</button>
-            <button class="approveButton"
-                    onclick="approveRequest({{ request[0] }}, {{ request[1] }})">Approve</button>
-          </div>
+      <div class="courseContainer">
+        <div class="gradeItem">
+          <span>{{ request[4] }}</span> <!-- Course Name -->
         </div>
+        <div class="studentList">
+          <!-- Display userId, Name, and Year Level -->
+          <span>Student ID: {{ request[0] }} Name: {{ request[1] }} {{ request[2] }} (Year: {{ request[3] }})</span>
+          <button class="denyButton"
+          onclick="denyRequest({{ request[0] }}, {{ request[6] }})">Deny</button>
+          <button class="approveButton"
+          onclick="approveRequest({{ request[0] }}, {{ request[6] }})">Approve</button>
+        </div>
+      </div>
       {% endfor %}
     </div>
-  {% endfor %}
-{% endblock %}
+    {% endfor %}
+  </div>
+    {% endblock %}

@@ -24,6 +24,8 @@ from src.Database.Query.SelectPeopleInCourse import SelectPeopleInCourse
 from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCourse
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Database.Update.ApproveCourseRequest import ApproveCourseRequest
+from src.Database.Update.DenyCourseRequest import DenyCourseRequest
 from src.Search.CourseSearch import CourseSearch
 from src.Database.Query.GetCourseRequests import CourseRequestManager
 
@@ -213,11 +215,21 @@ def courseDashboard(courseId):
     return render_template("courseDashboard.html", courseId=courseId)
 
 
-@app.route("/admin/approveRegistration")
+@app.route("/admin/approveRegistration", methods=['POST', 'GET'])
 def courseRegistration():
-    course_requests = CourseRequestManager.get_course_requests()
-    return render_template("admin/approveRegistration.html", course_requests=course_requests)
+    if request.method == 'GET':
+        course_requests = CourseRequestManager.get_course_requests()
+        return render_template("admin/approveRegistration.html", course_requests=course_requests)
+    else:
+        type = request.form['type']
+        
+        if type == 'approve':
+            ApproveCourseRequest.update((request.form['studentId'],request.form['courseId']))
 
+        if type == 'deny':
+            DenyCourseRequest.update((request.form['studentId'],request.form['courseId']))  
+        
+        return {}
 
 @app.route("/admin/createCourse", methods=["POST", "GET"])
 def createCourse():

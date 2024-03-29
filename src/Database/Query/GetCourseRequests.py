@@ -6,7 +6,7 @@ class CourseRequestManager:
         try:
             cursor = DatabaseManager.getDatabaseCursor()
             cursor.execute("""
-                SELECT u.userId, u.firstName, u.lastName, s.year, c.name, c.session
+                SELECT u.userId, u.firstName, u.lastName, s.year, c.name, c.session, c.courseId
                 FROM CourseRequests cr
                 JOIN Course c ON cr.courseId = c.courseId
                 JOIN User u ON cr.studentId = u.userId
