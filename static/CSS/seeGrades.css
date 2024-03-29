@@ -127,13 +127,18 @@ margin-left: 3em;
 
 
 
+input {
+    
+    width: 3em;
+}
+
 
 .gradeGroup :nth-child(2), .gradesheader :nth-child(2) {
     width: 27em;
 }
 
 .gradeItem :nth-child(2) {
-    width: 27em;
+    width: 30em;
 }
 
 
@@ -142,12 +147,19 @@ margin-left: 3em;
 }
 
 .gradeItem2 :first-child {
-    width: 17em;
+    width: 15em;
 }
 
 .gradeItem2 :nth-child(2) {
     width: 20em;
 }
+
+.gradeItem2 :nth-child(4) {
+    width: 1em;
+    margin-right: 2em;
+}
+
+
 
 .hide {
     display: none;

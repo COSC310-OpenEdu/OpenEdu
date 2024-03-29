@@ -5,9 +5,78 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
     <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../../static/JS/seeGrades.js"></script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Create variables for DOM elements
+            var questions = document.getElementsByClassName("avg");
+            var questions2 = document.getElementsByClassName("avg2");
+            var totalAvg = document.getElementsByClassName("g");
+            var total = document.getElementsByClassName("total");
+            var total2 = document.getElementsByClassName("total2");
+            
+            // Object for average grades for assignments
+            var totals = {};
+            // Set every assignmentId key value pair to 0
+            for (let i = 0; i < totalAvg.length; i++) {
+                totals[totalAvg[i].id] = 0;
+            }
+            average();
+            totalAverage();
+            
+            // Determines the average grade for a question, and shows the results
+            function average() {
+                for (let i = 0; i < questions.length; i++) {
+                    let grades = document.getElementsByClassName(questions[i].id);
+                    let avg = 0;
+                    // For every question, add the grade to the average
+                    for (let j = 0; j < grades.length; j++) {
+                        avg += parseFloat(grades[j].value);
+                    }
+                    avg = avg/grades.length;
+                    // For total assignment grade, adds question average divided by number of questions to the value associated with the current assignmentId
+                    totals[grades[0].id[1]] += avg/$("#"+grades[0].id[1]+" .gradeGroup2").length;
+                    avg = Math.round(avg*100)/100;
+                    // Adds average to desired element on page
+                    questions[i].innerHTML = "Average: "+ avg + "%";
+                    questions2[i].innerHTML = "Average: "+ avg;
+
+                }
+            }
+
+            // Shows the average grade for an assignments
+            function totalAverage() {
+                for (let i = 0; i < total.length; i++) {
+                    total[i].innerHTML = "Class Avg: "+Math.round(totals[totalAvg[i].id]*100)/100 +"%";
+                    total2[i].innerHTML = "Class Avg: "+Math.round(totals[totalAvg[i].id]*100)/100;
+                }
+            }
+        
+            // Function for updating the Grade table when a user clicks off the text box
+            var inputs = $("input");
+            inputs.on("blur", function() {
+                // The id for input area is questionId+assignmentId+studentId, so it just pulls from that
+                let qId = this.id[0];
+                let aId = this.id[1];
+                let sId = this.id[2];
+                // Sets URL for updatingGrade
+                const url = {{ url_for("updateGrade")|tojson }};
+                // Does an AJAX POST requset to updateGrade, updating grade in the process
+                var updated = $.post(url, {"courseId":1, "questionId":qId, "assignmentId":aId, "studentId":sId, "grade":this.value});
+                updated.done(function(data) {
+                    // When finished, run the average function again to update the averages
+                    console.log(data);
+                    average();
+                })
+            });
+        
+        });
+    </script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Grading{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grading{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
@@ -20,10 +89,10 @@
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading" class="active">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People">People</a>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading" class="active">Grading</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
     </header>
     <div class="main-container">
         <div class="gradesheader">
@@ -31,23 +100,37 @@
             <span>Submission</span><span>Grade</span><span>Percentage</span>
         </div> 
         <div class="grades">
-        <div class="grade"id="assignments">
-            <div class = "gradeGroup">
-                <span class="gradeTitle">&#9660; Assignments</span>
-                <span></span><span></span><span></span>
+            <!-- For every assignment in course, create a new dropdown list-->
+            {% for assignment in assignments %}
+            <div class="grade g"id="{{assignment[0]}}">
+                <div class = "gradeGroup">
+                    <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
+                    <span></span><span class="total2"></span><span class="total"></span>
+                </div>
+                <!-- For every question in assignment, create a drop down list containing each student-->
+                {% for question in questions %}
+                    {% if (question[2] == assignment[0]) %}
+                        <div class="grade">
+                        <div class="gradeItem gradeGroup2 question">     
+                            <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
+                            <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}"></span>
+                        </div>
+                        <!-- For every student, display their results to the question with an input box to update their grade -->
+                        {% for grade in grades %}
+                            {% if (grade[0] == question[0] and grade[5] == assignment[0])%}
+                                <div class="gradeItem2">     
+                                    <span>{{grade[1]}} {{grade[2]}}</span>
+                                    <span class="material-symbols-outlined">link</span><input id="{{question[0]}}{{assignment[0]}}{{grade[4]}}" class="{{question[0]}}" type="number" value="{{grade[6]}}" /><span>/100</span><span>{{grade[6]}}%</span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
                 
             </div>
-            <div class="grade" id="test">
-                <div class = "gradeGroup2 gradeItem">
-                    <span class="gradeTitle">&#9660; Assignment 1</span>
-                    <span></span><span></span><span></span>
-                </div>
-                <div class="gradeItem2">     
-                    <span>Student 1</span>
-                    <span class="material-symbols-outlined">link</span><span>90/100</span><span>90%</span>
-                </div>
-            </div>
-            <!-- Creates a new row for every assignment -->
+            {% endfor %}
+            
             
             </div>
         </div>

@@ -4,14 +4,14 @@
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/seeGrades.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
 {% endblock %}
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments{% endblock %}
 {% block navTop %}
     <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
     <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
 {% endblock %}
 {% block navBottom %}
     <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
@@ -19,26 +19,12 @@
 {% block content %}
     <!-- Secondary header for course pages -->
     <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments" class="active">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
+        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments" class="active">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades">Grades</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People">People</a>
     </header>
-    <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
-    <div class="container-body">
-        <a href="#">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Assignment</span>
-            </button>
-        </a>
-        <a href="{{url_for('createQuiz', courseId=courseId, courseName=courseName)}}">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Quiz</span>
-            </button>
-        </a>
-    </div>
+    <!-- Contains a list of assignments created by the teacher -->
     <div class="main-container">
         <div class="gradesheader">
             <span></span>
