@@ -9,6 +9,8 @@ from flask import (
     flash,
 )
 
+import json
+
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
@@ -25,6 +27,7 @@ from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCo
 from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
 from src.Database.Query.SelectAssignmentsForCourse import SelectAssignmentsForCourse
 from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
+from src.Database.Query.SelectStudentQuery import SelectStudentQuery
 from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
@@ -120,8 +123,26 @@ def createAccount():
 
         return redirect(url_for("login"))
 
-
-
+@app.route("/student/updateAccount", methods=['GET', 'POST'])
+def updateAccount():
+    if request.method == 'GET':
+        return render_template('student/updateAccount.html')
+    else:
+        return {}
+    
+@app.route("/student/info", methods=['POST'])
+def studentInfo():
+    # Returns firstname lastname and email to the given user id
+    studentInfo = SelectStudentQuery.query((session['userId'],));
+    
+    
+    returnData = {
+        'firstName': studentInfo[1],
+        'lastName': studentInfo[2],
+        'email': studentInfo[3]
+    };
+    
+    return json.dumps(returnData);
     
 @app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
 def seeGrades(courseId, courseName): 

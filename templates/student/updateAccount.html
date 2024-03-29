@@ -16,9 +16,9 @@
             element.classList.remove('highlight')
         }
 
-        // Runs Ajax to load students information like name and email
-        function loadPageData(studentId) {
-            $.post("{{ url_for('studentInfo') }}", {studentId: studentId})
+        // Runs Ajax to load students information like name and email for the currently logged in user
+        function loadPageData() {
+            $.post("{{ url_for('studentInfo') }}", )
                 .done(function(data) {
                     // Receive the student infromation for the given user from the server
                     studentInfo = JSON.parse(data);
