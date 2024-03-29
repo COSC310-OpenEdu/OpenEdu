@@ -82,6 +82,9 @@
                             .done(function () {
                                 loadPageData();
                                 alert('Your password has been updated')
+                            })
+                            .fail(function() {
+                                alert('The old password is invalid.');
                             });
                     }
 
