@@ -29,6 +29,7 @@ from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Search.CourseSearch import CourseSearch
+from src.Database.Query.SelectAllInstructors import SelectAllInstructors
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -236,11 +237,12 @@ def createCourse():
         credits = int(form.get("credits", 0))
         session = int(form.get("session", 0))
         term = int(form.get("term", 0))
+        instructorId = int(form.get("instructor", 0))
 
         courseData = (courseName, description, credits, session, term)
         # Update Database with course information
         try:
-            CreateCourse.update(courseData)
+            CreateCourse.update(courseData, instructorId)
             flash("Course created successfully!", "success")
         except Exception as e:
             flash(f"An error occurred: {str(e)}", "error")
@@ -248,7 +250,8 @@ def createCourse():
 
         return redirect(url_for("createCourse"))
     else:
-        return render_template("admin/createCourse.html")
+        instructorIds, instructorNames = SelectAllInstructors.queryAll()
+        return render_template("admin/createCourse.html", instructorIds=instructorIds, instructorNames=instructorNames, len=len)
 
 @app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
 def seeAssignments(courseId, courseName):
