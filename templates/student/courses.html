@@ -37,7 +37,7 @@
     <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}   
-    <div class="container-body overflow">
+    <div class="container-body overflow" style="flex-direction: row;">
         {% for course in courses %}
         <a href="{{ url_for('courseDashboard', courseId=course[0], courseName=course[1]) }}" class="course">
             <div class="banner"></div>

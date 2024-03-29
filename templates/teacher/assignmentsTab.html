@@ -26,24 +26,20 @@
     </header>
     <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
     <div class="container-body">
-        <a href="#">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Assignment</span>
-            </button>
-        </a>
-        <a href="{{url_for('createQuiz', courseId=courseId, courseName=courseName)}}">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Quiz</span>
-            </button>
-        </a>
-    </div>
-    <div class="main-container">
-        <div class="gradesheader">
-            <span></span>
-            <span></span><span></span><span></span>
-        </div> 
+        <div style="display: flex; flex-direction: row; gap: 36px;">
+            <a href="#">
+                <button>
+                    <span class="material-symbols-outlined">edit</span>
+                    <span>Create Assignment</span>
+                </button>
+            </a>
+            <a href="{{url_for('createQuiz', courseId=courseId, courseName=courseName)}}">
+                <button>
+                    <span class="material-symbols-outlined">edit</span>
+                    <span>Create Quiz</span>
+                </button>
+            </a>
+        </div>
         
         <!-- Display  every assignment in course-->
         <div class="grades">

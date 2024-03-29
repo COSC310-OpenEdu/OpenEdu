@@ -36,7 +36,7 @@
     <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
 {% endblock %}
 {% block content %}
-    <div class="container-body overflow">
+    <div class="container-body overflow" style="flex-direction: row;">
         <!-- this makes a link for every course in the database currently-->
         <!-- change later -->
         {% for course in courses %}

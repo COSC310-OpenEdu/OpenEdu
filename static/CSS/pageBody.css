@@ -33,7 +33,7 @@
 .container-body {
     font-family: Roboto, sans-serif;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex: 1;
     padding: 60px;
     gap: 36px;
