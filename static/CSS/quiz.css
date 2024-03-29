@@ -120,7 +120,7 @@ select {
     background-color: white;
 }
 
-.header {
+.quiz-header {
     display: flex;
     background-color: #B4CBC9;
     padding: 10px 40px 10px 40px;
