@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block navTop %}
-    <a href="#" id="logo">
+    <a href="{{ url_for('home') }}" id="logo">
         <span class="material-symbols-outlined size-36">school</span>
     </a>
     <a href="{{ url_for('updateAccount') }}" id="account" class="{% block account %}{% endblock %}">
@@ -11,11 +11,11 @@
         <span class="material-symbols-outlined">home</span>
         Home
     </a>
-    <a href="#" id="courses" class="{% block courses %}{% endblock %}">
+    <a href="#" id="course" class="{% block courses %}{% endblock %}">
         <span class="material-symbols-outlined">library_books</span>
         Courses
     </a>
-    <a href="#" id="search" class="{% block search %}{% endblock %}">
+    <a href="{{ url_for('search') }}" id="search" class="{% block search %}{% endblock %}">
         <span class="material-symbols-outlined">search</span>
         Search
     </a>

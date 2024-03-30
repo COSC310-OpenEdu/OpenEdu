@@ -187,7 +187,7 @@ def createQuiz(courseId, courseName):
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     if request.method == 'GET':
-        return render_template('search.html')
+        return render_template('student/search.html')
     else:
         searchTerm = request.form['searchTerm']
         return CourseSearch.search(searchTerm)
