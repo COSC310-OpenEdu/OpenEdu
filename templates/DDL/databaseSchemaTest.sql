@@ -209,7 +209,6 @@ INSERT INTO Solution (assignmentId, questionId, courseId,  studentId, studentAns
 -- Insert Grade
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,1,1,1,3,91.5, "Good");
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,2,1,1,3,45.5, "See me after class");
-INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,3,1,1,3,91.5, "Good");
 
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,1,1,2,3,91.5, "Excellent");
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,2,1,2,3,100.0, "Very Good");
