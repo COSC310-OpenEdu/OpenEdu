@@ -2,12 +2,12 @@ from src.Database.Query.SelectRegisteredCoursesQuery import SelectRegisteredCour
 import pytest
 
 def test_numberOfAttributes():
-    courses = SelectRegisteredCourses.query((1,))
+    courses = SelectRegisteredCourses.queryAll((1,))
     
     assert(len(courses[0]) == 5)
     
 def test_courseInformation():
-    courses = SelectRegisteredCourses.query((1,))
+    courses = SelectRegisteredCourses.queryAll((1,))
     
     assert(courses[0][0] == 1)
     assert(courses[0][1] == 'COSC303')
