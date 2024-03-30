@@ -13,6 +13,8 @@ class CreateAccount(DatabaseUpdate):
     
     @classmethod 
     def update(cls, dataTuple):
+        
+        
         createUser = ("INSERT INTO User (firstName, lastName, email, password, username) VALUES (%s, %s, %s, %s, %s);");
         createTeacher = ("INSERT INTO Instructor (userId) VALUES (LAST_INSERT_ID());");
         createStudent = ("INSERT INTO Student (userId) VALUES (LAST_INSERT_ID());");
@@ -29,5 +31,3 @@ class CreateAccount(DatabaseUpdate):
             cursor.execute(createStudent);
         else:
             cursor.execute(createTeacher);
-            
-        DatabaseManager.commit();

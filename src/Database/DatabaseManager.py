@@ -22,6 +22,7 @@ class DatabaseManager:
         cls.conn = connector.connect(
             **cls.db_config)  # Creates the cursor. Each method will create a different statement
         cls.cur = cls.conn.cursor()
+        cls.conn.autocommit = True
     
     @classmethod
     def closeConnection(cls) -> None:
