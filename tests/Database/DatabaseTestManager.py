@@ -27,4 +27,5 @@ class DatabaseTestManager():
     def endTest(cls):
         DatabaseManager.test = False
         cls.rollback()
+        cls.rollback()
         
