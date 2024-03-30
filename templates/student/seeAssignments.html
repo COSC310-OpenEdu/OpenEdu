@@ -34,12 +34,14 @@
         <!-- Display  every assignment in course-->
         <div class="grades">
         {% for assignment in assignments %}
+        <a href="{{url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe)}}">
         <div class="grade">
             <div class = "gradeGroup">
                 <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
                     <span></span><span></span><span></span>
             </div>
         </div>
+        </a>
         {% endfor %}
         
         </div>
