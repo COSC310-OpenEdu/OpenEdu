@@ -1,0 +1,39 @@
+label, textarea, input, button {
+    margin: 0;
+    padding: 0;
+}
+
+form button {
+    background-color: #B4CBC9;
+}
+
+form button:hover {
+    background-color: #99B0AE;
+    color: white;
+}
+
+select {
+    text-decoration: none;
+    margin: 0;
+    width: fit-content;
+    height: 46px;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 30px 40px 30px 40px;
+    border: 1px solid #8C8C8C;
+    border-radius: 8px;
+    width: auto;
+    height: fit-content;
+    gap: 16px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0 8px 0;
+    gap: 4px;
+}

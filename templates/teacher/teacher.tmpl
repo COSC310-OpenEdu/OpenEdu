@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block navTop %}
+    <a href="#" id="logo">
+        <span class="material-symbols-outlined size-36">school</span>
+    </a>
+    <a href="#" id="account" class="{% block account %}{% endblock %}">
+        <span class="material-symbols-outlined">account_circle</span>
+        Account
+    </a>
+    <a href="{{url_for('teacherHome')}}" id="home" class="{% block home %}{% endblock %}">
+        <span class="material-symbols-outlined">home</span>
+        Home
+    </a>
+    <a href="#" id="courses" class="{% block courses %}{% endblock %}">
+        <span class="material-symbols-outlined">library_books</span>
+        Courses
+    </a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" 
+            id="Dashboard" class="{% block dashboard %}{% endblock %}">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" 
+            id="Assignments" class="{% block assignments %}{% endblock %}">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" 
+            id="Grading" class="{% block grading %}{% endblock %}">Grading</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" 
+            id="People" class="{% block people %}{% endblock %}">People</a>
+    </header>
+{% endblock %}

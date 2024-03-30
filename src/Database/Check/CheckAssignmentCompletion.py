@@ -5,7 +5,7 @@ import mysql
 class CheckAssignmentCompletion(DatabaseCheck):
     @classmethod
     def check(self, dataTuple):
-        sql = "SELECT questionId, studentAnswer FROM Solution WHERE courseId=%s and assignmentId=%s and studentId=%s"
+        sql = "SELECT questionId, studentAnswer, studentId FROM Solution WHERE courseId=%s and assignmentId=%s and studentId=%s"
 
         cursor = DatabaseManager.getDatabaseCursor();
         cursor.execute(sql, (dataTuple))

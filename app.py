@@ -42,6 +42,9 @@ from src.Database.Query.SelectSolutionsForCourse import SelectSolutionsForCourse
 from src.Database.Update.AddGrade import AddGrade
 from src.Database.Update.DeleteAssignment import DeleteAssignment
 from src.Database.Query.SelectAllInstructors import SelectAllInstructors
+from src.Database.Update.DeleteGradesForAssignment import DeleteGradesForAssignment
+from src.Database.Update.DeleteAllSolutionsForAssignment import DeleteAllSolutionsForAssignment
+from src.Database.Query.SelectGradesForAssignment import SelectGradesForAssignment
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -237,6 +240,7 @@ def teacherCourseGrading(courseId, courseName):
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
 
+    # Make grades the same length as solutions as to not cause any errors
     if (len(grades) < len(solutions)):
         for i in range(len(grades) - 1, len(solutions)):
             grades.append(0)
@@ -355,6 +359,8 @@ def deleteAssignment():
     assignmentName = form.get("assignmentName", "")
     
     # This is scary so I've just commented it out for now
+    #DeleteAllSolutionsForAssignment.update((courseId, assignmentId,))
+    #DeleteGradesForAssignment.update((courseId, assignmentId,))
     #DeleteAssignment.update((courseId, assignmentId,))
 
     return redirect(url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName))
@@ -363,14 +369,20 @@ def deleteAssignment():
 def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
     questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
     completion = None
+    grades = None
     if (studentId != "False"):
         completion = CheckAssignmentCompletion.check((courseId, assignmentId, studentId,))
+        grades = SelectGradesForAssignment.queryAll((courseId, assignmentId, studentId,))
+         # Make grades the same length as solutions as to not cause any errors
+        if (len(grades) < len(completion)):
+            for i in range(len(grades) - 1, len(completion)):
+                grades.append(0)
 
     if (completion == False):
         flash("This student has not submitted this assignment yet.")
         return redirect(url_for('teacherCourseGrading', _anchor=str(assignmentId), courseId=courseId, courseName=courseName))
     else:
-        return render_template("teacher/teacherAssignment.html", courseId=courseId, firstName=firstName, lastName=lastName, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
+        return render_template("teacher/teacherAssignment.html", studentId=studentId, courseId=courseId, grades=grades, firstName=firstName, lastName=lastName, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
 
 
 if __name__ == "__main__":

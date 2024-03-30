@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/navbar.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/form.css') }}">
     <script>
         // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
@@ -89,65 +85,65 @@
                 window.location.replace("{{ url_for('login') }}");
             })
         });
-
-    
     </script>
-</head>
-<body>
-    <!-- Main body of page -->
-    <div id="body">
-        <div class="overlay"></div>
-        <form action="{{ url_for('createAccount')}}" method="post" class="center">
-            <div class="FormLine FormHeader">
-                <legend>Sign Up</legend>
-            </div>
-            
-            <div class="FormLine">
-                <select name="accountType" id="accountType">
-                    <option value="select" selected>Account Type</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="student">Student</option>
-                </select> <br>
-            </div>
-            
-            <div class="FormLine" id="emailDiv">
-                <label for="email">Email</label> <br>
-                <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
-            </div>
+{% endblock %}
+{% block pageHeader %}Create an OpenEdu Account{% endblock %}
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('login') }}" id="log"><span class="material-symbols-outlined">login</span>Login</a>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <form action="{{ url_for('createAccount')}}" method="post" class="center">
+        <div class="FormLine FormHeader">
+            <legend>Sign Up</legend>
+        </div>
+        
+        <div class="FormLine">
+            <select name="accountType" id="accountType">
+                <option value="select" selected>Account Type</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+            </select> <br>
+        </div>
+        
+        <div class="FormLine" id="emailDiv">
+            <label for="email">Email</label> <br>
+            <input type="email" name="email" id="email" placeholder="Enter Email"> <br>
+        </div>
 
-            <div class="FormLine">
-                <div class="left">
-                    <label for="fname">First Name</label> <br>
-                    <input type="text" name="fname" id="fname" placeholder="First Name">
-                </div>
-
-                <div class="right">
-                    <label for="lname">Last Name</label> <br>
-                    <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
-                </div>
-
+        <div class="FormLine">
+            <div class="left">
+                <label for="fname">First Name</label> <br>
+                <input type="text" name="fname" id="fname" placeholder="First Name">
             </div>
 
-            <div class="FormLine">
-                <label for="text">Username</label> <br>
-                <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+            <div class="right">
+                <label for="lname">Last Name</label> <br>
+                <input type="text" name="lname" id="lname" placeholder="Last Name"> <br>
             </div>
 
-            <div class="FormLine">
-                <label for="password">Password</label> <br>
-                <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
-            </div>
+        </div>
 
-            <div class="FormLine buttons">
-                <div class="left">
-                    <button id="Cancel">Cancel</button>
-                </div>
-                <div class="right">
-                    <button type="submit" class="right">Sign Up</button> <br>
-                </div>
-            </div>
-        </form>
+        <div class="FormLine">
+            <label for="text">Username</label> <br>
+            <input type="text" name="uname" id="uname" placeholder="Enter Username"> <br>
+        </div>
 
-    </div>
-</body>
-</html>
+        <div class="FormLine">
+            <label for="password">Password</label> <br>
+            <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
+        </div>
+
+        <div class="FormLine buttons FormFooter">
+            <div class="left">
+                <button id="Cancel">Cancel</button>
+            </div>
+            <div class="right">
+                <button type="submit" class="right">Sign Up</button> <br>
+            </div>
+        </div>
+    </form>
+{% endblock %}

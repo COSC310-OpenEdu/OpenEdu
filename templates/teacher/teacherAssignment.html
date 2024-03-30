@@ -59,6 +59,22 @@
                         {% endif %}
 
                         <br /><br /><span style="font-weight:bold;">Correct answer:</span><br /><br /><span class="answer">{{question[3]}}</span>
+                        {% if completion %} 
+                        {% for i in range(0, completion|length) %}
+                        {% set noGrades = false %}
+                        {% if grades %}
+                            {% if grades[i][0] == question[0] %}
+                                <input id="{{question[0]}}{{question[2]}}{{studentId}}" type="number" value="{{grades[i][1]}}" />
+                            {% else %}
+                            {% set noGrades = true %}
+                        {% else %}
+                        {% set noGrades = true %}
+
+                        {% if completion[i][0] == question[0] %}
+                        <input id="{{question[0]}}{{question[2]}}{{studentId}}" type="number" value="" />
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
