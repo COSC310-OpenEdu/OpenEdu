@@ -7,6 +7,8 @@ from src.Database.Check.CheckInstructor import CheckInstuctor
 import pytest
 
 def test_CreateAccount_student():
+    DatabaseTestManager.startTransation()
+    
     CreateAccount.update(('student', 'fname', 'lname', 'email', 'password', 'username'))
     
     primaryKey = GetPrimaryKeyOfLastInsert.query(None)
@@ -16,9 +18,12 @@ def test_CreateAccount_student():
     
     DatabaseTestManager.rollback()
     DatabaseTestManager.rollback()
+
     
     
 def test_CreateAccount_Instructor():
+    DatabaseTestManager.startTransation()
+    
     CreateAccount.update(('instructor', 'fname', 'lname', 'email', 'password', 'username'))
     
     primaryKey = GetPrimaryKeyOfLastInsert.query(None)
@@ -28,5 +33,5 @@ def test_CreateAccount_Instructor():
     
     DatabaseTestManager.rollback()
     DatabaseTestManager.rollback()
-    
+
     
