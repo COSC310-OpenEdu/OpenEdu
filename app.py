@@ -9,6 +9,8 @@ from flask import (
     flash,
 )
 
+import json
+
 from src.User import User
 from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
@@ -25,10 +27,14 @@ from src.Database.Query.SelectInstructorsForCourse import SelectInstructorsForCo
 from src.Database.Query.SelectGradesForCourse import SelectGradesForCourse
 from src.Database.Query.SelectAssignmentsForCourse import SelectAssignmentsForCourse
 from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
+from src.Database.Query.SelectStudentQuery import SelectStudentQuery
 from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Database.Update.UpdateEmail import UpdateEmail
+from src.Database.Update.UpdatePassword import UpdatePassword
 from src.Search.CourseSearch import CourseSearch
+from src.Database.Query.SelectAllInstructors import SelectAllInstructors
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -120,8 +126,41 @@ def createAccount():
 
         return redirect(url_for("login"))
 
-
-
+@app.route("/student/updateAccount", methods=['GET', 'POST'])
+def updateAccount():
+    if request.method == 'GET':
+        return render_template('student/updateAccount.html')
+    else:
+        requestType = request.form['type'];
+        
+        # Password update request
+        if (requestType == 'password'):
+            successful = UpdatePassword.update((session['userId'], request.form['old'], request.form['new']))
+            
+            if (successful == False):
+                return jsonify({"error": 'Password Update Failed'}), 400
+            
+        # Email update Request
+        if (requestType == 'email'):
+            successful = UpdateEmail.update((session['userId'], request.form['email'])) 
+            
+            if (successful == False):
+                return jsonify({"error": 'Email Update Failed'}), 400           
+        
+        return {}
+        
+@app.route("/student/info", methods=['POST'])
+def studentInfo():
+    # Returns firstname lastname and email to the given user id
+    studentInfo = SelectStudentQuery.query((session['userId'],));
+    
+    returnData = {
+        'firstName': studentInfo[1],
+        'lastName': studentInfo[2],
+        'email': studentInfo[3]
+    };
+    
+    return json.dumps(returnData);
     
 @app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
 def seeGrades(courseId, courseName): 
@@ -236,11 +275,12 @@ def createCourse():
         credits = int(form.get("credits", 0))
         session = int(form.get("session", 0))
         term = int(form.get("term", 0))
+        instructorId = int(form.get("instructor", 0))
 
         courseData = (courseName, description, credits, session, term)
         # Update Database with course information
         try:
-            CreateCourse.update(courseData)
+            CreateCourse.update(courseData, instructorId)
             flash("Course created successfully!", "success")
         except Exception as e:
             flash(f"An error occurred: {str(e)}", "error")
@@ -248,7 +288,8 @@ def createCourse():
 
         return redirect(url_for("createCourse"))
     else:
-        return render_template("admin/createCourse.html")
+        instructorIds, instructorNames = SelectAllInstructors.queryAll()
+        return render_template("admin/createCourse.html", instructorIds=instructorIds, instructorNames=instructorNames, len=len)
 
 @app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
 def seeAssignments(courseId, courseName):
