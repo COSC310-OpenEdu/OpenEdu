@@ -9,7 +9,6 @@ class CreateCourse:
     #   Output: N/A
     #
     
-    
     @classmethod 
     def update(cls, courseData, instructorId):
         insertCourseSQL = "INSERT INTO Course (name, description, credits, session, term) VALUES (%s, %s, %s, %s, %s)"

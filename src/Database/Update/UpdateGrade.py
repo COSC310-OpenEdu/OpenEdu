@@ -10,6 +10,3 @@ class UpdateGrade(DatabaseUpdate):
         cursor = DatabaseManager.getDatabaseCursor();
     
         cursor.execute(updateGrade, (dataTuple));
-        
-            
-        DatabaseManager.commit();

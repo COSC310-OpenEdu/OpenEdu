@@ -19,7 +19,5 @@ class UpdateEmail(DatabaseUpdate):
 
         sql = "UPDATE User Set email = %s WHERE userId = %s";
         cursor.execute(sql, (email, userId))
-        
-        DatabaseManager.commit();
         return True
         
