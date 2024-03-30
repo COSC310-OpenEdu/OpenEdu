@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0" />
+    <style>
+    .sidebar {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 5;
+        top: 0;
+        left: 80px;
+        background-color: white;
+        box-shadow: 4px 0 8px -4px #8C8C8C;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+
+    .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .sidebar a:hover {
+        color: #99B0AE;
+    }
+
+    .sidebar .close {
+        position: absolute;
+        top: 0;
+        right: 0px;
+        padding: 8px;
+    }
+
+    .sidebar .close:hover {
+        color: #FF5449;
+    }
+    </style>
+</head>
+{% block sidepanel %}
+<body>
+<div id="courseSidepanel" class="sidebar">
+    <a href="javascript:void(0)" class="close" onclick="closePanel()">
+        <span class="material-symbols-outlined">close</span>
+    </a>
+    {% if session['userType'] == "Student" %}
+        {% for course in courses %}  
+            <a href="{{ url_for('courseDashboard', courseId=course[0], courseName=course[1]) }}">
+                <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>
+                <p>{{ course[2] }}</p>
+            </a>
+        {% endfor %}
+    {% elif session['userType'] == "Instructor" %}
+        {% for course in courses %}  
+        <a href="{{ url_for('teacherCourseDash', courseId=course[0], courseName=course[1]) }}">
+            <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>
+            <p>{{ course[2] }}</p>
+        </a>
+        {% endfor %}
+    {% endif %}
+</div>
+</body>
+{% endblock %}
+</html>

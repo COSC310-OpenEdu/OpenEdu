@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <script src={{ url_for('static', filename='JS/sidepanel.js') }}></script>
+{% endblock %}
+
+{% include "sidepanel.html" %}
+
 {% block navTop %}
     <a href="#" id="logo">
         <span class="material-symbols-outlined size-36">school</span>
@@ -11,7 +18,7 @@
         <span class="material-symbols-outlined">home</span>
         Home
     </a>
-    <a href="#" id="courses" class="{% block courses %}{% endblock %}">
+    <a id="course" onclick="openPanel()" id="course" class="{% block courses %}{% endblock %}">
         <span class="material-symbols-outlined">library_books</span>
         Courses
     </a>
