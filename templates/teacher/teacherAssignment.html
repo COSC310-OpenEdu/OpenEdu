@@ -5,7 +5,32 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script> console.log("{{studentId}}")</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var inputs = $("input");
+            inputs.on("blur", function() {
+                // The id for input area is questionId+assignmentId+studentId, so it just pulls from that
+                let qId = this.id[0];
+                let aId = this.id[1];
+                let sId = this.id[2];
+                insert = 0;
+                if ($(this).hasClass("insert")) {
+                    insert = 1;
+                }
+                // Sets URL for updatingGrade
+                const url = {{ url_for("updateGrade")|tojson }};
+                // Does an AJAX POST requset to updateGrade, updating grade in the process
+                var updated = $.post(url, {"courseId":{{courseId}}, "questionId":qId, "assignmentId":aId, "studentId":sId, "grade":this.value, "insert":insert});
+                updated.done(function(data) {
+                    // When finished, run the average function again to update the averages
+                    console.log(data);
+                    
+                })
+            });
+        });
+    </script>
 {% endblock %}
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Assignment {{ assignmentId }} ({{ assignmentName }}) {% endblock %}
 {% block navTop %}
@@ -53,28 +78,30 @@
                         {% if completion %}
                         {% for answer in completion %}
                         {% if answer[0] == question[0] %}
-                        <br /><span style="font-weight:bold;">Student's answer:</span><br /><br /><span class="answer">{{answer[1]}}</span>
+                        <span style="font-weight:bold;">Student's answer:</span><br /><span class="answer">{{answer[1]}}</span>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
 
-                        <br /><br /><span style="font-weight:bold;">Correct answer:</span><br /><br /><span class="answer">{{question[3]}}</span>
+                        <span style="font-weight:bold;">Correct answer:</span><br /><span class="answer">{{question[3]}}</span>
                         {% if completion %} 
                         {% for i in range(0, completion|length) %}
                         {% set noGrades = false %}
                         {% if grades %}
                             {% if grades[i][0] == question[0] %}
-                                <input id="{{question[0]}}{{question[2]}}{{studentId}}" type="number" value="{{grades[i][1]}}" />
+                                <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput" type="number" value="{{grades[i][1]}}" /></span>
                             {% else %}
                             {% set noGrades = true %}
+                            {% endif %}
                         {% else %}
                         {% set noGrades = true %}
-
-                        {% if completion[i][0] == question[0] %}
-                        <input id="{{question[0]}}{{question[2]}}{{studentId}}" type="number" value="" />
                         {% endif %}
+                        {% if completion[i][0] == question[0] and noGrade==true%}
+                        <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput insert" type="number" value="" /></span>
                         {% endif %}
+                        
                         {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}

@@ -25,26 +25,6 @@
 {% block content %}
     {{ super() }}
     <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
-<<<<<<< HEAD
-    <div class="container-body" style="max-height:2.5em">
-        <a href="#">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Assignment</span>
-            </button>
-        </a>
-        <a href="{{url_for('createQuiz', courseId=courseId, courseName=courseName)}}">
-            <button>
-                <span class="material-symbols-outlined">edit</span>
-                <span>Create Quiz</span>
-            </button>
-        </a>
-    </div>
-    <div class="main-container">
-            <span></span>
-            <span></span><span></span><span></span>
-        </div> 
-=======
     <div class="container-body">
         <div style="display: flex; flex-direction: row; gap: 36px;">
             <a href="#">
@@ -60,7 +40,6 @@
                 </button>
             </a>
         </div>
->>>>>>> f0f144348a718d1df5bbbd052c4f778a51b46f8b
         
         <!-- Display  every assignment in course-->
         <div class="grades">

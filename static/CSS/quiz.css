@@ -102,11 +102,10 @@ select {
 /* Style for text box question and answers */
 .question {
     display: flex;
+    flex-direction: column;
     margin: 0;
     height: 20;
-    padding: 10px 40px 1em 40px;
-    align-items: center;
-    justify-content: center;
+    padding: 8px 40px 1em 40px;
 }
 
 .question input {
@@ -132,19 +131,20 @@ select {
     background-color: white;
 }
 
-<<<<<<< HEAD
 .answer {
     border: 1px #8C8C8C solid;
+    width:fit-content;
     border-radius: 1em;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
     padding: 0.5em;
     
 }
 
+input.gradeInput {
+    width: 3em;
+}
+
 .header {
-=======
-.quiz-header {
->>>>>>> f0f144348a718d1df5bbbd052c4f778a51b46f8b
     display: flex;
     background-color: #B4CBC9;
     padding: 10px 40px 10px 40px;
