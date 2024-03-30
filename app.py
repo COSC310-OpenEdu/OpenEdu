@@ -46,7 +46,7 @@ def home():
     # Test the database connection
 
     if session.get("userType") == "Student":
-        courses = SelectRegisteredCourses.queryAll((session["userId"]))
+        courses = SelectRegisteredCourses.queryAll((session["userId"],))
         return render_template("student/courses.html", courses=courses)
     elif session.get("userType") == "Instructor":
         return teacherHome()
