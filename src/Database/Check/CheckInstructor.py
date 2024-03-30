@@ -3,7 +3,7 @@ from src.Database.DatabaseManager import DatabaseManager
 
 import mysql
 
-class CheckUser(DatabaseCheck):
+class CheckInstuctor(DatabaseCheck):
     
     #
     #   Checks if a given user exists
@@ -18,4 +18,4 @@ class CheckUser(DatabaseCheck):
         sql = "SELECT COUNT(userId) FROM Instructor where userId = %s"
         cursor.execute(sql, dataTuple)
         
-        return cursor.fetchone()[0] == 1
+        return cursor.fetchone()[0] != 0

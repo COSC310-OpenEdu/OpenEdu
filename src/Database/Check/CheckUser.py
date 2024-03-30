@@ -16,5 +16,5 @@ class CheckUser(DatabaseCheck):
         
         sql = "SELECT COUNT(userId) FROM User where userId = %s"
         cursor.execute(sql, dataTuple)
-        
-        return cursor.fetchone()[0] == 1
+           
+        return cursor.fetchone()[0] != 0
