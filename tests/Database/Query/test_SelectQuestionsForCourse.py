@@ -1,12 +1,18 @@
 from src.Database.Query.SelectQuestionsForCourse import SelectQuestionsForCourse
+from tests.Database.DatabaseTestManager import DatabaseTestManager
 import pytest
 
 def test_numberOfQuestionsCourse1():
-    questions = SelectQuestionsForCourse.queryAll((1,))
+    DatabaseTestManager.startTest()
     
+    questions = SelectQuestionsForCourse.queryAll((1,))
     assert(len(questions) == 3)
     
+    DatabaseTestManager.endTest()
+    
 def test_questionInformation():
+    DatabaseTestManager.startTest()
+    
     questions = SelectQuestionsForCourse.queryAll((1,))
 
     assert(questions[0][0] == 1)
@@ -23,3 +29,5 @@ def test_questionInformation():
     assert(questions[2][1] == 'This is a question 3')
     assert(questions[2][2] == 1)
     assert(questions[2][3] == 'This is the answer 3')
+    
+    DatabaseTestManager.endTest()

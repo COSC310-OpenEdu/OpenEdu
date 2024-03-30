@@ -7,7 +7,7 @@ from src.Database.Check.CheckInstructor import CheckInstuctor
 import pytest
 
 def test_CreateAccount_student():
-    DatabaseTestManager.startTransation()
+    DatabaseTestManager.startTest()
     
     CreateAccount.update(('student', 'fname', 'lname', 'email', 'password', 'username'))
     
@@ -16,13 +16,12 @@ def test_CreateAccount_student():
     assert(CheckUser.check((primaryKey[0],)))
     assert(CheckStudent.check((primaryKey[0],)))
     
-    DatabaseTestManager.rollback()
-    DatabaseTestManager.rollback()
+    DatabaseTestManager.endTest()
 
     
     
 def test_CreateAccount_Instructor():
-    DatabaseTestManager.startTransation()
+    DatabaseTestManager.startTest()
     
     CreateAccount.update(('instructor', 'fname', 'lname', 'email', 'password', 'username'))
     
@@ -31,7 +30,6 @@ def test_CreateAccount_Instructor():
     assert(CheckUser.check((primaryKey[0],)))
     assert(CheckInstuctor.check((primaryKey[0],)))
     
-    DatabaseTestManager.rollback()
-    DatabaseTestManager.rollback()
+    DatabaseTestManager.endTest()
 
     
