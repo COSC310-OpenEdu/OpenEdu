@@ -1,27 +1,27 @@
-{% extends "base.html" %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.tmpl" %}
+
+<!-- Webpage title -->
 {% block title %}Publish Quiz{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">
 {% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Quiz / Publish Quiz{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set assignments in header to active class-->
+{% block assignments %}active{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-    <!-- Secondary header for course pages -->
-    <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments" class="active">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
-    </header>
+    {{ super() }}
     <div class="container-body">
         <!-- This just prints the key value pairs submitted from the createQuiz form -->
         <div>

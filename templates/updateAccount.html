@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Update Account{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
+    <script>
+        // Run once document is loaded
+        document.addEventListener('DOMContentLoaded', function (){
+            
+            document.querySelector('#password').addEventListener('click', function (e){
+                e.target.classList.remove('highlight');
+            });
+            document.querySelector('#repassword').addEventListener('click', function (e){
+                e.target.classList.remove('highlight');
+            });
+
+            // Verify form inputs are submitted properly
+            document.querySelector('form').addEventListener('submit', function (e){
+
+                // Check password
+                let password = document.querySelector("#password")
+                let repassword = document.querySelector("#repassword")
+
+                if (password.value != repassword.value && password.value.trim != '') {
+                    e.preventDefault();
+                    password.classList.add('highlight');
+                    repassword.classList.add('highlight');
+                }
+                e.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}
+{% block pageHeader %}Update your OpenEdu Account{% endblock %}
+{% block navTop %}
+<div class="flex-container">
+    <!-- Navigation bar -->
+    <!-- Left Column -->
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account" class="active"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
+    <a href="#" id="{{ url_for('search')}}"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Main body of page -->
+    <div class="overlay"></div>
+    <form action="{{ url_for('updateAccount') }}" method="post" class="center">
+        <div class="FormLine FormHeader">
+            <legend>Update User Details</legend>
+        </div>
+        
+        <div class="FormLine">
+            <p>Full Name: <span>Aidan Morris</span></p>
+        </div>
+
+        <div class="FormLine">
+            <label for="email">Email: <span>test@email.com</span></label> <br>
+            <input type="email" name="email" id="email" placeholder="Change Email"> <br>
+        </div>
+
+        <div class="FormLine">
+            <label for="password">Password</label> <br>
+            <input type="password" name="password" id="password" placeholder="Change Password" > <br>
+        </div>
+        
+        <div class="FormLine" style="padding-top: 0em;">
+            <input type="password" name="password" id="repassword" placeholder="Retype Password"> <br>
+        </div>
+
+        <div class="FormLine buttons FormFooter">
+            <div class="left">
+                <button onclick="javasrcipt:window.history.back();">Cancel</button>
+            </div>
+            <div class="right">
+                <button type="submit" class="right" style="width: 80%;">Submit Changes</button> <br>
+            </div>
+        </div>
+    </form>
+{% endblock %}

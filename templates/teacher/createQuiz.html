@@ -1,5 +1,10 @@
-{% extends "base.html" %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.tmpl" %}
+
+<!-- Webpage title -->
 {% block title %}Create Quiz{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
@@ -8,88 +13,71 @@
     <script type="text/javascript">
         let questionNumber = 1;
         function addQuestion() {
-
-            // Get the user selected value from select menu
-            let userChoice = document.getElementById("questionSelectBox").value;
-
-            // Adds the text box style question to form when add button is clicked
-            if (userChoice == "text box") {
-                document.getElementById("questionForm").insertAdjacentHTML("beforeend",
-                `<div class="question-container" id="question`+ questionNumber +`">
-                    <div class="question-container-header">
-                        Question `+ questionNumber + `
-                    </div>
-                    <div class="question">
-                        <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="questionText`+ questionNumber +`" required/>
-                    </div>
-                    <div class="question">
-                        <input placeholder="Answer" class="border-box" type="text" id="answer`+ questionNumber +`" name="answer`+ questionNumber +`" required/>
-                    </div>
-                </div>`
-                );
-                document.getElementById("questionList").insertAdjacentHTML("beforeend",
-                `<a href="#question`+ questionNumber +`">Question `+ questionNumber +`</a>`
-                );
-                questionNumber++;
-            }
+            document.getElementById("questionForm").insertAdjacentHTML("beforeend",
+            `<div class="question-container" id="question`+ questionNumber +`">
+                <div class="question-container-header">
+                    Question `+ questionNumber + `
+                </div>
+                <div class="question">
+                    <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="questionText`+ questionNumber +`" required/>
+                </div>
+                <div class="question">
+                    <input placeholder="Answer" class="border-box" type="text" id="answer`+ questionNumber +`" name="answer`+ questionNumber +`" required/>
+                </div>
+            </div>`
+            );
+            document.getElementById("questionList").insertAdjacentHTML("beforeend",
+            `<a href="#question`+ questionNumber +`">Question `+ questionNumber +`</a>`
+            );
+            questionNumber++;
         }
     </script>
 {% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Quiz{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set assignments in header to active class-->
+{% block assignments %}active{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-    <!-- Secondary header for course pages -->
-    <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments" class="active">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
-    </header>
-   <!-- Contains quiz building section --> 
-    <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
+    {{ super() }}
+    <!-- Contains quiz building section --> 
+    <div class="container-body" style="flex-direction: row; overflow: hidden;">
         <!-- Primary column containing question builder -->
         <div class="primary-container">
-            <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm">
-                <div class="form-header">
-                    <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required>
-                    <div class="form-header-right">
-                        <!-- Select menu for question type -->
-                        <select class="border-box" required id="questionSelectBox">
-                            <option value="">- Question Type -</option>
-                            <option value="text box">Text Box</option>
-                        </select>
-
-                        <!-- Button for adding questions -->
-                        <button type="button" onclick="addQuestion()">
-                            <span class="material-symbols-outlined">add</span>
-                            <span>Add Question</span>
-                        </button>
-                    </div>
+            <div class="form-header">
+                <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required form="questionForm">
+                <div class="form-header-right">
+                    <!-- Button for adding questions -->
+                    <button type="button" onclick="addQuestion()">
+                        <span class="material-symbols-outlined">add</span>
+                        <span>Add Question</span>
+                    </button>
                 </div>
-            </form>
+            </div>
+            <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
         </div>
         <!-- Secondary column containing list of links to each question added to form -->
         <div class="secondary-container">
-            <div class="header">Questions</div>
+            <div class="quiz-header">Questions</div>
 
             <!-- Container body that is populated with links to each question -->
             <div class="list-body" id="questionList"></div>
 
             <div class="footer">
                 <!-- Cancel button, redirects to assignments tab -->
-                <button>
-                    <span class="material-symbols-outlined">close</span>
-                    <span>Cancel</span>
-                </button>
-            
+                <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}">
+                    <button>
+                        <span class="material-symbols-outlined">close</span>
+                        <span>Cancel</span>
+                    </button>
+                </a>
+
                 <!-- Button for publishing the assignment -->
                 <button type="submit" form="questionForm">
                     <span class="material-symbols-outlined">assignment_add</span>
