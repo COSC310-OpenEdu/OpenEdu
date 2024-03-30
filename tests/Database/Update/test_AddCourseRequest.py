@@ -4,7 +4,7 @@ from tests.Database.DatabaseTestManager import DatabaseTestManager
 import pytest
 
 
-def test_AddCourseRequest():
+def test_AddCourseRequest_Single():
     AddCourseRequest.update((1,3))
     
     assert(CheckCourseRequest.check((1,3)))
@@ -19,4 +19,5 @@ def test_AddCourseRequest_Multiple():
     assert(CheckCourseRequest.check((1,3)))
     assert(CheckCourseRequest.check((2,3)))
     
+    DatabaseTestManager.rollback()
     DatabaseTestManager.rollback()
