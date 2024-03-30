@@ -1,5 +1,10 @@
-{% extends "base.html" %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.tmpl" %}
+
+<!-- Webpage title -->
 {% block title %}Homepage{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courses.css') }}">
@@ -25,16 +30,14 @@
         });
     </script>
 {% endblock %}
+
+<!-- Set home in navbar to active class-->
+{% block home %}active{% endblock %}
+
+<!-- On page header displaying where you are in the navigation -->
 {% block pageHeader %}Homepage{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
     <div class="container-body overflow" style="flex-direction: row;">
         <!-- this makes a link for every course in the database currently-->
