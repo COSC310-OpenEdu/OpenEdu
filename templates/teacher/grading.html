@@ -17,18 +17,19 @@
             var totalAvg = document.getElementsByClassName("g");
             var total = document.getElementsByClassName("total");
             var total2 = document.getElementsByClassName("total2");
-            
-            // Object for average grades for assignments
             var totals = {};
-            // Set every assignmentId key value pair to 0
-            for (let i = 0; i < totalAvg.length; i++) {
-                totals[totalAvg[i].id] = 0;
-            }
+            
             average();
-            totalAverage();
+            
             
             // Determines the average grade for a question, and shows the results
             function average() {
+                // Object for average grades for assignments
+                totals={};
+                // Set every assignmentId key value pair to 0
+                for (let i = 0; i < totalAvg.length; i++) {
+                    totals[totalAvg[i].id] = 0;
+                }
                 for (let i = 0; i < questions.length; i++) {
                     let grades = document.getElementsByClassName(questions[i].id);
                     let avg = 0;
@@ -38,7 +39,8 @@
                     }
                     avg = avg/grades.length;
                     // For total assignment grade, adds question average divided by number of questions to the value associated with the current assignmentId
-                    totals[grades[0].id[1]] += avg/$("#"+grades[0].id[1]+" .gradeGroup2").length;
+                    
+                    totals[questions[i].id[1]] += avg/$("#"+questions[i].id[1]+" .gradeGroup2").length;
                     
                     avg = Math.round(avg*100)/100;
                     // Adds average to desired element on page
@@ -46,6 +48,7 @@
                     questions2[i].innerHTML = "Average: "+ avg;
 
                 }
+                totalAverage();
             }
 
             // Shows the average grade for an assignments
@@ -63,6 +66,7 @@
                 let qId = this.id[0];
                 let aId = this.id[1];
                 let sId = this.id[2];
+                $(this).next().next().html(this.value +"%");
                 insert = 0;
                 if ($(this).hasClass("insert")) {
                     insert = 1;
@@ -74,8 +78,10 @@
                 updated.done(function(data) {
                     // When finished, run the average function again to update the averages
                     console.log(data);
+                    
+                   
                     average();
-                    totalAverage();
+                    
                 })
             });
         
@@ -120,7 +126,7 @@
                         <div class="grade">
                         <div class="gradeItem gradeGroup2 question">     
                             <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
-                            <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}"></span>
+                            <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}{{assignment[0]}}"></span>
                         </div>
                         <!-- For every student, display their results to the question with an input box to update their grade -->
                         {% for i in range(0, solutions|length) %}
@@ -130,10 +136,10 @@
                                 <div class="gradeItem2">     
                                     <span>{{grades[i][1]}} {{grades[i][2]}}</span>
                                     <span class="material-symbols-outlined">
-                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=grades[i][4])}}">
+                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=grades[i][1], lastName=grades[i][2], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=grades[i][4])}}">
                                         link</a></span>
                                     
-                                    <input id="{{question[0]}}{{assignment[0]}}{{grades[i][4]}}" class="{{question[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
+                                    <input id="{{question[0]}}{{assignment[0]}}{{grades[i][4]}}" class="{{question[0]}}{{assignment[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
                                 </div>
                             {% else %}
                             {% set noGrade = true %}
@@ -146,10 +152,10 @@
                                 <div class="gradeItem2">     
                                     <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
                                     <span class="material-symbols-outlined">
-                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
+                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=grades[i][1], lastName=grades[i][2], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
                                         link</a></span>
                                     
-                                    <input id="{{question[0]}}{{assignment[0]}}{{solutions[i][2]}}" class="{{question[0]}} insert" type="number" value="" /><span>/100</span><span></span>
+                                    <input id="{{question[0]}}{{assignment[0]}}{{solutions[i][2]}}" class="{{question[0]}}{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
                                 </div>
                             {% endif %}
                             {% endif %}

@@ -35,6 +35,7 @@ from src.Database.Update.SubmitAssignment import SubmitAssignment
 from src.Database.Update.DeleteSolutions import DeleteSolutions
 from src.Database.Query.SelectSolutionsForCourse import SelectSolutionsForCourse
 from src.Database.Update.AddGrade import AddGrade
+from src.Database.Update.DeleteAssignment import DeleteAssignment
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -304,18 +305,31 @@ def deleteSolutions():
 
     return redirect(url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName))
 
-@app.route("/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>", methods = ['GET'])
-def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId):
+@app.route("/deleteAssignment", methods=['POST'])
+def deleteAssignment():
+    form = request.form
+    courseId = form.get("courseId", "")
+    courseName = form.get("courseName", "")
+    assignmentId = form.get("assignmentId", "")
+    assignmentName = form.get("assignmentName", "")
+    
+    # This is scary so I've just commented it out for now
+    #DeleteAssignment.update((courseId, assignmentId,))
+
+    return redirect(url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName))
+
+@app.route("/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>", methods = ['GET'])
+def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
     questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
     completion = None
-    if (studentId != False):
+    if (studentId != "False"):
         completion = CheckAssignmentCompletion.check((courseId, assignmentId, studentId,))
 
     if (completion == False):
         flash("This student has not submitted this assignment yet.")
         return redirect(url_for('teacherCourseGrading', _anchor=str(assignmentId), courseId=courseId, courseName=courseName))
     else:
-        return render_template("teacher/teacherAssignment.html", courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
+        return render_template("teacher/teacherAssignment.html", courseId=courseId, firstName=firstName, lastName=lastName, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
 
 
 if __name__ == "__main__":
