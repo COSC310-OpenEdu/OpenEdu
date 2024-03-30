@@ -34,7 +34,6 @@ from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Database.Update.UpdateEmail import UpdateEmail
 from src.Database.Update.UpdatePassword import UpdatePassword
 from src.Search.CourseSearch import CourseSearch
-<<<<<<< HEAD
 from src.Database.Query.SelectQuestionsForAssignment import SelectQuestionsForAssignment
 from src.Database.Check.CheckAssignmentCompletion import CheckAssignmentCompletion
 from src.Database.Update.SubmitAssignment import SubmitAssignment
@@ -42,9 +41,7 @@ from src.Database.Update.DeleteSolutions import DeleteSolutions
 from src.Database.Query.SelectSolutionsForCourse import SelectSolutionsForCourse
 from src.Database.Update.AddGrade import AddGrade
 from src.Database.Update.DeleteAssignment import DeleteAssignment
-=======
 from src.Database.Query.SelectAllInstructors import SelectAllInstructors
->>>>>>> c8ed2bc9b6dcbf430f8fb7c9ce01fdec910fcdc1
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
