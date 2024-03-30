@@ -3,8 +3,14 @@ from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
 class AddQuestionoDatabase(DatabaseUpdate):
+    
+    #
+    #   Adds a new quetion to the database with inputted information
+    #   Input: dataTuple = (question, answer, questionId, courseId, assignmentId)
+    #   Ouput: N/A
+    #
+    
     @classmethod 
-
     def update(cls, dataTuple):
         #This method adds individual questions into the database. It is called
         #repeatedly by the AdddQuizToDatabase for every question in the quiz
