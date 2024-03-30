@@ -241,10 +241,22 @@ def teacherCourseGrading(courseId, courseName):
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
 
     # Make grades the same length as solutions as to not cause any errors
-    if (len(grades) < len(solutions)):
-        for i in range(len(grades) - 1, len(solutions)):
-            grades.append(0)
-    
+ 
+
+    if len(grades) < len(solutions):
+        for i in range(0, len(solutions)):
+            matching = False
+            for j in range(0, len(grades)):
+                if grades[i][0] == solutions[i][0] and grades[i][4] == solutions[i][2] and grades[i][5] == solutions[i][1]:
+                    matching = True
+            if matching == False:
+                try:
+                    grades.insert(i, 0)
+                except:
+                    grades.append(0)
+            
+    flash(grades)
+    flash(solutions)
     return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
 
 @app.route("/updateGrade", methods = ['POST'])

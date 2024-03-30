@@ -60,7 +60,7 @@
                         {% else %}
                         {% for answer in completion %}
                         {% if answer[0] == question[0] %}
-                        <br /><span style="font-weight:bold;">Your answer:</span><br /><br /><span class="answer">{{answer[1]}}</span>
+                        <span style="font-weight:bold;">Your answer:</span><span class="answer">{{answer[1]}}</span>
                         {% endif %}
                         {% endfor %}
                         {% endif %}

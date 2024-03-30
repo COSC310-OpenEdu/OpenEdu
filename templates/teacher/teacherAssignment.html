@@ -96,7 +96,7 @@
                         {% else %}
                         {% set noGrades = true %}
                         {% endif %}
-                        {% if completion[i][0] == question[0] and noGrade==true%}
+                        {% if completion[i][0] == question[0] and noGrades==true%}
                         <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput insert" type="number" value="" /></span>
                         {% endif %}
                         

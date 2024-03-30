@@ -1,17 +1,13 @@
-<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
-{% extends "teacher/teacher.tmpl" %}
-
-<!-- Webpage title -->
+{% extends "base.html" %}
 {% block title %}Grading{% endblock %}
-
-<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
-    <link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='CSS/seeGrades.css') }}">
+    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='JS/seeGrades.js')}}"></script>
+    <script src="../../static/JS/seeGrades.js"></script>
+    
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -92,25 +88,36 @@
         });
     </script>
 {% endblock %}
-
-<!-- Set courses in navbar to active class-->
-{% block courses %}active{% endblock %}
-
-<!-- On page header displaying where you are in the course navigation -->
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grading{% endblock %}
-
-<!-- Set grading in header to active class-->
-{% block grading %}active{% endblock %}
-
-<!-- This is where page content goes -->
+{% block navTop %}
+    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
 {% block content %}
-    {{ super() }}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading" class="active">Grading</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
+    </header>
     <div class="main-container">
         <div class="gradesheader">
             <span>Grade Item</span>
             <span>Submission</span><span>Grade</span><span>Percentage</span>
         </div> 
-        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+               <h1>{{ message }}</h1>
+            {% endfor %}
+         {% endif %}
+      {% endwith %}
         <div class="grades">
             <!-- For every assignment in course, create a new dropdown list-->
             {% for assignment in assignments %}
@@ -151,7 +158,7 @@
                                 <div class="gradeItem2">     
                                     <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
                                     <span class="material-symbols-outlined">
-                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=grades[i][1], lastName=grades[i][2], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
+                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=solutions[i][3], lastName=solutions[i][4], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
                                         link</a></span>
                                     
                                     <input id="{{question[0]}}{{assignment[0]}}{{solutions[i][2]}}" class="{{question[0]}}{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
