@@ -1,5 +1,10 @@
-{% extends "base.html" %}
+<!-- Extend common student navbar and secondary header from student.tmpl -->
+{% extends "student/student.tmpl" %}
+
+<!-- Webpage title -->
 {% block title %}Grades{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/seeGrades.css') }}">
@@ -53,26 +58,19 @@
         });
     </script>
 {% endblock %}
-{% block pageHeader %}{{ courseName }} / Grades for {{ username }}{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-    <a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
-{% block content %}
-    <!-- Secondary header for course pages -->
-    <header>
-        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
-        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments">Assignments</a>
-        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades" class="">Grades</a>
-        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People">People</a>
-    </header>
 
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grades for {{ username }}{% endblock %}
+
+<!-- Set grades in header to active class-->
+{% block grades %}active{% endblock %}
+
+<!-- This is where page content goes -->
+{% block content %}
+    {{ super() }}
     <div class="container-body" style="flex-direction: column; gap: 0;">
         <div class="gradesheader">
             <span>Grade Item</span>
