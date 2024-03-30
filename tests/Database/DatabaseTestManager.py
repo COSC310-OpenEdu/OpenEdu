@@ -14,3 +14,17 @@ class DatabaseTestManager():
         connection = DatabaseManager.getDatabaseConnection()
 
         connection.rollback()
+    
+    # Sets up environment for testing
+    @classmethod
+    def startTest(cls):
+        DatabaseManager.test = True
+        cls.startTransation()
+    
+    
+    # Reverts all changes from tests
+    @classmethod
+    def endTest(cls):
+        DatabaseManager.test = False
+        cls.rollback()
+        
