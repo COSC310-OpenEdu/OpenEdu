@@ -37,12 +37,13 @@
             {% endfor %}
          {% endif %}
       {% endwith %}
+            <!-- Form for submitting assignment -->
             <form action="{{url_for('submitAssignment')}}" id="questionForm" method="post" name="questionForm">
                 <input type="hidden" name="courseId" value="{{ courseId }}" />
                 <input type="hidden" name="courseName" value="{{ courseName }}" />
                 <input type="hidden" name="assignmentId" value="{{ assignmentId }}" />
                 <input type="hidden" name="assignmentName" value="{{ assignmentName }}" />
-
+                <!-- Create questions -->
                 {% for question in questions %}
                 <div class="question-container" id="{{question[0]}}">
                     <div class="question-container-header">

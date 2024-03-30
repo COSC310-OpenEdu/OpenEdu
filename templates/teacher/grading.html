@@ -111,13 +111,7 @@
             <span>Grade Item</span>
             <span>Submission</span><span>Grade</span><span>Percentage</span>
         </div> 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-               <h1>{{ message }}</h1>
-            {% endfor %}
-         {% endif %}
-      {% endwith %}
+        
         <div class="grades">
             <!-- For every assignment in course, create a new dropdown list-->
             {% for assignment in assignments %}
@@ -136,7 +130,8 @@
                         </div>
                         <!-- For every student, display their results to the question with an input box to update their grade -->
                         {% for i in range(0, solutions|length) %}
-                        {% set noGrades = false %}
+                        {% set noGrades = false %}<!-- Variable that determines if grade is present in database -->
+                        <!-- If grade exists, make sure it's the right grade for the right question, then display it -->
                         {% if grades[i] != 0 %}
                             {% if (grades[i][0] == question[0] and grades[i][5] == assignment[0])%}
                                 <div class="gradeItem2">     
@@ -153,6 +148,7 @@
                             {% else %}
                             {% set noGrade = true %}
                             {% endif %}
+                            <!-- If solutions exists, make sure it's the right solution for the right question, and that there isn't an already existing grade value -->
                             {% if solutions %}
                             {% if (solutions[i][0] == question[0] and solutions[i][1] == assignment[0] and noGrade == true)%}
                                 <div class="gradeItem2">     

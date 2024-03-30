@@ -55,16 +55,11 @@
     <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
         <!-- Primary column containing question builder -->
         <div class="primary-container">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-               <h1>{{ message }}</h1>
-            {% endfor %}
-         {% endif %}
-      {% endwith %}
+                <!-- Display student's name if it exists -->
                 {% if firstName != "0" %}
                     <h1>{{firstName}} {{lastName}}'s Submission</h1>
                 {% endif %}
+                <!-- For every question, create a container -->
                 {% for question in questions %}
                 <div class="question-container" id="{{question[0]}}">
                     <div class="question-container-header">
@@ -75,6 +70,7 @@
                         {{question[1]}}
                     </div>
                     <div class="question">
+                        <!-- If viewing a student's submission, show it -->
                         {% if completion %}
                         {% for answer in completion %}
                         {% if answer[0] == question[0] %}
@@ -83,10 +79,13 @@
                         {% endfor %}
                         {% endif %}
 
+                        <!-- Show the correct answer to the question -->
                         <span style="font-weight:bold;">Correct answer:</span><br /><span class="answer">{{question[3]}}</span>
+                        <!-- If viewing a student's submission, create number boxes for grading -->
                         {% if completion %} 
                         {% for i in range(0, completion|length) %}
                         {% set noGrades = false %}
+                        <!-- Similar to the grading page, check if the solution has been graded already -->
                         {% if grades %}
                             {% if grades[i][0] == question[0] %}
                                 <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput" type="number" value="{{grades[i][1]}}" /></span>

@@ -240,9 +240,7 @@ def teacherCourseGrading(courseId, courseName):
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
 
-    # Make grades the same length as solutions as to not cause any errors
- 
-
+    # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
     if len(grades) < len(solutions):
         for i in range(0, len(solutions)):
             matching = False
@@ -255,13 +253,13 @@ def teacherCourseGrading(courseId, courseName):
                 except:
                     grades.append(0)
             
-    flash(grades)
-    flash(solutions)
+    
     return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
 
 @app.route("/updateGrade", methods = ['POST'])
 def updateGrade():
     form = request.form
+    # If grade is already in database, update it. If not, insert it.
     if (form['insert'] == "1"):
         AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade']))
     else:
@@ -382,6 +380,7 @@ def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studen
     questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
     completion = None
     grades = None
+    # If clicked from grading tab, get the completion status and the grades from that submission
     if (studentId != "False"):
         completion = CheckAssignmentCompletion.check((courseId, assignmentId, studentId,))
         grades = SelectGradesForAssignment.queryAll((courseId, assignmentId, studentId,))
@@ -390,6 +389,7 @@ def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studen
             for i in range(len(grades) - 1, len(completion)):
                 grades.append(0)
 
+    #If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
     if (completion == False):
         flash("This student has not submitted this assignment yet.")
         return redirect(url_for('teacherCourseGrading', _anchor=str(assignmentId), courseId=courseId, courseName=courseName))
