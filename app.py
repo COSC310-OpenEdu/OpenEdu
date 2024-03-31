@@ -375,10 +375,9 @@ def deleteAssignment():
     assignmentId = form.get("assignmentId", "")
     assignmentName = form.get("assignmentName", "")
     
-    # This is scary so I've just commented it out for now
-    #DeleteAllSolutionsForAssignment.update((courseId, assignmentId,))
-    #DeleteGradesForAssignment.update((courseId, assignmentId,))
-    #DeleteAssignment.update((courseId, assignmentId,))
+    DeleteGradesForAssignment.update((courseId, assignmentId,))
+    DeleteAllSolutionsForAssignment.update((courseId, assignmentId,))
+    DeleteAssignment.update((courseId, assignmentId,))
 
     return redirect(url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName))
 

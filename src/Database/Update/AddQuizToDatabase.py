@@ -1,7 +1,7 @@
 from src.Database.Update.DatabaseUpdate import DatabaseUpdate
 from src.Database.DatabaseManager import DatabaseManager
 import mysql
-from src.Database.Update.AddQuestionToDatabase import AddQuestionoDatabase
+from src.Database.Update.AddQuestionToDatabase import AddQuestionToDatabase
 from datetime import datetime, timedelta
 
 class AddQuizToDatabase(DatabaseUpdate):
