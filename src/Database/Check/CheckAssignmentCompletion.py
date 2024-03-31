@@ -3,6 +3,14 @@ from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
 class CheckAssignmentCompletion(DatabaseCheck):
+    
+    #
+    #   Checks whether an assignment is complete
+    #   Input:  dataTuple = (courseId, assignmentId, studentId)
+    #   Output:    True if the assignment is complete
+    #              False otherwise
+    
+    
     @classmethod
     def check(self, dataTuple):
         sql = "SELECT questionId, studentAnswer, studentId FROM Solution WHERE courseId=%s and assignmentId=%s and studentId=%s"
