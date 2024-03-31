@@ -25,7 +25,5 @@ class UpdatePassword(DatabaseUpdate):
         sql = "UPDATE User Set password = %s WHERE userId = %s";
         
         cursor.execute(sql, (newPassword, userId))
-        
-        DatabaseManager.commit();
         return True
         

@@ -1,6 +1,14 @@
 from src.Database.DatabaseManager import DatabaseManager
 
 class CreateCourse:
+    
+    #
+    #   Creates a new course and adds an instructor to it
+    #   Input:  courseData = (courseName, description, credits, session, term)
+    #           instructorId = The Id of the instructor instructing the class
+    #   Output: N/A
+    #
+    
     @classmethod 
     def update(cls, courseData, instructorId):
         insertCourseSQL = "INSERT INTO Course (name, description, credits, session, term) VALUES (%s, %s, %s, %s, %s)"
@@ -14,5 +22,4 @@ class CreateCourse:
         cursor2 = DatabaseManager.getDatabaseCursor()
         statement2 = "INSERT INTO Instructs(instructorId, courseId) VALUES(%s, %s)"
         cursor2.execute(statement2, (instructorId, courseId))
-        DatabaseManager.commit()
 
