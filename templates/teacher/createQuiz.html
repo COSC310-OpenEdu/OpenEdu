@@ -11,12 +11,13 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='CSS/quiz.css')}}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <script type="text/javascript">
-        let questionNumber = 1;
+        let questionNumber = 0;
         function addQuestion() {
+            questionNumber++;
             document.getElementById("questionForm").insertAdjacentHTML("beforeend",
             `<div class="question-container" id="question`+ questionNumber +`">
                 <div class="question-container-header">
-                    Question `+ questionNumber + `
+                    Question `+ questionNumber +`
                 </div>
                 <div class="question">
                     <input placeholder="Question Text" class="border-box" type="text" id="questionText`+ questionNumber +`" name="questionText`+ questionNumber +`" required/>
@@ -27,9 +28,16 @@
             </div>`
             );
             document.getElementById("questionList").insertAdjacentHTML("beforeend",
-            `<a href="#question`+ questionNumber +`">Question `+ questionNumber +`</a>`
+            `<a href="#question`+ questionNumber +`" id="questionLink`+ questionNumber +`">Question `+ questionNumber +`</a>`
             );
-            questionNumber++;
+        }
+
+        function removeQuestion() {
+            if (questionNumber > 0) {
+                document.getElementById("question" + questionNumber).remove();
+                document.getElementById("questionLink" + questionNumber).remove();
+                questionNumber--;
+            }
         }
     </script>
 {% endblock %}
@@ -53,6 +61,11 @@
             <div class="form-header">
                 <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required form="questionForm">
                 <div class="form-header-right">
+                    <!-- Button for removing the most recently added question -->
+                    <button type="button" onclick="removeQuestion()">
+                        <span class="material-symbols-outlined">remove</span>
+                        <span>Remove Question</span>
+                    </button>
                     <!-- Button for adding questions -->
                     <button type="button" onclick="addQuestion()">
                         <span class="material-symbols-outlined">add</span>
