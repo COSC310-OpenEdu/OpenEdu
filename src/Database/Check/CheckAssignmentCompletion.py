@@ -7,7 +7,7 @@ class CheckAssignmentCompletion(DatabaseCheck):
     #
     #   Checks whether an assignment is complete
     #   Input:  dataTuple = (courseId, assignmentId, studentId)
-    #   Output:    True if the assignment is complete
+    #   Output:    returns solutions if the assignment is complete
     #              False otherwise
     
     
