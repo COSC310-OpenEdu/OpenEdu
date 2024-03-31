@@ -21,6 +21,6 @@ def test_AssignmentIncomplete():
     assignmentId = 0
     studentId = 0
     isComplete = CheckAssignmentCompletion.check(courseId,assignmentId,studentId,)
-    assert(isComplete == False) #Check assignment is complete
+    assert(isComplete == False) #Check assignment is incomplete
     
     DatabaseTestManager.endTest()
