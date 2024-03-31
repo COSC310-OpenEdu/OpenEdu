@@ -11,7 +11,7 @@ class SelectQuestionsForAssignment(DatabaseQueryAll):
     #
     
     @classmethod
-    def queryAll(cls, dataTuple) -> list:
+    def queryAll(cls, dataTuple) -> tuple:
        
         cursor = DatabaseManager.getDatabaseCursor()
         sql = """SELECT questionId, questionText, assignmentId, questionAnswer, longQuestion FROM Question
