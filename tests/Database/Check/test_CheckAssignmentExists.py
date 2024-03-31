@@ -8,7 +8,7 @@ def test_AssignmentExists():
     
     courseId = 1
     assignmentId = 1
-    exists = CheckAssignmentExists.check(courseId,assignmentId,)
+    exists = CheckAssignmentExists.check((courseId,assignmentId,))
     assert(exists == True) #Check assignment exists
     
     DatabaseTestManager.endTest()
@@ -18,7 +18,7 @@ def test_AssignmentDoesntExist():
 
     courseId = 0
     assignmentId = 0
-    exists = CheckAssignmentExists.check(courseId,assignmentId,)
+    exists = CheckAssignmentExists.check((courseId,assignmentId,))
     assert(exists == False) #Check assignment doesnt exist
     
     DatabaseTestManager.endTest()

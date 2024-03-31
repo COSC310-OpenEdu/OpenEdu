@@ -7,7 +7,7 @@ def test_solutionsLength():
     DatabaseTestManager.startTest()
     
     courseId = 1
-    solutions = SelectSolutionsForCourse.queryAll(courseId,)
+    solutions = SelectSolutionsForCourse.queryAll((courseId,))
     assert(len(solutions) == 6) 
     
     DatabaseTestManager.endTest()

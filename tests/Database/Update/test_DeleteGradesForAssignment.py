@@ -7,9 +7,9 @@ import pytest
 def test_DeleteGradesForAssignment():
     DatabaseTestManager.startTest()
     
-    DeleteGradesForAssignment.update(1, 1,)
+    DeleteGradesForAssignment.update((1, 1,))
     grades = SelectGradesForAssignment.queryAll((1, 1, 1,))
-    assert(grades is None)
+    assert(not grades)
     
     DatabaseTestManager.endTest()
     

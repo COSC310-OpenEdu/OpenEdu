@@ -9,7 +9,7 @@ def test_AssignmentComplete():
     courseId = 1
     assignmentId = 1
     studentId = 1
-    isComplete = CheckAssignmentCompletion.check(courseId,assignmentId,studentId,)
+    isComplete = CheckAssignmentCompletion.check((courseId,assignmentId,studentId,))
     assert(isComplete != False) #Check assignment is complete
     
     DatabaseTestManager.endTest()
@@ -20,7 +20,7 @@ def test_AssignmentIncomplete():
     courseId = 0
     assignmentId = 0
     studentId = 0
-    isComplete = CheckAssignmentCompletion.check(courseId,assignmentId,studentId,)
+    isComplete = CheckAssignmentCompletion.check((courseId,assignmentId,studentId,))
     assert(isComplete == False) #Check assignment is incomplete
     
     DatabaseTestManager.endTest()

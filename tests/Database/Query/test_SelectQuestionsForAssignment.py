@@ -8,7 +8,7 @@ def test_questionsLength():
     
     courseId = 1
     assignmentId = 1
-    questions = SelectQuestionsForAssignment.queryAll(courseId, assignmentId,)
+    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
     assert(len(questions) == 3) 
     
     DatabaseTestManager.endTest()

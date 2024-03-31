@@ -16,7 +16,7 @@ class CheckAssignmentExists(DatabaseCheck):
 
         cursor = DatabaseManager.getDatabaseCursor();
         cursor.execute(statement, (dataTuple))
-        assignment = cursor.fetchall()
+        assignment = cursor.fetchone()
         DatabaseManager.closeConnection();
     
         if assignment is None:

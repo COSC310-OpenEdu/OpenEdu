@@ -9,7 +9,7 @@ def test_SubmissionIsGraded():
     courseId = 1
     assignmentId = 1
     studentId = 1
-    exists = CheckSubmissionIsGraded.check(courseId,assignmentId, studentId,)
+    exists = CheckSubmissionIsGraded.check((courseId,assignmentId, studentId,))
     assert(exists == True) #Check assignment exists
     
     DatabaseTestManager.endTest()
@@ -20,7 +20,7 @@ def test_SubmissionNotGraded():
     courseId = 0
     assignmentId = 0
     studentId = 0
-    exists = CheckSubmissionIsGraded.check(courseId,assignmentId,studentId,)
+    exists = CheckSubmissionIsGraded.check((courseId,assignmentId,studentId,))
     assert(exists == False) #Check assignment doesnt exist
     
     DatabaseTestManager.endTest()

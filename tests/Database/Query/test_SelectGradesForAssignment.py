@@ -9,7 +9,7 @@ def test_gradesLength():
     courseId = 1
     assignmentId = 1
     studentId = 1
-    grades = SelectGradesForAssignment.queryAll(courseId, assignmentId, studentId,)
-    assert(len(grades) == 3) 
+    grades = SelectGradesForAssignment.queryAll((courseId, assignmentId, studentId,))
+    assert(len(grades) == 2) 
     
     DatabaseTestManager.endTest()

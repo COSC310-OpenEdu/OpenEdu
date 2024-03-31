@@ -19,7 +19,7 @@ class CheckSubmissionIsGraded(DatabaseCheck):
         grades = cursor.fetchall()
         DatabaseManager.closeConnection();
     
-        if grades is None:
+        if not grades:
             return False
         else:
             return True

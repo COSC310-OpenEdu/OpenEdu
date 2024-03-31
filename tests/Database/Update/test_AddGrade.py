@@ -7,7 +7,7 @@ import pytest
 def test_AddGrade():
     DatabaseTestManager.startTest()
     
-    DeleteGradesForAssignment.update(1, 1,)
+    DeleteGradesForAssignment.update((1, 1,))
     AddGrade.update((1, 1, 1, 1, 3, 42))
     assert(CheckGrade.check((42, 1, 1, 1, 1,)) == True)
     
