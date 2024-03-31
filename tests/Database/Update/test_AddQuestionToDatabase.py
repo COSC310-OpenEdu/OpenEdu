@@ -1,25 +1,24 @@
-from src.Database.Update.AddQuestionToDatabase import AddQuestionDatabase
+from src.Database.Update.AddQuestionToDatabase import AddQuestionToDatabase
 from src.Database.Check.CheckAddQuestion import CheckAddQuestion
 from tests.Database.DatabaseTestManager import DatabaseTestManager
 import pytest
 
 def test_AddQuestonToDatabase_single():
-    try:
-        AddQuestionDatabase.update(("question","Answer",100,1,1));
-        assert(CheckAddQuestion.check((100,1,1)))
-    except Exception:
-        assert(False)
-    finally:
-        DatabaseTestManager.rollback()
+    DatabaseTestManager.startTest()
+
+    AddQuestionToDatabase.update(("question","Answer",100,1,1));
+    assert(CheckAddQuestion.check((100,1,1)))
+
+    DatabaseTestManager.endTest()
     
 def test_AddQuestonToDatabase_multiple():
-    try:
-        AddQuestionDatabase.update(("question1","Answer1",100,1,1));
-        AddQuestionDatabase.update(("question2","Answer2",101,1,1));
+    DatabaseTestManager.startTest()
     
-        assert(CheckAddQuestion.check((100,1,1)))
-        assert(CheckAddQuestion.check((101,1,1)))
-    except Exception:
-        assert(False)
-    finally:
-        DatabaseTestManager.rollback()
+    AddQuestionToDatabase.update(("question1","Answer1",101,1,1));
+    AddQuestionToDatabase.update(("question2","Answer2",102,1,1));
+    
+    assert(CheckAddQuestion.check((101,1,1)))
+    assert(CheckAddQuestion.check((102,1,1)))
+    
+    DatabaseTestManager.endTest()
+    

@@ -2,7 +2,7 @@ from src.Database.Update.DatabaseUpdate import DatabaseUpdate
 from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
-class AddQuestionoDatabase(DatabaseUpdate):
+class AddQuestionToDatabase(DatabaseUpdate):
     
     #
     #   Adds a new quetion to the database with inputted information
@@ -22,6 +22,3 @@ class AddQuestionoDatabase(DatabaseUpdate):
 
         cursor = DatabaseManager.getDatabaseCursor();
         cursor.execute(statement, queryData)
-        
-
-        DatabaseManager.commit()

@@ -13,7 +13,7 @@ class CheckAddQuestion(DatabaseCheck):
     @classmethod 
     def check(cls, dataTuple) -> bool:
         cursor = DatabaseManager.getDatabaseCursor()
-        sql = "SELECT COUNT(questionId) FROM CourseRequests WHERE questionId = %s AND assignmentId = %s AND courseId = %s"
+        sql = "SELECT COUNT(questionId) FROM Question WHERE questionId = %s AND assignmentId = %s AND courseId = %s"
         cursor.execute(sql, dataTuple)
         
         return cursor.fetchone()[0] == 1;

@@ -9,11 +9,17 @@ class DatabaseTestManager():
         
         connection.start_transaction()
         
+        
     @classmethod
     def rollback(cls):
         connection = DatabaseManager.getDatabaseConnection()
 
         connection.rollback()
+    
+    @classmethod
+    def commit(cls):
+        connection = DatabaseManager.getDatabaseConnection()
+
     
     # Sets up environment for testing
     @classmethod
@@ -26,6 +32,10 @@ class DatabaseTestManager():
     @classmethod
     def endTest(cls):
         DatabaseManager.test = False
+        
         cls.rollback()
         cls.rollback()
+        cls.rollback()
+        
+        cls.commit()
         
