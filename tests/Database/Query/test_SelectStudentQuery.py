@@ -1,20 +1,30 @@
 from src.Database.Query.SelectStudentQuery import SelectStudentQuery
+from tests.Database.DatabaseTestManager import DatabaseTestManager
 import pytest
 
 def test_selectCourseQuery_valid():
-    userId = 1
+    DatabaseTestManager.startTest()
     
+    userId = 1
     studentData = SelectStudentQuery.query((userId,))
     assert(studentData[1] == "James")
     
-def test_selectCourseQuery_invalid():
-    userId = 1
+    DatabaseTestManager.endTest()
     
+def test_selectCourseQuery_invalid():
+    DatabaseTestManager.startTest()
+    
+    userId = 1    
     studentData = SelectStudentQuery.query((userId,))
     assert(studentData[1] != "NotJames")
     
-def test_selectCourseQuery_nonIntegerId():
-    userId = 'Cat'
+    DatabaseTestManager.endTest()
     
+def test_selectCourseQuery_nonIntegerId():
+    DatabaseTestManager.startTest()
+    
+    userId = 'Cat'
     studentData = SelectStudentQuery.query((userId,))
     assert(studentData is None)
+    
+    DatabaseTestManager.endTest()
