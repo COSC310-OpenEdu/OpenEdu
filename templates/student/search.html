@@ -1,5 +1,5 @@
 <!-- Extend common student navbar from student.tmpl -->
-{% extends "student/student.tmpl" %}
+{% extends "student/student.html" %}
 
 <!-- Webpage title -->
 {% block title %}Search{% endblock %}
@@ -112,7 +112,7 @@
 }
 </style>
     <div>Search for Courses</div>
-    <div>
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
         <input type="text" id="input" placeholder="Search...">
         <button onclick="search()">
             <span class="material-symbols-outlined">search</span>Search

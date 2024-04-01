@@ -220,10 +220,7 @@ def joinCourse(courseId):
 
 @app.route("/teacher/homepage", methods=["POST", "GET"])
 def teacherHome():
-    # temporarily getting a list of all courses
-    
     courses = SelectCourseQuery.query((session['userId'],))
-    
     return render_template("teacher/homepage.html", courses = courses)
 
 @app.route("/teacher/<courseId>-<courseName>/dashboard", methods = ['GET'])
@@ -243,6 +240,7 @@ def teacherCourseGrading(courseId, courseName):
     grades = SelectGradesForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
+    courses = SelectCourseQuery.query((session['userId'],))
 
     # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
     if len(grades) < len(solutions):
@@ -258,7 +256,7 @@ def teacherCourseGrading(courseId, courseName):
                     grades.append(0)
             
     
-    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
+    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
 
 @app.route("/updateGrade", methods = ['POST'])
 def updateGrade():

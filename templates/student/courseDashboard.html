@@ -1,13 +1,12 @@
 <!-- Extend common student navbar and secondary header from student.tmpl -->
-{% extends "student/student.tmpl" %}
+{% extends "student/student.html" %}
 
 <!-- Webpage title -->
 {% block title %}Dashboard{% endblock %}
 
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
-    {{ super() }}
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+    {{ super() }}  
 {% endblock %}
 
 <!-- Set courses in navbar to active class-->
