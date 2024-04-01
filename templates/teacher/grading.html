@@ -1,10 +1,14 @@
-{% extends "teacher/teacher.tmpl." %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.html" %}
+
+<!-- Webpage title -->
 {% block title %}Grading{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../../static/JS/seeGrades.js"></script>
-    
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -85,24 +89,19 @@
         });
     </script>
 {% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grading{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set grading in header to active class-->
+{% block grading %}active{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-    <!-- Secondary header for course pages -->
-    <header>
-        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
-        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments">Assignments</a>
-        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading" class="active">Grading</a>
-        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
-    </header>
+    {{ super() }}
     <div class="main-container">
         <div class="gradesheader">
             <span>Grade Item</span>

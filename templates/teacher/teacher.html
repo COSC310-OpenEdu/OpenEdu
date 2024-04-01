@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/courses.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/courseHeader.css') }}"> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/button.css') }}">
     <script src="{{ url_for('static', filename='JS/sidepanel.js') }}"></script>
 {% endblock %}
 

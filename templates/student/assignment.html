@@ -1,30 +1,30 @@
-{% extends "base.html" %}
-{% block title %}{{assignmentName}}{% endblock %}
+<!-- Extend common student navbar and secondary header from student.tmpl -->
+{% extends "student/student.html" %}
+
+<!-- Webpage title -->
+{% block title %}Assignment {{assignmentId}}{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}  
     <script> console.log("{{completion}}")</script>
 {% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
 {% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Assignment {{ assignmentId }} ({{ assignmentName }}) {% endblock %}
-{% block navTop %}
-<a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-<a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-<a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-<a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-<a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set assignments in header to active class-->
+{% block assignments %}active{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-    <!-- Secondary header for course pages -->
-    <header>
-        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
-        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments" class="active">Assignments</a>
-        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades">Grades</a>
-        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People">People</a>
-    </header>
-   <!-- Contains quiz section --> 
-    <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
+    <!-- Inherits the secondary header for courses -->
+    {{ super() }}
+    <!-- Contains quiz section --> 
+    <div class="container-body" style="flex-direction: row; overflow: hidden;"> 
         <!-- Primary column containing question builder -->
         <div class="primary-container">
         {% with messages = get_flashed_messages() %}
@@ -69,7 +69,7 @@
         </div>
         <!-- Secondary column containing list of links to each question added to form -->
         <div class="secondary-container">
-            <div class="header">Questions</div>
+            <div class="box-header">Questions</div>
 
             <!-- Container body that is populated with links to each question -->
             <div class="list-body" id="questionList">
