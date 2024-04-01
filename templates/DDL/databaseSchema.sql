@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS User (
     userId      INTEGER NOT NULL AUTO_INCREMENT,
     firstName   VARCHAR(20),
     lastName    VARCHAR(20),
-    email       VARCHAR(20),
+    email       VARCHAR(100),
     username    VARCHAR(20),
     password    VARCHAR(20),
     profilePicture BLOB,
@@ -67,9 +67,9 @@ CREATE TABLE IF NOT EXISTS Admin (
 CREATE TABLE IF NOT EXISTS Assignment (
     assignmentId    INTEGER NOT NULL AUTO_INCREMENT,
     courseId        INTEGER NOT NULL,
-    name            VARCHAR(20),
+    name            VARCHAR(200),
     files           BLOB,
-    fileLocator     VARCHAR(20),
+    fileLocator     VARCHAR(200),
     dueDate         DATETIME,
 
     PRIMARY KEY (assignmentId, courseId),
