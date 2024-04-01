@@ -10,8 +10,10 @@ from flask import (
 )
 
 import json
-
+import os
 from src.User import User
+from flask import send_from_directory
+from werkzeug.utils import secure_filename
 from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Update.CreateAccount import CreateAccount
 from src.Database.Update.createCourse import CreateCourse
@@ -43,9 +45,13 @@ from src.Database.Update.AddGrade import AddGrade
 from src.Database.Update.DeleteAssignment import DeleteAssignment
 from src.Database.Query.SelectAllInstructors import SelectAllInstructors
 from src.Database.Update.DeleteGradesForAssignment import DeleteGradesForAssignment
-from src.Database.Update.DeleteAllSolutionsForAssignment import DeleteAllSolutionsForAssignment
+from src.Database.Update.DeleteAllSolutionsForAssignment import (
+    DeleteAllSolutionsForAssignment,
+)
 from src.Database.Query.SelectGradesForAssignment import SelectGradesForAssignment
 from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
+from src.Database.Update.AddCourseFile import AddCourseFile
+from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -137,107 +143,178 @@ def createAccount():
 
         return redirect(url_for("login"))
 
-@app.route("/student/updateAccount", methods=['GET', 'POST'])
+
+@app.route("/student/updateAccount", methods=["GET", "POST"])
 def updateAccount():
-    if request.method == 'GET':
-        return render_template('student/updateAccount.html')
+    if request.method == "GET":
+        return render_template("student/updateAccount.html")
     else:
-        requestType = request.form['type'];
-        
+        requestType = request.form["type"]
         # Password update request
-        if (requestType == 'password'):
-            successful = UpdatePassword.update((session['userId'], request.form['old'], request.form['new']))
-            
-            if (successful == False):
-                return jsonify({"error": 'Password Update Failed'}), 400
-            
+        if requestType == "password":
+            successful = UpdatePassword.update(
+                (session["userId"], request.form["old"], request.form["new"])
+            )
+
+            if successful == False:
+                return jsonify({"error": "Password Update Failed"}), 400
+
         # Email update Request
-        if (requestType == 'email'):
-            successful = UpdateEmail.update((session['userId'], request.form['email'])) 
-            
-            if (successful == False):
-                return jsonify({"error": 'Email Update Failed'}), 400           
-        
+        if requestType == "email":
+            successful = UpdateEmail.update((session["userId"], request.form["email"]))
+
+            if successful == False:
+                return jsonify({"error": "Email Update Failed"}), 400
+
         return {}
-        
-@app.route("/student/info", methods=['POST'])
+
+
+@app.route("/student/info", methods=["POST"])
 def studentInfo():
     # Returns firstname lastname and email to the given user id
-    studentInfo = SelectStudentQuery.query((session['userId'],));
-    
+    studentInfo = SelectStudentQuery.query((session["userId"],))
     returnData = {
-        'firstName': studentInfo[1],
-        'lastName': studentInfo[2],
-        'email': studentInfo[3]
-    };
-    
-    return json.dumps(returnData);
-    
-@app.route("/student/<courseId>-<courseName>/grades", methods=['GET'])
-def seeGrades(courseId, courseName): 
- 
+        "firstName": studentInfo[1],
+        "lastName": studentInfo[2],
+        "email": studentInfo[3],
+    }
+    return json.dumps(returnData)
+
+
+@app.route("/student/<courseId>-<courseName>/grades", methods=["GET"])
+def seeGrades(courseId, courseName):
     # Query for getting grades for every assignment in a class for a given student
-    grades = SelectGradeForStudent.queryAll((session['userId'], courseId,));
+    grades = SelectGradeForStudent.queryAll(
+        (
+            session["userId"],
+            courseId,
+        )
+    )
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    
+
     # Go to See Grades page
-    return render_template("student/seeGrades.html", grades=grades, courseName=courseName, username=session['username'], courseId=courseId, assignments=assignments, questions=questions, courses=courses)
+    return render_template(
+        "student/seeGrades.html",
+        grades=grades,
+        courseName=courseName,
+        username=session["username"],
+        courseId=courseId,
+        assignments=assignments,
+        questions=questions,
+        courses=courses,
+    )
 
 
-@app.route("/teacher/<courseId>-<courseName>/assignments/createQuiz", methods = ['POST', 'GET'])
+@app.route(
+    "/teacher/<courseId>-<courseName>/assignments/createQuiz", methods=["POST", "GET"]
+)
 def createQuiz(courseId, courseName):
-    if request.method == 'GET':
-        courses = SelectCourseQuery.query((session['userId'],))
-        return render_template("teacher/createQuiz.html", courseId=courseId, courseName=courseName, courses=courses)
-    if request.method == 'POST':
+    if request.method == "GET":
+        courses = SelectCourseQuery.query((session["userId"],))
+        return render_template(
+            "teacher/createQuiz.html",
+            courseId=courseId,
+            courseName=courseName,
+            courses=courses,
+        )
+    if request.method == "POST":
         questionForm = request.form
-        return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
-    
+        return render_template(
+            "teacher/publishQuiz.html",
+            questionForm=questionForm,
+            courseId=courseId,
+            courseName=courseName,
+        )
 
-@app.route('/search', methods = ['POST', 'GET'])
+
+@app.route("/search", methods=["POST", "GET"])
 def search():
-    if request.method == 'GET':
+    if request.method == "GET":
         courses = SelectRegisteredCourses.queryAll((session["userId"],))
-        return render_template('student/search.html', courses=courses)
+        return render_template("student/search.html", courses=courses)
     else:
-        searchTerm = request.form['searchTerm']
+        searchTerm = request.form["searchTerm"]
         return CourseSearch.search(searchTerm)
 
-@app.route('/Course/<courseId>/join', methods = ['POST'])
+
+@app.route("/Course/<courseId>/join", methods=["POST"])
 def joinCourse(courseId):
-    userId = session['userId']
-    
+    userId = session["userId"]
+
     # Student must be signed in to join a course
     if userId == None:
-        return redirect(url_for('login'))
-    
+        return redirect(url_for("login"))
+
     AddCourseRequest.update((userId, courseId))
-    
+
     return {}
 
 
 @app.route("/teacher/homepage", methods=["POST", "GET"])
 def teacherHome():
     # temporarily getting a list of all courses
-    
-    courses = SelectCourseQuery.query((session['userId'],))
-    
-    return render_template("teacher/homepage.html", courses = courses)
 
-@app.route("/teacher/<courseId>-<courseName>/dashboard", methods = ['GET'])
+    courses = SelectCourseQuery.query((session["userId"],))
+
+    return render_template("teacher/homepage.html", courses=courses)
+
+
+@app.route("/teacher/<courseId>-<courseName>/dashboard", methods=["GET", "POST"])
 def teacherCourseDash(courseId, courseName):
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/courseDashboard.html", courseId=courseId, courseName=courseName, courses=courses)
+    courses = SelectCourseQuery.query((session["userId"],))
+    if request.method == "POST":
+        # Handle file uploads
+        file = request.files["file"]
+        # Retrieves custom file name from the pop-up window
+        custom_file_name = request.form["fileName"]
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join("uploads/course_" + str(courseId), filename)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            file.save(file_path)
 
-@app.route("/teacher/<courseId>-<courseName>/assignments", methods = ['GET'])
+            # Use AddCourseFile to insert the file record
+            AddCourseFile.insert_file_record(courseId, file_path, custom_file_name)
+
+    # Retrieve the list of files for the course to display
+    files = SelectFilesQuery.get_files_for_course(courseId)
+
+    return render_template(
+        "teacher/courseDashboard.html",
+        courseId=courseId,
+        courseName=courseName,
+        courses=courses,
+        files=files  # Pass the list of files to the template
+    )
+
+@app.route('/download_file/<int:file_id>')
+def download_file(file_id):
+    # Assuming RetrieveFileInfoQuery.get_file_info fetches file path using file_id
+    file_info = RetrieveFileInfoQuery.get_file_info(file_id)
+    if file_info:
+        file_path = file_info['fileLocator']
+        directory = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        return "File not found", 404
+
+@app.route("/teacher/<courseId>-<courseName>/assignments", methods=["GET"])
 def teacherCourseAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/assignmentsTab.html", courseId=courseId, courseName=courseName, assignments=assignments, courses=courses)
+    courses = SelectCourseQuery.query((session["userId"],))
+    return render_template(
+        "teacher/assignmentsTab.html",
+        courseId=courseId,
+        courseName=courseName,
+        assignments=assignments,
+        courses=courses,
+    )
 
-@app.route("/teacher/<courseId>-<courseName>/grading", methods = ['GET'])
+
+@app.route("/teacher/<courseId>-<courseName>/grading", methods=["GET"])
 def teacherCourseGrading(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     grades = SelectGradesForCourse.queryAll((courseId,))
@@ -249,52 +326,110 @@ def teacherCourseGrading(courseId, courseName):
         for i in range(0, len(solutions)):
             matching = False
             for j in range(0, len(grades)):
-                if grades[i][0] == solutions[i][0] and grades[i][4] == solutions[i][2] and grades[i][5] == solutions[i][1]:
+                if (
+                    grades[i][0] == solutions[i][0]
+                    and grades[i][4] == solutions[i][2]
+                    and grades[i][5] == solutions[i][1]
+                ):
                     matching = True
             if matching == False:
                 try:
                     grades.insert(i, 0)
                 except:
                     grades.append(0)
-            
-    
-    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
 
-@app.route("/updateGrade", methods = ['POST'])
+    return render_template(
+        "teacher/grading.html",
+        courseId=courseId,
+        solutions=solutions,
+        courseName=courseName,
+        grades=grades,
+        assignments=assignments,
+        questions=questions,
+    )
+
+
+@app.route("/updateGrade", methods=["POST"])
 def updateGrade():
     form = request.form
     # If grade is already in database, update it. If not, insert it.
-    if (form['insert'] == "1"):
-        AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade']))
+    if form["insert"] == "1":
+        AddGrade.update(
+            (
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+                session["userId"],
+                form["grade"],
+            )
+        )
     else:
-        UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
+        UpdateGrade.update(
+            (
+                form["grade"],
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+            )
+        )
     return jsonify(form)
 
-@app.route("/teacher/<courseId>-<courseName>/people", methods = ['GET'])
+
+@app.route("/teacher/<courseId>-<courseName>/people", methods=["GET"])
 def teacherCoursePeople(courseId, courseName):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
     people = SelectPeopleInCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors, courses=courses)
+    courses = SelectCourseQuery.query((session["userId"],))
+    return render_template(
+        "teacher/people.html",
+        courseId=courseId,
+        courseName=courseName,
+        people=people,
+        instructors=instructors,
+        courses=courses,
+    )
 
-@app.route("/student/<courseId>-<courseName>/people", methods = ['GET'])
+
+@app.route("/student/<courseId>-<courseName>/people", methods=["GET"])
 def studentCoursePeople(courseId, courseName):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
     people = SelectPeopleInCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    
-    return render_template("student/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors, courses=courses)
 
-@app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods = ['POST', 'GET'])
+    return render_template(
+        "student/people.html",
+        courseId=courseId,
+        courseName=courseName,
+        people=people,
+        instructors=instructors,
+        courses=courses,
+    )
+
+
+@app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods=["POST", "GET"])
 def publishQuiz(courseId, courseName):
     questionForm = request.form
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName, courses=courses)
+    courses = SelectCourseQuery.query((session["userId"],))
+    return render_template(
+        "teacher/publishQuiz.html",
+        questionForm=questionForm,
+        courseId=courseId,
+        courseName=courseName,
+        courses=courses,
+    )
 
-@app.route("/student/<courseId>-<courseName>/dashboard", methods = ['GET'])
-def courseDashboard(courseId,courseName):
+
+@app.route("/student/<courseId>-<courseName>/dashboard", methods=["GET"])
+def courseDashboard(courseId, courseName):
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName, courses=courses)
+    return render_template(
+        "student/courseDashboard.html",
+        courseId=courseId,
+        courseName=courseName,
+        courses=courses,
+    )
 
 
 @app.route("/admin/approveRegistration")
@@ -326,85 +461,223 @@ def createCourse():
         return redirect(url_for("createCourse"))
     else:
         instructorIds, instructorNames = SelectAllInstructors.queryAll()
-        return render_template("admin/createCourse.html", instructorIds=instructorIds, instructorNames=instructorNames, len=len)
+        return render_template(
+            "admin/createCourse.html",
+            instructorIds=instructorIds,
+            instructorNames=instructorNames,
+            len=len,
+        )
 
-@app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
+
+@app.route("/student/<courseId>-<courseName>/assignments", methods=["GET"])
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
+    return render_template(
+        "student/seeAssignments.html",
+        courseId=courseId,
+        assignments=assignments,
+        courseName=courseName,
+        courses=courses,
+    )
 
-@app.route("/student/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>", methods = ['GET'])
+
+@app.route(
+    "/student/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>",
+    methods=["GET"],
+)
 def studentAssignment(courseId, courseName, assignmentId, assignmentName):
-    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
-    completion = CheckAssignmentCompletion.check((courseId, assignmentId, session['userId'],))
-    assignmentName = assignmentName.strip('\"')
-    return render_template("student/assignment.html", courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
+    questions = SelectQuestionsForAssignment.queryAll(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
+    completion = CheckAssignmentCompletion.check(
+        (
+            courseId,
+            assignmentId,
+            session["userId"],
+        )
+    )
+    assignmentName = assignmentName.strip('"')
+    return render_template(
+        "student/assignment.html",
+        courseId=courseId,
+        courseName=courseName,
+        assignmentId=assignmentId,
+        assignmentName=assignmentName,
+        questions=questions,
+        completion=completion,
+    )
 
-@app.route("/submitAssignment", methods=['POST'])
+
+@app.route("/submitAssignment", methods=["POST"])
 def submitAssignment():
     form = request.form
     courseId = form.get("courseId", "")
     courseName = form.get("courseName", "")
     assignmentId = form.get("assignmentId", "")
     assignmentName = form.get("assignmentName", "")
-    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
+    questions = SelectQuestionsForAssignment.queryAll(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
 
     for question in questions:
-       SubmitAssignment.update((courseId, question[0], assignmentId, session['userId'], form.get(str(question[0]), "")))
-    
-    flash("You have submitted this assignment!")
-    return redirect(url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName))
+        SubmitAssignment.update(
+            (
+                courseId,
+                question[0],
+                assignmentId,
+                session["userId"],
+                form.get(str(question[0]), ""),
+            )
+        )
 
-@app.route("/deleteSolutions", methods=['POST'])
+    flash("You have submitted this assignment!")
+    return redirect(
+        url_for(
+            "studentAssignment",
+            courseId=courseId,
+            courseName=courseName,
+            assignmentId=assignmentId,
+            assignmentName=assignmentName,
+        )
+    )
+
+
+@app.route("/deleteSolutions", methods=["POST"])
 def deleteSolutions():
     form = request.form
     courseId = form.get("courseId", "")
     courseName = form.get("courseName", "")
     assignmentId = form.get("assignmentId", "")
     assignmentName = form.get("assignmentName", "")
-    
-    graded = CheckSubmissionIsGraded.check((courseId, assignmentId, session['userId'],))
+
+    graded = CheckSubmissionIsGraded.check(
+        (
+            courseId,
+            assignmentId,
+            session["userId"],
+        )
+    )
     if graded == False:
-        DeleteSolutions.update((courseId, assignmentId, session['userId'],))
+        DeleteSolutions.update(
+            (
+                courseId,
+                assignmentId,
+                session["userId"],
+            )
+        )
     else:
         flash("Sorry. This assignment has already been graded.")
-    return redirect(url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName))
+    return redirect(
+        url_for(
+            "studentAssignment",
+            courseId=courseId,
+            courseName=courseName,
+            assignmentId=assignmentId,
+            assignmentName=assignmentName,
+        )
+    )
 
-@app.route("/deleteAssignment", methods=['POST'])
+
+@app.route("/deleteAssignment", methods=["POST"])
 def deleteAssignment():
     form = request.form
     courseId = form.get("courseId", "")
     courseName = form.get("courseName", "")
     assignmentId = form.get("assignmentId", "")
     assignmentName = form.get("assignmentName", "")
-    
-    DeleteGradesForAssignment.update((courseId, assignmentId,))
-    DeleteAllSolutionsForAssignment.update((courseId, assignmentId,))
-    DeleteAssignment.update((courseId, assignmentId,))
 
-    return redirect(url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName))
+    DeleteGradesForAssignment.update(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
+    DeleteAllSolutionsForAssignment.update(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
+    DeleteAssignment.update(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
 
-@app.route("/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>", methods = ['GET'])
-def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
-    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
+    return redirect(
+        url_for("teacherCourseAssignments", courseId=courseId, courseName=courseName)
+    )
+
+
+@app.route(
+    "/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>",
+    methods=["GET"],
+)
+def teacherAssignment(
+    courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName
+):
+    questions = SelectQuestionsForAssignment.queryAll(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
     completion = None
     grades = None
     # If clicked from grading tab, get the completion status and the grades from that submission
-    if (studentId != "False"):
-        completion = CheckAssignmentCompletion.check((courseId, assignmentId, studentId,))
-        grades = SelectGradesForAssignment.queryAll((courseId, assignmentId, studentId,))
-         # Make grades the same length as solutions as to not cause any errors
-        if (len(grades) < len(completion)):
+    if studentId != "False":
+        completion = CheckAssignmentCompletion.check(
+            (
+                courseId,
+                assignmentId,
+                studentId,
+            )
+        )
+        grades = SelectGradesForAssignment.queryAll(
+            (
+                courseId,
+                assignmentId,
+                studentId,
+            )
+        )
+        # Make grades the same length as solutions as to not cause any errors
+        if len(grades) < len(completion):
             for i in range(len(grades) - 1, len(completion)):
                 grades.append(0)
 
-    #If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
-    if (completion == False):
+    # If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
+    if completion == False:
         flash("This student has not submitted this assignment yet.")
-        return redirect(url_for('teacherCourseGrading', _anchor=str(assignmentId), courseId=courseId, courseName=courseName))
+        return redirect(
+            url_for(
+                "teacherCourseGrading",
+                _anchor=str(assignmentId),
+                courseId=courseId,
+                courseName=courseName,
+            )
+        )
     else:
-        return render_template("teacher/teacherAssignment.html", studentId=studentId, courseId=courseId, grades=grades, firstName=firstName, lastName=lastName, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
+        return render_template(
+            "teacher/teacherAssignment.html",
+            studentId=studentId,
+            courseId=courseId,
+            grades=grades,
+            firstName=firstName,
+            lastName=lastName,
+            courseName=courseName,
+            assignmentId=assignmentId,
+            assignmentName=assignmentName,
+            questions=questions,
+            completion=completion,
+        )
 
 
 if __name__ == "__main__":
