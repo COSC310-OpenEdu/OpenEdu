@@ -52,6 +52,7 @@ from src.Database.Query.SelectGradesForAssignment import SelectGradesForAssignme
 from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
+from src.Database.Update.DeleteCourseFile import DeleteCourseFile
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -300,6 +301,16 @@ def download_file(file_id):
         return send_from_directory(directory, filename, as_attachment=True)
     else:
         return "File not found", 404
+
+@app.route('/delete_file/<int:courseId>/<courseName>/<int:file_id>', methods=['POST'])
+def delete_file(courseId, courseName, file_id):
+    success = DeleteCourseFile.delete_file_record(file_id)
+    if success:
+        flash('File deleted successfully', 'success')
+    else:
+        flash('File could not be deleted', 'error')
+    return redirect(url_for('teacherCourseDash', courseId=courseId, courseName=courseName))  # Redirect to the appropriate page
+
 
 @app.route("/teacher/<courseId>-<courseName>/assignments", methods=["GET"])
 def teacherCourseAssignments(courseId, courseName):
