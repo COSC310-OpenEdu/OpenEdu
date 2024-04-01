@@ -7,9 +7,6 @@
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='CSS/quiz.css')}}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
     <script type="text/javascript">
         let questionNumber = 0;
         function addQuestion() {
@@ -77,7 +74,7 @@
         </div>
         <!-- Secondary column containing list of links to each question added to form -->
         <div class="secondary-container">
-            <div class="quiz-header">Questions</div>
+            <div class="box-header">Questions</div>
 
             <!-- Container body that is populated with links to each question -->
             <div class="list-body" id="questionList"></div>

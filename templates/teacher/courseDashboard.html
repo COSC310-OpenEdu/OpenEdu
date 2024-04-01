@@ -7,8 +7,6 @@
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}"> 
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">
 {% endblock %}
 
 <!-- Set courses in navbar to active class-->

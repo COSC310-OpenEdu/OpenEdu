@@ -7,7 +7,7 @@
 {% include "sidepanel.html" %}
 
 {% block navTop %}
-    <a href="#" id="logo">
+    <a href="{{url_for('teacherHome')}}" id="logo">
         <span class="material-symbols-outlined size-36">school</span>
     </a>
     <a href="#" id="account" class="{% block account %}{% endblock %}">
@@ -18,7 +18,7 @@
         <span class="material-symbols-outlined">home</span>
         Home
     </a>
-    <a id="course" onclick="openPanel()" id="course" class="{% block courses %}{% endblock %}">
+    <a id="course" onclick="openPanel()" class="{% block courses %}{% endblock %}">
         <span class="material-symbols-outlined">library_books</span>
         Courses
     </a>

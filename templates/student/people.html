@@ -7,9 +7,6 @@
 <!-- Inherits stylesheets from base.html -->
 {% block head %} 
     {{ super() }}
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
-    <link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='CSS/seeGrades.css') }}">
     <script src="{{ url_for('static', filename='JS/seeGrades.js')}}"></script>
 {% endblock %}
 
