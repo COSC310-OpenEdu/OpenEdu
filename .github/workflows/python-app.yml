@@ -38,4 +38,4 @@ jobs:
       working-directory: ../
       run: |
         export PYTHONPATH="$PYTHONPATH:/home/runner/work/OpenEdu/src"
-        pytest
+        -m pytest
