@@ -14,11 +14,12 @@
     background-color: #F8F8F8;
     flex-grow: 1;
     overflow: hidden;
+    box-shadow: 2px 2px 8px #8C8C8C;
 }
 
 .header {
     background-color: #B4CBC9;
-    height: fit-content;
+    height: 28px;
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
     padding: 36px;
@@ -33,9 +34,9 @@
 .container-body {
     font-family: Roboto, sans-serif;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex: 1;
-    padding: 60px;
+    padding: 36px;
     gap: 36px;
     overflow: auto;
 }

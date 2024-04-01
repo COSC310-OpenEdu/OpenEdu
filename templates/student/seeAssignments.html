@@ -1,0 +1,48 @@
+<!-- Extend common student navbar and secondary header from student.tmpl -->
+{% extends "student/student.tmpl" %}
+
+<!-- Webpage title -->
+{% block title %}Assignments{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/seeGrades.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+{% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments{% endblock %}
+
+<!-- Set assignments in header to active class-->
+{% block assignments %}active{% endblock %}
+
+<!-- This is where page content goes -->
+{% block content %}
+    {{ super() }}
+    <!-- Contains a list of assignments created by the teacher -->
+    <div class="main-container">
+        <div class="gradesheader">
+            <span></span>
+            <span></span><span></span><span></span>
+        </div> 
+        
+        <!-- Display  every assignment in course-->
+        <div class="grades">
+        {% for assignment in assignments %}
+        <a href="{{url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe)}}">
+        <div class="grade">
+            <div class = "gradeGroup">
+                <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
+                    <span></span><span></span><span></span>
+            </div>
+        </div>
+        </a>
+        {% endfor %}
+        
+        </div>
+    </div>
+{% endblock %}

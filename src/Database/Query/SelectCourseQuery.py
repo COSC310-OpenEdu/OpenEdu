@@ -6,7 +6,7 @@ import mysql
 class SelectCourseQuery(DatabaseQuery):
     @classmethod
     def query(cls, dataTuple) -> tuple:
-        getCourseName = "SELECT Instructs.courseId, name FROM Instructs JOIN Course ON Course.courseId = Instructs.courseId WHERE instructorId  = %s"
+        getCourseName = "SELECT Instructs.courseId, name, description FROM Instructs JOIN Course ON Course.courseId = Instructs.courseId WHERE instructorId  = %s"
 
         instructorId = dataTuple
         

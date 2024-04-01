@@ -1,0 +1,53 @@
+<!-- Extend common student navbar and secondary header from student.tmpl -->
+{% extends "student/student.tmpl" %}
+
+<!-- Webpage title -->
+{% block title %}Homepage{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courses.css') }}">
+    <script>
+        // Assign colors to each course
+        document.addEventListener("DOMContentLoaded", function() {
+            let courses = document.getElementsByClassName("banner");
+            let green = "rgba(207,234,195,255)";
+            let yellow = "rgba(236,228,195,255)";
+            let pink = "rgba(254,219,215,255)";
+            let blue = "rgba(193,220,235,255)";
+            let purple = "rgba(216, 215, 254, 255)";
+            let colors = [green, yellow, pink, blue, purple];
+            let colorIndex = 0;
+            for (let i = 0; i < courses.length; i++) {
+                courses[i].style.backgroundColor = colors[colorIndex];
+                colorIndex++;
+                if (colorIndex > colors.length - 1) {
+                    colorIndex = 0;
+                }
+            }
+            
+        });
+    </script>
+{% endblock %}
+
+<!-- Set home in navbar to active class-->
+{% block home %}active{% endblock %}
+
+<!-- On page header displaying where you are in the navigation -->
+{% block pageHeader %}Homepage{% endblock %}
+
+<!-- This is where page content goes -->
+{% block content %}   
+    <div class="container-body overflow" style="flex-direction: row;">
+        {% for course in courses %}
+        <a href="{{ url_for('courseDashboard', courseId=course[0], courseName=course[1]) }}" class="course">
+            <div class="banner"></div>
+            <div class="course-info">
+                <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>
+                <p>{{ course[2] }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,33 +1,55 @@
-{% extends "base.html" %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.tmpl" %}
+
+<!-- Webpage title -->
 {% block title %}Homepage{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='js/courseCard.js')}}" type="text/javascript" defer></script>
-    <script> const courseList = JSON.parse('{{ courses|tojson|safe }}'); </script>
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courses.css') }}">
+    <script>
+        // Assign colors to each course
+        document.addEventListener("DOMContentLoaded", function() {
+            let courses = document.getElementsByClassName("banner");
+            let green = "rgba(207,234,195,255)";
+            let yellow = "rgba(236,228,195,255)";
+            let pink = "rgba(254,219,215,255)";
+            let blue = "rgba(193,220,235,255)";
+            let purple = "rgba(216, 215, 254, 255)";
+            let colors = [green, yellow, pink, blue, purple];
+            let colorIndex = 0;
+            for (let i = 0; i < courses.length; i++) {
+                courses[i].style.backgroundColor = colors[colorIndex];
+                colorIndex++;
+                if (colorIndex > colors.length - 1) {
+                    colorIndex = 0;
+                }
+            }
+            
+        });
+    </script>
 {% endblock %}
+
+<!-- Set home in navbar to active class-->
+{% block home %}active{% endblock %}
+
+<!-- On page header displaying where you are in the navigation -->
 {% block pageHeader %}Homepage{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-    <div class="container-body overflow">
+    <div class="container-body overflow" style="flex-direction: row;">
         <!-- this makes a link for every course in the database currently-->
         <!-- change later -->
         {% for course in courses %}
-        <span slot="contents" >
-            <a href="{{url_for('teacherCourseDash', courseId=course[0])}}">
-            <course-card-component id="{{ course[1] }}">
-                <span slot="courseId">{{ course[1][0:4] + " " + course[1][4:] }}</span>
-                <span slot="courseName"></span>
-            </course-card-component>
-            </a>
-        </span>
+        <a href="{{url_for('teacherCourseDash', courseId=course[0], courseName=course[1])}}" class="course">
+            <div class="banner"></div>
+            <div class="course-info">
+                <p>{{ course[1][0:4] + " " + course[1][4:] }}</p>
+                <p>{{ course[2] }}</p>
+            </div>
+        </a>
         {% endfor %}
     </div>
 {% endblock %}

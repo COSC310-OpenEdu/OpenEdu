@@ -1,0 +1,105 @@
+<!-- Extend common student navbar and secondary header from student.tmpl -->
+{% extends "student/student.tmpl" %}
+
+<!-- Webpage title -->
+{% block title %}Grades{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/seeGrades.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">  
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Create variables
+            let groups = document.getElementsByClassName("grade");
+            let assignmentButton = groups[0].children[0];
+           
+            let buttons = [];
+            let toggle = true;
+            var assignments = document.getElementsByClassName("g");
+            // Calculates average grade for every assignment
+            for (let i = 0; i < assignments.length; i++) {
+                let questions = assignments[i].querySelectorAll(" .avg");
+                let avg = 0;
+                // For every question in assignment, add the grade to the average
+                for (let j = 0; j<questions.length; j++) {
+                    avg += parseFloat(questions[j].id);
+                }
+                avg = avg/questions.length;
+                // Set the HTML of desired areas to be equal to the average
+                assignments[i].querySelector(" .total2").innerHTML = (Math.round(avg*100)/100) + "%";
+                assignments[i].querySelector(" .total").innerHTML = (Math.round(avg*100)/100) +"/100";
+            }
+            // Adds hide class to each gradeItem
+            for (let i = 0; i < groups.length; i++) {
+                buttons.push(groups[i].children[0]);
+                for (let j = 1; j < groups[i].children.length; j++) {
+                    groups[i].children[j].classList.add("hide");
+                }
+            }
+            
+            // When element is clicked, sets distance a variable for animation and unhides/hides gradeItems
+            function click(index) {
+                for (let i = 1; i < groups[index].children.length; i++) {
+                    let t = i*-3.3 + "";
+                    t += "em";
+                    groups[index].children[i].style.setProperty("--slide", t);
+                    toggle = groups[index].children[i].classList.toggle("hide");
+                    
+                }
+            }
+            // Creates onClick listeners for each gradeGroup
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function() {
+                    click(i);
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Grades for {{ username }}{% endblock %}
+
+<!-- Set grades in header to active class-->
+{% block grades %}active{% endblock %}
+
+<!-- This is where page content goes -->
+{% block content %}
+    {{ super() }}
+    <div class="container-body" style="flex-direction: column; gap: 0;">
+        <div class="gradesheader">
+            <span>Grade Item</span>
+            <span></span><span>Grade</span><span>Percentage</span>
+        </div> 
+        <div class="grades">
+            <!-- For every assignment in course, create a dropdown menu -->
+            {% for assignment in assignments %}
+            <div class="grade g"id="{{assignment[0]}}">
+                <div class = "gradeGroup">
+                    <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
+                    <span></span><span class="total"></span><span class="total2"></span>
+                </div>
+                <!-- Show logged in student's grades for every question for a given assignment -->
+                {% for grade in grades %}
+                    {% if (grade[0] == assignment[0]) %}
+                        <div class="grade">
+                        <div class="gradeItem question">     
+                            <span>Question {{ grade[1] }} ({{ grade[2] }})</span>
+                            <span></span><span class="avg" id="{{grade[4]}}">{{grade[4]}}/100</span><span class="avg2">{{grade[4]}}%</span>
+                        </div>
+                        
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+{% endblock %}

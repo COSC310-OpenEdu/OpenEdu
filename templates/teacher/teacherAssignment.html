@@ -1,0 +1,136 @@
+{% extends "teacher/teacher.tmpl" %}
+{% block title %}{{assignmentName}}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='CSS/quiz.css')}}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script> console.log("{{studentId}}")</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var inputs = $("input");
+            inputs.on("blur", function() {
+                // The id for input area is questionId+assignmentId+studentId, so it just pulls from that
+                let qId = this.id[0];
+                let aId = this.id[1];
+                let sId = this.id[2];
+                insert = 0;
+                if ($(this).hasClass("insert")) {
+                    insert = 1;
+                }
+                // Sets URL for updatingGrade
+                const url = {{ url_for("updateGrade")|tojson }};
+                // Does an AJAX POST requset to updateGrade, updating grade in the process
+                var updated = $.post(url, {"courseId":{{courseId}}, "questionId":qId, "assignmentId":aId, "studentId":sId, "grade":this.value, "insert":insert});
+                updated.done(function(data) {
+                    // When finished, run the average function again to update the averages
+                    console.log(data);
+                    
+                })
+            });
+        });
+    </script>
+{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Assignment {{ assignmentId }} ({{ assignmentName }}) {% endblock %}
+{% block navTop %}
+<a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+<a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+<a href="{{ url_for('teacherHome') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+<a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+<a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{url_for('teacherCourseDash', courseId=courseId, courseName=courseName)}}" id="Dashboard">Dashboard</a>
+        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}" id="Assignments" class="active">Assignments</a>
+        <a href="{{url_for('teacherCourseGrading', courseId=courseId, courseName=courseName)}}" id="Grading">Grading</a>
+        <a href="{{url_for('teacherCoursePeople', courseId=courseId, courseName=courseName)}}" id="People">People</a>
+    </header>
+   <!-- Contains quiz building section --> 
+    <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
+        <!-- Primary column containing question builder -->
+        <div class="primary-container">
+                <!-- Display student's name if it exists -->
+                {% if firstName != "0" %}
+                    <h1>{{firstName}} {{lastName}}'s Submission</h1>
+                {% endif %}
+                <!-- For every question, create a container -->
+                {% for question in questions %}
+                <div class="question-container" id="{{question[0]}}">
+                    <div class="question-container-header">
+                        Question {{question[0]}}
+                        
+                    </div>
+                    <div class="question">
+                        {{question[1]}}
+                    </div>
+                    <div class="question">
+                        <!-- If viewing a student's submission, show it -->
+                        {% if completion %}
+                        {% for answer in completion %}
+                        {% if answer[0] == question[0] %}
+                        <span style="font-weight:bold;">Student's answer:</span><br /><span class="answer">{{answer[1]}}</span>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+
+                        <!-- Show the correct answer to the question -->
+                        <span style="font-weight:bold;">Correct answer:</span><br /><span class="answer">{{question[3]}}</span>
+                        <!-- If viewing a student's submission, create number boxes for grading -->
+                        {% if completion %} 
+                        {% for i in range(0, completion|length) %}
+                        {% set noGrades = false %}
+                        <!-- Similar to the grading page, check if the solution has been graded already -->
+                        {% if grades %}
+                            {% if grades[i][0] == question[0] %}
+                                <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput" type="number" value="{{grades[i][1]}}" /></span>
+                            {% else %}
+                            {% set noGrades = true %}
+                            {% endif %}
+                        {% else %}
+                        {% set noGrades = true %}
+                        {% endif %}
+                        {% if completion[i][0] == question[0] and noGrades==true%}
+                        <span>Grade: <input id="{{question[0]}}{{question[2]}}{{studentId}}" class="gradeInput insert" type="number" value="" /></span>
+                        {% endif %}
+                        
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            
+        </div>
+        <!-- Secondary column containing list of links to each question added to form -->
+        <div class="secondary-container">
+            <div class="header">Questions</div>
+
+            <!-- Container body that is populated with links to each question -->
+            <div class="list-body" id="questionList">
+                {% for question in questions %}
+                    <a href="#{{question[0]}}">
+                        Question {{question[0]}}
+                    </a>
+                {% endfor %}
+            </div>
+
+            <div class="footer">
+            <!-- If assignment is already complete, show button for deleting submission -->
+            <form action="{{url_for('deleteAssignment')}}" method="post" onsubmit="return confirm('Are you sure you want to delete this assignment?');">
+                <input type="hidden" name="courseId" value="{{ courseId }}" />
+                <input type="hidden" name="courseName" value="{{ courseName }}" />
+                <input type="hidden" name="assignmentId" value="{{ assignmentId }}" />
+                <button type="submit">
+                    <span>Delete this Assignment?</span>
+                </button>
+            </form>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

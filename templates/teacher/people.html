@@ -1,5 +1,10 @@
-{% extends "base.html" %}
-{% block title %}Assignments{% endblock %}
+<!-- Extend common teacher navbar and secondary header from teacher.tmpl -->
+{% extends "teacher/teacher.tmpl" %}
+
+<!-- Webpage title -->
+{% block title %}People{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %} 
 {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
@@ -7,49 +12,43 @@
     <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">
     <script src="../../static/JS/seeGrades.js"></script>
 {% endblock %}
-{% block pageHeader %}{{ courseId[0:4] + " " + courseId[4:] }} / Assignments{% endblock %}
-{% block navTop %}
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{url_for('teacherHome')}}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses" class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set courses in navbar to active class-->
+{% block courses %}active{% endblock %}
+
+<!-- On page header displaying where you are in the course navigation -->
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / People{% endblock %}
+
+<!-- Set people in header to active class-->
+{% block people %}active{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
-
-            <!-- Secondary header for course pages -->
-            <header>
-                <a href="{{url_for('teacherCourseDash', courseId=courseId)}}" id="Dashboard">Dashboard</a>
-                <a href="{{url_for('teacherCourseAssignments', courseId=courseId)}}" id="Assignments">Assignments</a>
-                <a href="{{url_for('teacherCourseGrading', courseId=courseId)}}" id="Grading">Grading</a>
-                <a href="{{url_for('teacherCoursePeople', courseId=courseId)}}" id="People" class="active">People</a>
-            </header>
-
-            <div class="main-container">
-                <div class="gradesheader">
-                    <span></span>
-                    <span></span><span></span><span></span>
-                </div> 
-                
-                <div class="grades">
-                {% for instructor in instructors %}
-                <div class="grade">
-                    <div class = "gradeGroup">
-                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
-                        <span style="width: 10em; margin-right: 20em;">{{ instructor[1] }} {{ instructor[2] }}</span><span></span><span>Instructor</span>
-                    </div>
-                </div>
-                {% endfor %}
-                {% for person in people %}
-                <div class="grade">
-                    <div class = "gradeGroup">
-                        <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
-                        <span style="width: 10em; margin-right: 20em;">{{ person[1] }} {{ person[2] }}</span><span></span><span>Student</span>
-                    </div>
-                </div>
-                {% endfor %}
-                </div>
+    {{ super() }}
+    <div class="main-container">
+        <div class="gradesheader">
+            <span></span>
+            <span></span><span></span><span></span>
+        </div> 
+        <!-- Display every instructor in course -->
+        <div class="grades">
+        {% for instructor in instructors %}
+        <div class="grade">
+            <div class = "gradeGroup">
+                <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                <span style="width: 10em; margin-right: 20em;">{{ instructor[1] }} {{ instructor[2] }}</span><span></span><span>Instructor</span>
             </div>
-            {% endblock %}
+        </div>
+        {% endfor %}
+        <!-- Display every student enrolled in course -->
+        {% for person in people %}
+        <div class="grade">
+            <div class = "gradeGroup">
+                <span class="gradeTitle material-symbols-outlined" style="width:2em;">person</span>
+                <span style="width: 10em; margin-right: 20em;">{{ person[1] }} {{ person[2] }}</span><span></span><span>Student</span>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

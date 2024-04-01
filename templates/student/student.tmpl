@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <script src={{ url_for('static', filename='JS/sidepanel.js') }}></script>
+{% endblock %}
+
+{% include "sidepanel.html" %}
+
+{% block navTop %}
+    <a href="{{ url_for('home') }}" id="logo">
+        <span class="material-symbols-outlined size-36">school</span>
+    </a>
+    <a href="{{ url_for('updateAccount') }}" id="account" class="{% block account %}{% endblock %}">
+        <span class="material-symbols-outlined">account_circle</span>
+        Account
+    </a>
+    <a href="{{ url_for('home') }}" id="home" class="{% block home %}{% endblock %}">
+        <span class="material-symbols-outlined">home</span>
+        Home
+    </a>
+    <a id="course" onclick="openPanel()" class="{% block courses %}{% endblock %}">
+        <span class="material-symbols-outlined">library_books</span>
+        Courses
+    </a>
+    <a href="{{ url_for('search') }}" id="search" class="{% block search %}{% endblock %}">
+        <span class="material-symbols-outlined">search</span>
+        Search
+    </a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" 
+            id="Dashboard" class="{% block dashboard %}{% endblock %}">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" 
+            id="Assignments" class="{% block assignments %}{% endblock %}">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" 
+            id="Grades" class="{% block grades %}{% endblock %}">Grades</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" 
+            id="People" class="{% block people %}{% endblock %}">People</a>
+    </header>
+{% endblock %}
