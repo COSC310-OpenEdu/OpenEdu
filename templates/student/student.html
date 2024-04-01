@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    <script src={{ url_for('static', filename='JS/sidepanel.js') }}></script>
+    <script src="{{ url_for('static', filename='JS/sidepanel.js') }}"></script>
 {% endblock %}
 
 {% include "sidepanel.html" %}
