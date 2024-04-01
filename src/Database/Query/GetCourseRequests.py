@@ -1,6 +1,13 @@
 from src.Database.DatabaseManager import DatabaseManager
 
 class CourseRequestManager:
+    
+    #
+    #   Returns course requests and information about people that are making the requests 
+    #   Input:  N/A
+    #   Output: A list of course requests
+    #
+    
     @staticmethod
     def get_course_requests():
         try:
