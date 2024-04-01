@@ -40,7 +40,7 @@ class AddQuizToDatabase(DatabaseUpdate):
             answer = form[answerKey]
 
             #Add Question to database
-            AddQuestionoDatabase.update((question, answer, questionNumber, courseId, assignmentId))
+            AddQuestionToDatabase.update((question, answer, questionNumber, courseId, assignmentId))
             questionNumber  = questionNumber + 1
         
 
