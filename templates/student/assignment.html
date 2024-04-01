@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{assignmentName}}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/button.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/quiz.css')}}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/courseHeader.css') }}">    
+    <script> console.log("{{completion}}")</script>
+{% endblock %}
+{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Assignment {{ assignmentId }} ({{ assignmentName }}) {% endblock %}
+{% block navTop %}
+<a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
+<a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+<a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
+<a href="#" id="courses"  class="active"><span class="material-symbols-outlined">library_books</span>Courses</a>
+<a href="#" id="search"><span class="material-symbols-outlined">search</span>Search</a>
+{% endblock %}
+{% block navBottom %}
+    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
+{% endblock %}
+{% block content %}
+    <!-- Secondary header for course pages -->
+    <header>
+        <a href="{{ url_for('courseDashboard', courseId=courseId, courseName=courseName) }}" id="Dashboard">Dashboard</a>
+        <a href="{{ url_for('seeAssignments', courseId=courseId, courseName=courseName) }}" id="Assignments" class="active">Assignments</a>
+        <a href="{{ url_for('seeGrades', courseId=courseId, courseName=courseName) }}" id="Grades">Grades</a>
+        <a href="{{ url_for('studentCoursePeople', courseId=courseId, courseName=courseName) }}" id="People">People</a>
+    </header>
+   <!-- Contains quiz section --> 
+    <div style="display: flex; flex-direction: row; overflow: scroll; height: auto; width: auto; padding: 60px; gap: 24px;">
+        <!-- Primary column containing question builder -->
+        <div class="primary-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+               <script> alert("{{message}}"); </script>
+            {% endfor %}
+         {% endif %}
+      {% endwith %}
+            <!-- Form for submitting assignment -->
+            <form action="{{url_for('submitAssignment')}}" id="questionForm" method="post" name="questionForm">
+                <input type="hidden" name="courseId" value="{{ courseId }}" />
+                <input type="hidden" name="courseName" value="{{ courseName }}" />
+                <input type="hidden" name="assignmentId" value="{{ assignmentId }}" />
+                <input type="hidden" name="assignmentName" value="{{ assignmentName }}" />
+                <!-- Create questions -->
+                {% for question in questions %}
+                <div class="question-container" id="{{question[0]}}">
+                    <div class="question-container-header">
+                        Question {{question[0]}}
+                        
+ 
+                    </div>
+                    <div class="question">
+                        {{question[1]}}
+                    </div>
+                    <div class="question">
+                        <!-- If assignment is already complete, show answers. If not, show text box -->
+                        {% if completion == false %}
+                        <textarea placeholder="Answer" class="border-box" id="" name="{{question[0]}}" required></textarea>
+                        {% else %}
+                        {% for answer in completion %}
+                        {% if answer[0] == question[0] %}
+                        <span style="font-weight:bold;">Your answer:</span><span class="answer">{{answer[1]}}</span>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+        <!-- Secondary column containing list of links to each question added to form -->
+        <div class="secondary-container">
+            <div class="header">Questions</div>
+
+            <!-- Container body that is populated with links to each question -->
+            <div class="list-body" id="questionList">
+                {% for question in questions %}
+                    <a href="#{{question[0]}}">
+                        Question {{question[0]}}
+                    </a>
+                {% endfor %}
+            </div>
+
+            <div class="footer">
+            
+                <!-- Button for submitting the assignment -->
+                {% if completion == false %}
+                <button type="submit" form="questionForm">
+                    <span class="material-symbols-outlined">assignment_add</span>
+                    <span>Submit</span>
+                </button>
+                {% else %}
+                <!-- If assignment is already complete, show button for deleting submission -->
+                <form action="{{url_for('deleteSolutions')}}" method="post" onsubmit="return confirm('Are you sure you want to delete your submission?');">
+                <input type="hidden" name="courseId" value="{{ courseId }}" />
+                <input type="hidden" name="courseName" value="{{ courseName }}" />
+                <input type="hidden" name="assignmentId" value="{{ assignmentId }}" />
+                <input type="hidden" name="assignmentName" value="{{ assignmentName }}" />
+                <button type="submit">
+                    <span>Try Again?</span>
+                </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

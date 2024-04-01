@@ -34,7 +34,18 @@ from src.Database.Update.AddCourseRequest import AddCourseRequest
 from src.Database.Update.UpdateEmail import UpdateEmail
 from src.Database.Update.UpdatePassword import UpdatePassword
 from src.Search.CourseSearch import CourseSearch
+from src.Database.Query.SelectQuestionsForAssignment import SelectQuestionsForAssignment
+from src.Database.Check.CheckAssignmentCompletion import CheckAssignmentCompletion
+from src.Database.Update.SubmitAssignment import SubmitAssignment
+from src.Database.Update.DeleteSolutions import DeleteSolutions
+from src.Database.Query.SelectSolutionsForCourse import SelectSolutionsForCourse
+from src.Database.Update.AddGrade import AddGrade
+from src.Database.Update.DeleteAssignment import DeleteAssignment
 from src.Database.Query.SelectAllInstructors import SelectAllInstructors
+from src.Database.Update.DeleteGradesForAssignment import DeleteGradesForAssignment
+from src.Database.Update.DeleteAllSolutionsForAssignment import DeleteAllSolutionsForAssignment
+from src.Database.Query.SelectGradesForAssignment import SelectGradesForAssignment
+from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -169,7 +180,7 @@ def seeGrades(courseId, courseName):
     grades = SelectGradeForStudent.queryAll((session['userId'], courseId,));
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
-    courses = SelectRegisteredCourses.query((session["userId"]))
+    courses = SelectRegisteredCourses.queryAll((session["userId"],))
     
     # Go to See Grades page
     return render_template("student/seeGrades.html", grades=grades, courseName=courseName, username=session['username'], courseId=courseId, assignments=assignments, questions=questions, courses=courses)
@@ -188,7 +199,7 @@ def createQuiz(courseId, courseName):
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     if request.method == 'GET':
-        courses = SelectRegisteredCourses.query((session["userId"]))
+        courses = SelectRegisteredCourses.queryAll((session["userId"],))
         return render_template('student/search.html', courses=courses)
     else:
         searchTerm = request.form['searchTerm']
@@ -231,13 +242,32 @@ def teacherCourseGrading(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     grades = SelectGradesForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/grading.html", courseId=courseId, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
+    solutions = SelectSolutionsForCourse.queryAll((courseId,))
+
+    # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
+    if len(grades) < len(solutions):
+        for i in range(0, len(solutions)):
+            matching = False
+            for j in range(0, len(grades)):
+                if grades[i][0] == solutions[i][0] and grades[i][4] == solutions[i][2] and grades[i][5] == solutions[i][1]:
+                    matching = True
+            if matching == False:
+                try:
+                    grades.insert(i, 0)
+                except:
+                    grades.append(0)
+            
+    
+    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
 
 @app.route("/updateGrade", methods = ['POST'])
 def updateGrade():
     form = request.form
-    UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
+    # If grade is already in database, update it. If not, insert it.
+    if (form['insert'] == "1"):
+        AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade']))
+    else:
+        UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
     return jsonify(form)
 
 @app.route("/teacher/<courseId>-<courseName>/people", methods = ['GET'])
@@ -251,7 +281,7 @@ def teacherCoursePeople(courseId, courseName):
 def studentCoursePeople(courseId, courseName):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
     people = SelectPeopleInCourse.queryAll((courseId,))
-    courses = SelectRegisteredCourses.query((session["userId"]))
+    courses = SelectRegisteredCourses.queryAll((session["userId"],))
     
     return render_template("student/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors, courses=courses)
 
@@ -263,7 +293,7 @@ def publishQuiz(courseId, courseName):
 
 @app.route("/student/<courseId>-<courseName>/dashboard", methods = ['GET'])
 def courseDashboard(courseId,courseName):
-    courses = SelectRegisteredCourses.query((session["userId"]))
+    courses = SelectRegisteredCourses.queryAll((session["userId"],))
     return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName, courses=courses)
 
 
@@ -301,8 +331,80 @@ def createCourse():
 @app.route("/student/<courseId>-<courseName>/assignments", methods = ['GET'])
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
-    courses = SelectRegisteredCourses.query((session["userId"]))
+    courses = SelectRegisteredCourses.queryAll((session["userId"],))
     return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
+
+@app.route("/student/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>", methods = ['GET'])
+def studentAssignment(courseId, courseName, assignmentId, assignmentName):
+    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
+    completion = CheckAssignmentCompletion.check((courseId, assignmentId, session['userId'],))
+    assignmentName = assignmentName.strip('\"')
+    return render_template("student/assignment.html", courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
+
+@app.route("/submitAssignment", methods=['POST'])
+def submitAssignment():
+    form = request.form
+    courseId = form.get("courseId", "")
+    courseName = form.get("courseName", "")
+    assignmentId = form.get("assignmentId", "")
+    assignmentName = form.get("assignmentName", "")
+    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
+
+    for question in questions:
+       SubmitAssignment.update((courseId, question[0], assignmentId, session['userId'], form.get(str(question[0]), "")))
+    
+    flash("You have submitted this assignment!")
+    return redirect(url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName))
+
+@app.route("/deleteSolutions", methods=['POST'])
+def deleteSolutions():
+    form = request.form
+    courseId = form.get("courseId", "")
+    courseName = form.get("courseName", "")
+    assignmentId = form.get("assignmentId", "")
+    assignmentName = form.get("assignmentName", "")
+    
+    graded = CheckSubmissionIsGraded.check((courseId, assignmentId, session['userId'],))
+    if graded == False:
+        DeleteSolutions.update((courseId, assignmentId, session['userId'],))
+    else:
+        flash("Sorry. This assignment has already been graded.")
+    return redirect(url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName))
+
+@app.route("/deleteAssignment", methods=['POST'])
+def deleteAssignment():
+    form = request.form
+    courseId = form.get("courseId", "")
+    courseName = form.get("courseName", "")
+    assignmentId = form.get("assignmentId", "")
+    assignmentName = form.get("assignmentName", "")
+    
+    DeleteGradesForAssignment.update((courseId, assignmentId,))
+    DeleteAllSolutionsForAssignment.update((courseId, assignmentId,))
+    DeleteAssignment.update((courseId, assignmentId,))
+
+    return redirect(url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName))
+
+@app.route("/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>", methods = ['GET'])
+def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
+    questions = SelectQuestionsForAssignment.queryAll((courseId, assignmentId,))
+    completion = None
+    grades = None
+    # If clicked from grading tab, get the completion status and the grades from that submission
+    if (studentId != "False"):
+        completion = CheckAssignmentCompletion.check((courseId, assignmentId, studentId,))
+        grades = SelectGradesForAssignment.queryAll((courseId, assignmentId, studentId,))
+         # Make grades the same length as solutions as to not cause any errors
+        if (len(grades) < len(completion)):
+            for i in range(len(grades) - 1, len(completion)):
+                grades.append(0)
+
+    #If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
+    if (completion == False):
+        flash("This student has not submitted this assignment yet.")
+        return redirect(url_for('teacherCourseGrading', _anchor=str(assignmentId), courseId=courseId, courseName=courseName))
+    else:
+        return render_template("teacher/teacherAssignment.html", studentId=studentId, courseId=courseId, grades=grades, firstName=firstName, lastName=lastName, courseName=courseName, assignmentId=assignmentId, assignmentName=assignmentName, questions=questions, completion=completion)
 
 
 if __name__ == "__main__":

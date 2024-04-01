@@ -102,14 +102,21 @@ select {
 /* Style for text box question and answers */
 .question {
     display: flex;
+    flex-direction: column;
     margin: 0;
     height: 20;
-    padding: 8px 40px 0 40px;
+    padding: 8px 40px 1em 40px;
 }
 
 .question input {
     flex: auto;
     margin: 0;
+}
+
+.question textarea {
+    resize: none;
+    width: 90em;
+    height:5em;
 }
 
 /* Container for list of question links */
@@ -124,7 +131,20 @@ select {
     background-color: white;
 }
 
-.quiz-header {
+.answer {
+    border: 1px #8C8C8C solid;
+    width:fit-content;
+    border-radius: 1em;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    
+}
+
+input.gradeInput {
+    width: 3em;
+}
+
+.header {
     display: flex;
     background-color: #B4CBC9;
     padding: 10px 40px 10px 40px;
