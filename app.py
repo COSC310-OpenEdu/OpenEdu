@@ -286,6 +286,7 @@ def studentCoursePeople(courseId, courseName):
 @app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId, courseName):
     questionForm = request.form
+    AddQuizToDatabase.update(questionForm, courseId)
     courses = SelectCourseQuery.query((session['userId'],))
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName, courses=courses)
 
