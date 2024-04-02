@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS Assignment (
     assignmentId    INTEGER NOT NULL AUTO_INCREMENT,
     courseId        INTEGER NOT NULL,
     name            VARCHAR(200),
-    files           BLOB,
     fileLocator     VARCHAR(200),
     dueDate         DATETIME,
+    notQuiz         BIT,
 
     PRIMARY KEY (assignmentId, courseId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
