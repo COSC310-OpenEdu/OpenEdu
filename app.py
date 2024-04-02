@@ -435,12 +435,18 @@ def publishQuiz(courseId, courseName):
 @app.route("/student/<courseId>-<courseName>/dashboard", methods=["GET"])
 def courseDashboard(courseId, courseName):
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
+    
+    # Retrieve the list of files for the course
+    files = SelectFilesQuery.get_files_for_course(courseId)
+
     return render_template(
         "student/courseDashboard.html",
         courseId=courseId,
         courseName=courseName,
         courses=courses,
+        files=files
     )
+
 
 
 @app.route("/admin/approveRegistration")

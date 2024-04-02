@@ -24,6 +24,25 @@
     {{ super() }}
     <!-- Contains a list of files uploaded by the teacher -->
     <div class="container-body">
-
+        {% if files %}
+            <div class="uploaded-files">
+                <h3>Course Files</h3>
+                <ul>
+                    {% for file in files %}
+                        <li>
+                            <a href="{{ url_for('download_file', file_id=file.fileId) }}">
+                                <span class="material-symbols-outlined">download</span>
+                                {{ file.fileName }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="no-files-message">
+                There are no files to download! Please check back later.
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
+
