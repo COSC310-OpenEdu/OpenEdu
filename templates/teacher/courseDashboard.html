@@ -55,6 +55,12 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  .deleteButton{
+    padding: 12px;
+    font-size: 18px;
+    margin-left: 4em;
+  }
 </style>
 {% endblock %}
 
@@ -78,18 +84,27 @@ endblock %}
   </button>
   <h3>Uploaded Files</h3>
   <ul>
+    {% if files %}
+
+    <!-- Generates a list of courses, it is quite literally a list! -->
     {% for file in files %}
     <li>
       <a href="{{ url_for('download_file', file_id=file.fileId) }}">
         <span class="material-symbols-outlined">download</span>
         {{ file.fileName }}
       </a>
-      <button onclick="confirmDelete('{{ courseId }}', '{{ courseName }}', {{ file.fileId }})">X</button>
+      <!-- Creates a button to allow for the deletion of files. -->
+      <button class="material-symbols-outlined deleteButton" onclick="confirmDelete('{{ courseId }}', '{{ courseName }}', {{ file.fileId }})">close</button>
 
     </li>
     {% endfor %}
   </ul>
 </div>
+{% else %}
+    
+    There are no uploaded files! Please upload some!
+    
+{% endif %}
 
 <!-- File Upload Modal (this is the pop-up Window)-->
 <div id="uploadModal" class="modal">
