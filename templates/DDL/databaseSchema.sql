@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS Assignment (
     name            VARCHAR(200),
     fileLocator     VARCHAR(200),
     dueDate         DATETIME,
-    notQuiz         BIT,
+    quiz            BIT DEFAULT 1,
 
     PRIMARY KEY (assignmentId, courseId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
