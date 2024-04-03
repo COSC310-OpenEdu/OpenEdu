@@ -7,7 +7,8 @@
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">  
+    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css"> 
+    <script src="../../static/JS/dueDates.js"></script>
 {% endblock %}
 
 <!-- Set courses in navbar to active class-->
@@ -34,9 +35,9 @@
         {% for assignment in assignments %}
         <a href="{{url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe)}}">
         <div class="grade">
-            <div class = "gradeGroup">
+            <div class = "gradeGroup assign">
                 <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span></span><span></span>
+                    <span></span><span></span><span id="{{assignment[2]}}">Due: {{assignment[2]}}</span>
             </div>
         </div>
         </a>

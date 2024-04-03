@@ -346,6 +346,10 @@ def createCourse():
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
+    for assignment in assignments:
+        completion = CheckAssignmentCompletion.check((courseId, assignment[0], session['userId'],))
+        assignment = assignment + completion
+        
     return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
 
 @app.route("/student/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>", methods = ['GET'])
