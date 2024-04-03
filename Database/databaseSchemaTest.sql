@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS User (
     userId      INTEGER NOT NULL AUTO_INCREMENT,
     firstName   VARCHAR(20),
     lastName    VARCHAR(20),
-    email       VARCHAR(20),
+    email       VARCHAR(100),
     username    VARCHAR(20),
     password    VARCHAR(20),
     profilePicture BLOB,
@@ -67,10 +67,10 @@ CREATE TABLE IF NOT EXISTS Admin (
 CREATE TABLE IF NOT EXISTS Assignment (
     assignmentId    INTEGER NOT NULL AUTO_INCREMENT,
     courseId        INTEGER NOT NULL,
-    name            VARCHAR(20),
-    files           BLOB,
-    fileLocator     VARCHAR(20),
+    name            VARCHAR(200),
+    fileLocator     VARCHAR(200),
     dueDate         DATETIME,
+    notQuiz         BIT,
 
     PRIMARY KEY (assignmentId, courseId),
     FOREIGN KEY (courseId) REFERENCES Course(courseId)
@@ -209,6 +209,7 @@ INSERT INTO Solution (assignmentId, questionId, courseId,  studentId, studentAns
 -- Insert Grade
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,1,1,1,3,91.5, "Good");
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,2,1,1,3,45.5, "See me after class");
+INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,3,1,1,3,91.5, "Good");
 
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,1,1,2,3,91.5, "Excellent");
 INSERT INTO Grades (assignmentId, questionId, courseId,  studentId, instructorId, grade, comment) VALUES (1,2,1,2,3,100.0, "Very Good");

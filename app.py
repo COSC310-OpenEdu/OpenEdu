@@ -31,6 +31,9 @@ from src.Database.Query.SelectStudentQuery import SelectStudentQuery
 from src.Database.Update.UpdateGrade import UpdateGrade
 from src.Database.Update.AddQuizToDatabase import AddQuizToDatabase
 from src.Database.Update.AddCourseRequest import AddCourseRequest
+from src.Database.Update.ApproveCourseRequest import ApproveCourseRequest
+from src.Database.Update.DenyCourseRequest import DenyCourseRequest
+from src.Database.Query.GetCourseRequests import CourseRequestManager
 from src.Database.Update.UpdateEmail import UpdateEmail
 from src.Database.Update.UpdatePassword import UpdatePassword
 from src.Search.CourseSearch import CourseSearch
@@ -46,6 +49,7 @@ from src.Database.Update.DeleteGradesForAssignment import DeleteGradesForAssignm
 from src.Database.Update.DeleteAllSolutionsForAssignment import DeleteAllSolutionsForAssignment
 from src.Database.Query.SelectGradesForAssignment import SelectGradesForAssignment
 from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
+
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -220,10 +224,7 @@ def joinCourse(courseId):
 
 @app.route("/teacher/homepage", methods=["POST", "GET"])
 def teacherHome():
-    # temporarily getting a list of all courses
-    
     courses = SelectCourseQuery.query((session['userId'],))
-    
     return render_template("teacher/homepage.html", courses = courses)
 
 @app.route("/teacher/<courseId>-<courseName>/dashboard", methods = ['GET'])
@@ -243,6 +244,7 @@ def teacherCourseGrading(courseId, courseName):
     grades = SelectGradesForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
+    courses = SelectCourseQuery.query((session['userId'],))
 
     # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
     if len(grades) < len(solutions):
@@ -258,7 +260,7 @@ def teacherCourseGrading(courseId, courseName):
                     grades.append(0)
             
     
-    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions)
+    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
 
 @app.route("/updateGrade", methods = ['POST'])
 def updateGrade():
@@ -288,6 +290,7 @@ def studentCoursePeople(courseId, courseName):
 @app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods = ['POST', 'GET'])
 def publishQuiz(courseId, courseName):
     questionForm = request.form
+    AddQuizToDatabase.update(questionForm, courseId)
     courses = SelectCourseQuery.query((session['userId'],))
     return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName, courses=courses)
 
@@ -297,10 +300,21 @@ def courseDashboard(courseId,courseName):
     return render_template("student/courseDashboard.html", courseId=courseId, courseName=courseName, courses=courses)
 
 
-@app.route("/admin/approveRegistration")
+@app.route("/admin/approveRegistration", methods=['POST', 'GET'])
 def courseRegistration():
-    return render_template("admin/approveRegistration.html")
+    if request.method == 'GET':
+        course_requests = CourseRequestManager.get_course_requests()
+        return render_template("admin/approveRegistration.html", course_requests=course_requests)
+    else:
+        type = request.form['type']
+        
+        if type == 'approve':
+            ApproveCourseRequest.update((request.form['studentId'],request.form['courseId']))
 
+        if type == 'deny':
+            DenyCourseRequest.update((request.form['studentId'],request.form['courseId']))  
+        
+        return {}
 
 @app.route("/admin/createCourse", methods=["POST", "GET"])
 def createCourse():

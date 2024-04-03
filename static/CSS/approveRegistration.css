@@ -163,3 +163,7 @@ main {
     top: var(--slide);
   }
 }
+
+.courses {
+  overflow-y: scroll;
+}
