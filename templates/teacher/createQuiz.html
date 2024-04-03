@@ -32,7 +32,7 @@
                         </button>
                     </div>
                 </div>
-                <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+                <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
             </div>
             <!-- Secondary column containing list of links to each question added to form -->
                 <div class="secondary-container">
@@ -64,9 +64,9 @@
                 node.innerHTML = '';
                 node.insertAdjacentHTML("beforeend",
                 `<div class="primary-container" >
-                    <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+                    <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
                     <div class="form-header" style="justify-content: flex-start;">
-                        <input id="quizId" class="border-box" placeholder="Essay Name" name="quizId" required form="questionForm">
+                        <input id="quizId" class="border-box" placeholder="Essay Name" name="quizId" required form="questionForm" style="width:50%;">
                     </div>
                     <div class="form-header" style="justify-content: flex-start; flex: auto;">
                         <textarea style="height: 90%;" placeholder="Essay Prompt" class="border-box" id="questionText1" name="questionText1" rows="8" cols="100" required form="questionForm"></textarea>

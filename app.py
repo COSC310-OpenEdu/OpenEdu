@@ -197,7 +197,8 @@ def createQuiz(courseId, courseName):
         return render_template("teacher/createQuiz.html", courseId=courseId, courseName=courseName, courses=courses)
     if request.method == 'POST':
         questionForm = request.form
-        return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName)
+        AddQuizToDatabase.update(questionForm, courseId)
+        return redirect(url_for("teacherCourseAssignments", courseId=courseId, courseName=courseName))
     
 
 @app.route('/search', methods = ['POST', 'GET'])
@@ -286,13 +287,6 @@ def studentCoursePeople(courseId, courseName):
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
     
     return render_template("student/people.html", courseId=courseId, courseName=courseName, people=people, instructors=instructors, courses=courses)
-
-@app.route("/teacher/<courseId>-<courseName>/publishQuiz", methods = ['POST', 'GET'])
-def publishQuiz(courseId, courseName):
-    questionForm = request.form
-    AddQuizToDatabase.update(questionForm, courseId)
-    courses = SelectCourseQuery.query((session['userId'],))
-    return render_template("teacher/publishQuiz.html", questionForm=questionForm, courseId=courseId, courseName=courseName, courses=courses)
 
 @app.route("/student/<courseId>-<courseName>/dashboard", methods = ['GET'])
 def courseDashboard(courseId,courseName):
