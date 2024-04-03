@@ -125,7 +125,8 @@ select {
     flex-direction: column;
     flex: 0;
     width: fit-content;
-    height: 100%;
+    height: fit-content;
+    max-height: 100%;
     border: 1px #8C8C8C solid;
     border-radius: 8px;
     background-color: white;
@@ -145,6 +146,7 @@ input.gradeInput {
 
 .box-header {
     display: flex;
+    flex: 0;
     background-color: #B4CBC9;
     padding: 10px 40px 10px 40px;
     height: 40px;
