@@ -247,12 +247,14 @@ def teacherCourseGrading(courseId, courseName):
     courses = SelectCourseQuery.query((session['userId'],))
 
     # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
+    
     if len(grades) < len(solutions):
         for i in range(0, len(solutions)):
             matching = False
             for j in range(0, len(grades)):
-                if grades[i][0] == solutions[i][0] and grades[i][4] == solutions[i][2] and grades[i][5] == solutions[i][1]:
-                    matching = True
+                if grades[j] != 0:
+                    if grades[j][0] == solutions[i][0] and grades[j][4] == solutions[i][2] and grades[j][5] == solutions[i][1]:
+                        matching = True
             if matching == False:
                 try:
                     grades.insert(i, 0)
