@@ -2,13 +2,95 @@
 {% extends "teacher/teacher.html" %}
 
 <!-- Webpage title -->
-{% block title %}Create Quiz{% endblock %}
+{% block title %}Create Assessment{% endblock %}
 
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <script type="text/javascript">
         let questionNumber = 0;
+        function checkAssignmentType() {
+            if (document.getElementById("quiz").checked) {
+                questionNumber = 0;
+                var node = document.getElementById("assignment-box");
+                node.innerHTML = '';
+                //document.getElementById("questionList").innerHTML = '';
+                node.insertAdjacentHTML("beforeend",
+                `<div class="primary-container" >
+                <div class="form-header">
+                    <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required form="questionForm">
+                    <div class="form-header-right">
+                        <!-- Button for removing the most recently added question -->
+                        <button type="button" onclick="removeQuestion()">
+                            <span class="material-symbols-outlined">remove</span>
+                            <span>Remove Question</span>
+                        </button>
+                        <!-- Button for adding questions -->
+                        <button type="button" onclick="addQuestion()">
+                            <span class="material-symbols-outlined">add</span>
+                            <span>Add Question</span>
+                        </button>
+                    </div>
+                </div>
+                <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+            </div>
+            <!-- Secondary column containing list of links to each question added to form -->
+                <div class="secondary-container">
+                    <div class="box-header">Questions</div>
+
+                    <!-- Container body that is populated with links to each question -->
+                    <div class="list-body" id="questionList"></div>
+
+                    <div class="footer">
+                        <!-- Cancel button, redirects to assignments tab -->
+                        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}">
+                            <button>
+                                <span class="material-symbols-outlined">close</span>
+                                <span>Cancel</span>
+                            </button>
+                        </a>
+
+                        <!-- Button for publishing the assignment -->
+                        <button type="submit" form="questionForm">
+                            <span class="material-symbols-outlined">assignment_add</span>
+                            <span>Publish</span>
+                        </button>
+                    </div>
+                </div>`
+                );
+            } else if (document.getElementById("essay").checked) {
+                questionNumber = 0;
+                var node = document.getElementById("assignment-box");
+                node.innerHTML = '';
+                node.insertAdjacentHTML("beforeend",
+                `<div class="primary-container" >
+                    <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+                    <div class="form-header" style="justify-content: flex-start;">
+                        <input id="quizId" class="border-box" placeholder="Essay Name" name="quizId" required form="questionForm">
+                    </div>
+                    <div class="form-header" style="justify-content: flex-start; flex: auto;">
+                        <textarea style="height: 90%;" placeholder="Essay Prompt" class="border-box" id="questionText1" name="questionText1" rows="8" cols="100" required form="questionForm"></textarea>
+                    </div>
+                    <div class="form-header" style="justify-content: flex-start;">
+                        <!-- Cancel button, redirects to assignments tab -->
+                        <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}">
+                            <button>
+                                <span class="material-symbols-outlined">close</span>
+                                <span>Cancel</span>
+                            </button>
+                        </a>
+                        <!-- Button for publishing the assignment -->
+                        <button type="submit" form="questionForm">
+                            <span class="material-symbols-outlined">assignment_add</span>
+                            <span>Publish</span>
+                        </button>
+                    </div>
+                </div>
+                `
+                );         
+            }
+        }
+
         function addQuestion() {
             questionNumber++;
             document.getElementById("questionForm").insertAdjacentHTML("beforeend",
@@ -43,7 +125,25 @@
 {% block courses %}active{% endblock %}
 
 <!-- On page header displaying where you are in the course navigation -->
-{% block pageHeader %}{{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Quiz{% endblock %}
+{% block pageHeader %}
+<style> 
+    .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    </style>
+    <div>
+        {{ courseName[0:4] + " " + courseName[4:] }} / Assignments / Create Assessment
+    </div>
+    <div class="border-box" style="font-size: small;" onchange="checkAssignmentType()">
+        <p>Select the assignment type:</p>
+        <input type="radio" name="submissionType" id="essay" value="essay">
+        <label for="essay">Essay</label>
+        <input type="radio" name="submissionType" id="quiz" value="quiz">
+        <label for="quiz">Quiz</label>
+    </div>
+{% endblock %}
 
 <!-- Set assignments in header to active class-->
 {% block assignments %}active{% endblock %}
@@ -51,49 +151,6 @@
 <!-- This is where page content goes -->
 {% block content %}
     {{ super() }}
-    <!-- Contains quiz building section --> 
-    <div class="container-body" style="flex-direction: row; overflow: hidden;">
-        <!-- Primary column containing question builder -->
-        <div class="primary-container">
-            <div class="form-header">
-                <input id="quizId" class="border-box" placeholder="Quiz Name" name="quizId" required form="questionForm">
-                <div class="form-header-right">
-                    <!-- Button for removing the most recently added question -->
-                    <button type="button" onclick="removeQuestion()">
-                        <span class="material-symbols-outlined">remove</span>
-                        <span>Remove Question</span>
-                    </button>
-                    <!-- Button for adding questions -->
-                    <button type="button" onclick="addQuestion()">
-                        <span class="material-symbols-outlined">add</span>
-                        <span>Add Question</span>
-                    </button>
-                </div>
-            </div>
-            <form action="{{ url_for('publishQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
-        </div>
-        <!-- Secondary column containing list of links to each question added to form -->
-        <div class="secondary-container">
-            <div class="box-header">Questions</div>
-
-            <!-- Container body that is populated with links to each question -->
-            <div class="list-body" id="questionList"></div>
-
-            <div class="footer">
-                <!-- Cancel button, redirects to assignments tab -->
-                <a href="{{url_for('teacherCourseAssignments', courseId=courseId, courseName=courseName)}}">
-                    <button>
-                        <span class="material-symbols-outlined">close</span>
-                        <span>Cancel</span>
-                    </button>
-                </a>
-
-                <!-- Button for publishing the assignment -->
-                <button type="submit" form="questionForm">
-                    <span class="material-symbols-outlined">assignment_add</span>
-                    <span>Publish</span>
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Contains quiz/essay building section --> 
+    <div class="container-body" style="flex-direction: row; overflow: hidden;" id="assignment-box"></div>
 {% endblock %}

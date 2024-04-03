@@ -125,7 +125,7 @@ select {
     flex-direction: column;
     flex: 0;
     width: fit-content;
-    height: fit-content;
+    height: 100%;
     border: 1px #8C8C8C solid;
     border-radius: 8px;
     background-color: white;
@@ -137,7 +137,6 @@ select {
     border-radius: 1em;
     margin-bottom: 1em;
     padding: 0.5em;
-    
 }
 
 input.gradeInput {
@@ -160,8 +159,11 @@ input.gradeInput {
 .list-body {
     display: flex;
     flex-direction: column;
+    flex: auto;
+    height: 100%;
     padding: 10px 40px 10px 40px;
-    gap: 10px
+    gap: 10px;
+    overflow: auto;
 }
 
 .list-body a:hover {
@@ -172,7 +174,7 @@ input.gradeInput {
     display: flex;
     flex-direction: row;
     width: auto;
-    height: auto;
+    height: fit-content;
     align-items: center;
     justify-content: center;
     gap: 10px;
