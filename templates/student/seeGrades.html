@@ -26,6 +26,9 @@
                     avg += parseFloat(questions[j].id);
                 }
                 avg = avg/questions.length;
+                if (isNaN(avg)) {
+                    avg = 0; 
+                }
                 // Set the HTML of desired areas to be equal to the average
                 assignments[i].querySelector(" .total2").innerHTML = (Math.round(avg*100)/100) + "%";
                 assignments[i].querySelector(" .total").innerHTML = (Math.round(avg*100)/100) +"/100";

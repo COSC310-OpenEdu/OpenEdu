@@ -261,7 +261,7 @@ def teacherCourseGrading(courseId, courseName):
                 except:
                     grades.append(0)
             
-    
+    flash(questions)
     return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
 
 @app.route("/updateGrade", methods = ['POST'])
@@ -269,10 +269,10 @@ def updateGrade():
     form = request.form
     # If grade is already in database, update it. If not, insert it.
     if (form['insert'] == "1"):
-        AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade']))
+        AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade'],))
     else:
         UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
-    return jsonify(form)
+    return "DONE"
 
 @app.route("/teacher/<courseId>-<courseName>/people", methods = ['GET'])
 def teacherCoursePeople(courseId, courseName):
