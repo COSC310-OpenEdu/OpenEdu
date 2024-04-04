@@ -3,10 +3,16 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/form.css') }}">
+    
+    
     <script>
         // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
             
+            {% if error %}
+                alert('That user name already exists')
+            {% endif %}
+
             // Remove highlight from inputs when clicked on
             document.querySelector('select').addEventListener('click', function (e){
                 e.target.classList.remove('highlight');
@@ -145,5 +151,7 @@
                 <button type="submit" class="right">Sign Up</button> <br>
             </div>
         </div>
+
+        
     </form>
 {% endblock %}
