@@ -25,16 +25,10 @@
     <!-- Contains a list of assessments published and buttons for creating a quiz or assignment -->
     <div class="container-body">
         <div style="display: flex; flex-direction: row; gap: 36px;">
-            <a href="#">
+            <a href="{{ url_for('createQuiz', courseId=courseId, courseName=courseName) }}">
                 <button>
                     <span class="material-symbols-outlined">edit</span>
-                    <span>Create Assignment</span>
-                </button>
-            </a>
-            <a href="{{url_for('createQuiz', courseId=courseId, courseName=courseName)}}">
-                <button>
-                    <span class="material-symbols-outlined">edit</span>
-                    <span>Create Quiz</span>
+                    <span>Create an Essay or Quiz</span>
                 </button>
             </a>
         </div>
