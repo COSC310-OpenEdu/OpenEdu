@@ -60,14 +60,24 @@
                 
                 // Join button in course infomation
                 joinButton = document.createElement('button');
-                joinButton.innerHTML = 'Request to join';
                 joinButton.classList.add('join');
                 courseInfo.appendChild(joinButton);
-
+                
                 // Handle join course request
-                joinButton.addEventListener('click', function(){
-                    joinCourse(jsonData[i][0] + '');
-                });
+                if (jsonData[i][8] == 0) {
+                    // Course can be requested
+                    joinButton.innerHTML = 'Request to join';
+                    joinButton.addEventListener('click', function(){
+                        joinCourse(jsonData[i][0] + '');
+                    });
+                } else {
+                    // Course has already been requested
+                    joinButton.classList.add('requested');
+                    joinButton.innerHTML = 'Requested';
+                    joinButton.addEventListener('click', function(){
+                        alert('You have already request to join this course')
+                    })
+                }
 
                 // Toggle the visablity of the course information div
                 div.addEventListener('click', function(){
