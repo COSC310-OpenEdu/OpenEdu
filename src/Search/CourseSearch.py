@@ -1,4 +1,4 @@
-from src.Database.Query.SelectCourseQueryAll import SelectCourseQueryAll
+from src.Database.Query.SelectRequestableCourses import SelectRequestableCourses
 import json
 
 class CourseSearch():
@@ -7,8 +7,8 @@ class CourseSearch():
     # Returns a JSON formated list of the course list given a searchTerm
     #
     @classmethod
-    def search(cls, searchTerm):
-        courseData = SelectCourseQueryAll.queryAll((searchTerm,))
+    def search(cls, tuple):
+        courseData = SelectRequestableCourses.queryAll(tuple)
         
         return cls.jsonFormat(courseData)
         

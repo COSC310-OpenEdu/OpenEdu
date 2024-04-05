@@ -29,7 +29,12 @@
     float:right;
     padding: 0.75em;
     position: relative;
-    top: -0.75em;
+    top: -1em;
+}
+
+.requested {
+    pointer-events: none;
+    background-color: var(--redButton);
 }
 
 input {
