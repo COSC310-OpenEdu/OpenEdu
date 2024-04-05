@@ -56,6 +56,7 @@ from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 from src.Database.Update.DeleteCourseFile import DeleteCourseFile
+from src.Database.Update.DeleteAllQuestionsForAssignment import DeleteAllQuestionsForAssignment
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -347,7 +348,7 @@ def teacherCourseGrading(courseId, courseName):
                 except:
                     grades.append(0)
             
-    flash(questions)
+    
     return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
 
 @app.route("/updateGrade", methods=["POST"])
@@ -595,6 +596,7 @@ def deleteAssignment():
             assignmentId,
         )
     )
+    DeleteAllQuestionsForAssignment.update((courseId, assignmentId,))
     DeleteAssignment.update(
         (
             courseId,
