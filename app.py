@@ -461,10 +461,14 @@ def createCourse():
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    for assignment in assignments:
-        completion = CheckAssignmentCompletion.check((courseId, assignment[0], session['userId'],))
-        assignment = assignment + completion
-        
+    for i in range(0, len(assignments)):
+        completion = CheckAssignmentCompletion.check((courseId, assignments[i][0], session['userId'],))
+        if completion == False:
+            completion = (False,)
+        else:
+            completion = (True,)
+        assignments[i] = assignments[i] + completion
+    
     return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
 
 

@@ -24,6 +24,13 @@
 {% block content %}
     {{ super() }}
     <!-- Contains a list of assignments created by the teacher -->
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+               <script> alert("{{message}}"); </script>
+            {% endfor %}
+         {% endif %}
+      {% endwith %}
     <div class="main-container">
         <div class="gradesheader">
             <span></span>
@@ -37,7 +44,7 @@
         <div class="grade">
             <div class = "gradeGroup assign">
                 <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span></span><span id="{{assignment[2]}}">Due: {{assignment[2]}}</span>
+                    <span></span><span>{% if assignment[3] == true %} Submitted {% else %} Incomplete {% endif %}</span><span id="{{assignment[2]}}">Due: {{assignment[2]}}</span>
             </div>
         </div>
         </a>
