@@ -611,33 +611,14 @@ def deleteAssignment():
     "/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>",
     methods=["GET"],
 )
-def teacherAssignment(
-    courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName
-):
-    questions = SelectQuestionsForAssignment.queryAll(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
+def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
+    questions = SelectQuestionsForAssignment.queryAll((courseId,assignmentId,))
     completion = None
     grades = None
     # If clicked from grading tab, get the completion status and the grades from that submission
     if studentId != "False":
-        completion = CheckAssignmentCompletion.check(
-            (
-                courseId,
-                assignmentId,
-                studentId,
-            )
-        )
-        grades = SelectGradesForAssignment.queryAll(
-            (
-                courseId,
-                assignmentId,
-                studentId,
-            )
-        )
+        completion = CheckAssignmentCompletion.check((courseId,assignmentId,studentId,))
+        grades = SelectGradesForAssignment.queryAll((courseId,assignmentId,studentId,))
         # Make grades the same length as solutions as to not cause any errors
         if len(grades) < len(completion):
             for i in range(len(grades) - 1, len(completion)):
@@ -646,14 +627,7 @@ def teacherAssignment(
     # If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
     if completion == False:
         flash("This student has not submitted this assignment yet.")
-        return redirect(
-            url_for(
-                "teacherCourseGrading",
-                _anchor=str(assignmentId),
-                courseId=courseId,
-                courseName=courseName,
-            )
-        )
+        return redirect(url_for("teacherCourseGrading",_anchor=str(assignmentId),courseId=courseId,courseName=courseName,))
     else:
         return render_template(
             "teacher/teacherAssignment.html",
