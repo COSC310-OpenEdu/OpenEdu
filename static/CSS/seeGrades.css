@@ -168,3 +168,6 @@ input {
 }
 
 
+.grey {
+    background-color: var(--outlineColor);
+}
