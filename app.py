@@ -236,7 +236,7 @@ def search():
         return render_template("student/search.html", courses=courses)
     else:
         searchTerm = request.form["searchTerm"]
-        return CourseSearch.search(searchTerm)
+        return CourseSearch.search((searchTerm, session['userId']))
 
 
 @app.route("/Course/<courseId>/join", methods=["POST"])
