@@ -3,10 +3,16 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/form.css') }}">
+    
+    
     <script>
         // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
             
+            {% if error %}
+                alert('That user name already exists')
+            {% endif %}
+
             // Remove highlight from inputs when clicked on
             document.querySelector('select').addEventListener('click', function (e){
                 e.target.classList.remove('highlight');
@@ -70,11 +76,13 @@
                     username.classList.add('highlight');
                 }
 
-                // Check password
+                // Check password is not empty and both passwords match
                 let password = document.querySelector("#password")
-                if (password.value.trim() == '') {
+                let verifypassword = document.querySelector("#verifypassword")
+                if (password.value.trim() == '' || password.value.trim() != verifypassword.value.trim()) {
                     e.preventDefault();
                     password.classList.add('highlight');
+                    verifypassword.classList.add('highlight');
                 }
             });
 
@@ -136,6 +144,10 @@
             <label for="password">Password</label> <br>
             <input type="password" name="password" id="password" placeholder="Enter Password"> <br>
         </div>
+        
+        <div class="FormLine">
+            <input type="password" name="verifypassword" id="verifypassword" placeholder="Verify Password"> <br>
+        </div>
 
         <div class="FormLine buttons FormFooter">
             <div class="left">
@@ -145,5 +157,7 @@
                 <button type="submit" class="right">Sign Up</button> <br>
             </div>
         </div>
+
+        
     </form>
 {% endblock %}
