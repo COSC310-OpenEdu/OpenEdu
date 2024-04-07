@@ -45,7 +45,7 @@
                         avg = 0; 
                     }
                     let questionId = questions[i].id.split("_")[1];
-                    totals[questionId] += avg/$("#"+questionId+" .gradeGroup2").length;
+                    totals[questionId] += avg/$("#"+questionId+" .avg").length;
                     
                     avg = Math.round(avg*100)/100;
                     // Adds average to desired element on page
@@ -120,62 +120,101 @@
         <div class="grades">
             <!-- For every assignment in course, create a new dropdown list-->
             {% for assignment in assignments %}
-            <div class="grade g"id="{{assignment[0]}}">
-                <div class = "gradeGroup">
-                    <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span class="total2"></span><span class="total"></span>
-                </div>
+                {% if assignment[3] == true %} <!-- Check if assignment is a quiz or essay -->
+                <div class="grade g"id="{{assignment[0]}}">
+                    <div class = "gradeGroup">
+                        <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})   Type: Quiz</span>
+                        <span></span><span class="total2"></span><span class="total"></span>
+                    </div>
                 <!-- For every question in assignment, create a drop down list containing each student-->
                 {% for question in questions %}
                     {% if (question[2] == assignment[0]) %}
                         <div class="grade">
-                        <div class="gradeItem gradeGroup2">     
-                            <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
-                            <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}_{{assignment[0]}}"></span>
+                            <div class="gradeItem gradeGroup2">     
+                                <span>&#9660; Question {{ question[0] }} ({{ question[1] }})</span>
+                                <span></span><span class="avg2"></span><span class="avg" id="{{question[0]}}_{{assignment[0]}}"></span>
+                            </div>
+                            <!-- For every student, display their results to the question with an input box to update their grade -->
+                            {% for i in range(0, solutions|length) %}
+                                {% set noGrades = false %}<!-- Variable that determines if grade is present in database -->
+                                <!-- If grade exists, make sure it's the right grade for the right question, then display it -->
+                                {% if grades[i] != 0 %}
+                                    {% if (grades[i][0] == question[0] and grades[i][5] == assignment[0])%}
+                                        <div class="gradeItem2">     
+                                            <span>{{grades[i][1]}} {{grades[i][2]}}</span>
+                                            <span class="material-symbols-outlined">
+                                                <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=grades[i][1], lastName=grades[i][2], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=grades[i][4])}}">
+                                                link</a></span>
+                                            
+                                            <input id="{{question[0]}}_{{assignment[0]}}_{{grades[i][4]}}" class="{{question[0]}}_{{assignment[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
+                                        </div>
+                                    {% else %}
+                                        {% set noGrade = true %}
+                                    {% endif %}
+                                {% else %}
+                                    {% set noGrade = true %}
+                                {% endif %}
+                                <!-- If solutions exists, make sure it's the right solution for the right question, and that there isn't an already existing grade value -->
+                                {% if solutions %}
+                                    {% if (solutions[i][0] == question[0] and solutions[i][1] == assignment[0] and noGrade == true)%}
+                                        <div class="gradeItem2">     
+                                            <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
+                                            <span class="material-symbols-outlined">
+                                                <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=solutions[i][3], lastName=solutions[i][4], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
+                                                link</a></span>
+                                            
+                                            <input id="{{solutions[i][0]}}_{{assignment[0]}}_{{solutions[i][2]}}" class="{{question[0]}}_{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+                {% else %}
+                    <!-- If assignment is an essay, do this: -->
+                    <div class="grade"id="{{assignment[0]}}">
+                        <div class = "gradeGroup">
+                            <span class="gradeTitle">&#9660; Assignment {{ assignment[0] }} ({{ assignment[1] }})   Type: Essay</span>
+                            <span></span><span class="avg2"></span><span class="avg" id="1_{{assignment[0]}}"></span>
+                        </div>
+
                         <!-- For every student, display their results to the question with an input box to update their grade -->
                         {% for i in range(0, solutions|length) %}
-                        {% set noGrades = false %}<!-- Variable that determines if grade is present in database -->
-                        <!-- If grade exists, make sure it's the right grade for the right question, then display it -->
-                        {% if grades[i] != 0 %}
-                            {% if (grades[i][0] == question[0] and grades[i][5] == assignment[0])%}
-                                <div class="gradeItem2">     
-                                    <span>{{grades[i][1]}} {{grades[i][2]}}</span>
-                                    <span class="material-symbols-outlined">
-                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=grades[i][1], lastName=grades[i][2], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=grades[i][4])}}">
-                                        link</a></span>
-                                    
-                                    <input id="{{question[0]}}_{{assignment[0]}}_{{grades[i][4]}}" class="{{question[0]}}_{{assignment[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
-                                </div>
+                            {% set noGrades = false %}<!-- Variable that determines if grade is present in database -->
+                            <!-- If grade exists, make sure it's the right grade for the right question, then display it -->
+                            {% if grades[i] != 0 %}
+                                {% if (grades[i][5] == assignment[0])%}
+                                    <div class="gradeItem2">     
+                                        <span>{{grades[i][1]}} {{grades[i][2]}}</span>
+                                        <span class="material-symbols-outlined">
+                                            <a href="">
+                                            link</a></span>
+                                        <input id="{{grades[i][0]}}_{{assignment[0]}}_{{grades[i][4]}}" class="{{grades[i][0]}}_{{assignment[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
+                                    </div>
+                                {% else %}
+                                    {% set noGrade = true %}
+                                {% endif %}
                             {% else %}
-                            {% set noGrade = true %}
-                            {% endif %}
-                            {% else %}
-                            {% set noGrade = true %}
+                                {% set noGrade = true %}
                             {% endif %}
                             <!-- If solutions exists, make sure it's the right solution for the right question, and that there isn't an already existing grade value -->
                             {% if solutions %}
-                            {% if (solutions[i][0] == question[0] and solutions[i][1] == assignment[0] and noGrade == true)%}
-                                <div class="gradeItem2">     
-                                    <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
-                                    <span class="material-symbols-outlined">
-                                        <a href="{{url_for('teacherAssignment', _anchor=question[0]|string, firstName=solutions[i][3], lastName=solutions[i][4], courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe, studentId=solutions[i][2])}}">
-                                        link</a></span>
-                                    
-                                    <input id="{{solutions[i][0]}}_{{assignment[0]}}_{{solutions[i][2]}}" class="{{question[0]}}{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
-                                </div>
+                                {% if (solutions[i][1] == assignment[0] and noGrade == true)%}
+                                    <div class="gradeItem2">     
+                                        <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
+                                        <span class="material-symbols-outlined">
+                                            <a href="">
+                                            link</a></span>        
+                                        <input id="{{solutions[i][0]}}_{{assignment[0]}}_{{solutions[i][2]}}" class="{{solutions[i][0]}}_{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
+                                    </div>
+                                {% endif %}
                             {% endif %}
-                            {% endif %}
-                        
                         {% endfor %}
                     </div>
-                    {% endif %}
-                {% endfor %}
-                
-            </div>
+                {% endif %}
             {% endfor %}
-            
-            
             </div>
         </div>
     </div>

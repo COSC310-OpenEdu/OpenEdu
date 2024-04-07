@@ -56,6 +56,7 @@ from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 from src.Database.Update.DeleteCourseFile import DeleteCourseFile
+from src.Database.Update.DeleteAllQuestionsForAssignment import DeleteAllQuestionsForAssignment
 import mysql
 
 currentUser = None  # Start with no user logged in
@@ -353,7 +354,7 @@ def teacherCourseGrading(courseId, courseName):
                 except:
                     grades.append(0)
             
-    flash(questions)
+    
     return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
 
 @app.route("/updateGrade", methods=["POST"])
@@ -467,13 +468,15 @@ def createCourse():
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    return render_template(
-        "student/seeAssignments.html",
-        courseId=courseId,
-        assignments=assignments,
-        courseName=courseName,
-        courses=courses,
-    )
+    for i in range(0, len(assignments)):
+        completion = CheckAssignmentCompletion.check((courseId, assignments[i][0], session['userId'],))
+        if completion == False:
+            completion = (False,)
+        else:
+            completion = (True,)
+        assignments[i] = assignments[i] + completion
+    
+    return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
 
 
 @app.route(
@@ -599,6 +602,7 @@ def deleteAssignment():
             assignmentId,
         )
     )
+    DeleteAllQuestionsForAssignment.update((courseId, assignmentId,))
     DeleteAssignment.update(
         (
             courseId,
@@ -615,33 +619,14 @@ def deleteAssignment():
     "/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>",
     methods=["GET"],
 )
-def teacherAssignment(
-    courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName
-):
-    questions = SelectQuestionsForAssignment.queryAll(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
+def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
+    questions = SelectQuestionsForAssignment.queryAll((courseId,assignmentId,))
     completion = None
     grades = None
     # If clicked from grading tab, get the completion status and the grades from that submission
     if studentId != "False":
-        completion = CheckAssignmentCompletion.check(
-            (
-                courseId,
-                assignmentId,
-                studentId,
-            )
-        )
-        grades = SelectGradesForAssignment.queryAll(
-            (
-                courseId,
-                assignmentId,
-                studentId,
-            )
-        )
+        completion = CheckAssignmentCompletion.check((courseId,assignmentId,studentId,))
+        grades = SelectGradesForAssignment.queryAll((courseId,assignmentId,studentId,))
         # Make grades the same length as solutions as to not cause any errors
         if len(grades) < len(completion):
             for i in range(len(grades) - 1, len(completion)):
@@ -650,14 +635,7 @@ def teacherAssignment(
     # If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
     if completion == False:
         flash("This student has not submitted this assignment yet.")
-        return redirect(
-            url_for(
-                "teacherCourseGrading",
-                _anchor=str(assignmentId),
-                courseId=courseId,
-                courseName=courseName,
-            )
-        )
+        return redirect(url_for("teacherCourseGrading",_anchor=str(assignmentId),courseId=courseId,courseName=courseName,))
     else:
         return render_template(
             "teacher/teacherAssignment.html",

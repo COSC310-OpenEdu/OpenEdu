@@ -7,7 +7,8 @@
 <!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css">  
+    <link rel="stylesheet" type="text/css" href = "../../static/CSS/seeGrades.css"> 
+    <script src="../../static/JS/dueDates.js"></script>
 {% endblock %}
 
 <!-- Set courses in navbar to active class-->
@@ -23,6 +24,7 @@
 {% block content %}
     {{ super() }}
     <!-- Contains a list of assignments created by the teacher -->
+    
     <div class="main-container">
         <div class="gradesheader">
             <span></span>
@@ -30,18 +32,20 @@
         </div> 
         
         <!-- Display  every assignment in course-->
-        <div class="grades">
-        {% for assignment in assignments %}
-        <a href="{{url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe)}}">
-        <div class="grade">
-            <div class = "gradeGroup">
-                <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
-                    <span></span><span></span><span></span>
-            </div>
-        </div>
-        </a>
-        {% endfor %}
+        <div class="grades" id="assignmentList">
+            {% for assignment in assignments %}
+                <a href="{{url_for('studentAssignment', courseId=courseId, courseName=courseName, assignmentId=assignment[0], assignmentName=assignment[1]|safe)}}">
+                    <div class="grade">
+                        <div class = "gradeGroup assign">
+                            <span class="gradeTitle">Assignment {{ assignment[0] }} ({{ assignment[1] }})</span>
+                                <span>{% if assignment[4] == true %} Submitted {% else %} Incomplete {% endif %}</span><span></span><span id="{{assignment[2]}}">Due: {{assignment[2]}}</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
         
         </div>
+        
     </div>
+    
 {% endblock %}

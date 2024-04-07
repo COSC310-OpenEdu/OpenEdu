@@ -115,7 +115,7 @@ select {
 
 .question textarea {
     resize: none;
-    width: 90em;
+    width: 70em;
     height:5em;
 }
 
@@ -134,9 +134,11 @@ select {
 
 .answer {
     border: 1px #8C8C8C solid;
-    width:fit-content;
+    max-width:fit-content;
+    word-break: break-word;
     border-radius: 1em;
     margin-bottom: 1em;
+    white-space: normal;
     padding: 0.5em;
 }
 

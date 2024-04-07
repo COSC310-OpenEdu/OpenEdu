@@ -7,7 +7,7 @@ class SelectAssignmentsForCourse(DatabaseQueryAll):
     def queryAll(cls, dataTuple) -> tuple:
        
         cursor = DatabaseManager.getDatabaseCursor()
-        sql = """SELECT assignmentId, name FROM Assignment
+        sql = """SELECT assignmentId, name, dueDate, quiz FROM Assignment
                  WHERE courseId = %s"""
         cursor.execute(sql, (dataTuple))
         assignments = cursor.fetchall()

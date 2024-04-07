@@ -8,6 +8,15 @@
 {% block head %}
     {{ super() }}  
     <script> console.log("{{completion}}")</script>
+    <script>
+        // function for displaying the remaining characters
+        var max = 1000;
+        function remainingChars(textbox) {
+            let currentLength = textbox.value.length;
+            let remaining = textbox.parentNode.querySelector(".remaining");
+            remaining.innerHTML = max - currentLength;
+        }
+    </script>
 {% endblock %}
 
 <!-- Set courses in navbar to active class-->
@@ -54,7 +63,8 @@
                     <div class="question">
                         <!-- If assignment is already complete, show answers. If not, show text box -->
                         {% if completion == false %}
-                        <textarea placeholder="Answer" class="border-box" id="" name="{{question[0]}}" required></textarea>
+                        <textarea maxlength="1000" onkeyup="remainingChars(this);" placeholder="Answer" class="border-box" id="" name="{{question[0]}}" required></textarea>
+                        <p class="remaining">1000</p>
                         {% else %}
                         {% for answer in completion %}
                         {% if answer[0] == question[0] %}
