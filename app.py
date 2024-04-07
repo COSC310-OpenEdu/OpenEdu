@@ -56,7 +56,11 @@ from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 from src.Database.Update.DeleteCourseFile import DeleteCourseFile
+<<<<<<< HEAD
 from src.Database.Update.DeleteAllQuestionsForAssignment import DeleteAllQuestionsForAssignment
+=======
+import mysql
+>>>>>>> 03e273b3864d88ea7186c595a03fa991bc458b36
 
 currentUser = None  # Start with no user logged in
 app = Flask(__name__)
@@ -134,16 +138,21 @@ def createAccount():
     else:  # Post request
         # Update Database with user inputted information
         form = request.form
-        CreateAccount.update(
-            (
-                form["accountType"],
-                form["fname"],
-                form["lname"],
-                form["email"],
-                form["password"],
-                form["uname"],
+        try:
+            CreateAccount.update(
+                (
+                    form["accountType"],
+                    form["fname"],
+                    form["lname"],
+                    form["email"],
+                    form["password"],
+                    form["uname"],
+                )
             )
-        )
+        except mysql.connector.errors.IntegrityError:
+            return render_template("accountCreation.html", error="Username")
+           
+            
         # Forward to the login page
 
         return redirect(url_for("login"))

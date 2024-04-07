@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS User (
     profilePicture BLOB,
     profilePictureLocator VARCHAR(20),
 
+    UNIQUE (username),
     PRIMARY KEY (userId)
 );
 
