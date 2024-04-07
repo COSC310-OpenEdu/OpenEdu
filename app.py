@@ -230,9 +230,12 @@ def createQuiz(courseId, courseName):
             courseName=courseName,
             courses=courses,
         )
-    if request.method == "POST":
+    elif request.method == "POST":
         questionForm = request.form
-        AddQuizToDatabase.update(questionForm, courseId)
+        # Retrieve the 'isQuiz' value from form data
+        # Defaults to 0 (essay) if not found
+        is_quiz = questionForm.get('isQuiz', '0')
+        AddQuizToDatabase.update(questionForm, courseId, is_quiz)
         return redirect(url_for("teacherCourseAssignments", courseId=courseId, courseName=courseName))
     
 

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 class AddQuizToDatabase(DatabaseUpdate):
     @classmethod 
-    def update(cls, form, courseId):
+    def update(cls, form, courseId, is_quiz):
         #This method adds a quiz to the database. It stores the quiz name in the
         #assignment table with a duedate. Then each question contained in the quiz
         #is individually added to the quiz database
@@ -15,10 +15,13 @@ class AddQuizToDatabase(DatabaseUpdate):
 
         #Add QuizName to Database
         cursor = DatabaseManager.getDatabaseCursor()
-        statement = "INSERT INTO Assignment(courseId, name, dueDate) VALUES (%s, %s, %s)"
+        # SQL query now includes the 'quiz' column to indicate quiz or essay
+        statement = "INSERT INTO Assignment(courseId, name, dueDate, quiz) VALUES (%s, %s, %s, %s)"
         #one week from now
         dueDate = datetime.now() + timedelta(weeks=1)
-        quizInfo = (courseId, quizname, dueDate)
+        # I've added is_quiz to indicate if it's a quiz or essay
+        is_quiz_int = int(is_quiz)
+        quizInfo = (courseId, quizname, dueDate, is_quiz_int)
         cursor.execute(statement, quizInfo)
 
         DatabaseManager.commit()
