@@ -5,7 +5,7 @@ import mysql
 class DenyCourseRequest(DatabaseUpdate):
     
     #
-    #   Removes a course request for a given student
+    #   Denies a course request for a given user
     #   If a request already exisits do nothing
     #   Input: dataTuple = (studentId, courseId)
     #                    = The student and course being approved
@@ -14,7 +14,7 @@ class DenyCourseRequest(DatabaseUpdate):
     @classmethod
     def update(cls, dataTuple):
         
-        sql = "DELETE FROM CourseRequests WHERE studentId = %s AND courseId = %s"
+        sql = "Update CourseRequests Set denied = 1 WHERE studentId = %s AND courseId = %s"
         
         cursor = DatabaseManager.getDatabaseCursor()
         
