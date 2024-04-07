@@ -16,12 +16,12 @@ class SelectRequestableCourses(DatabaseQueryAll):
         
         searchTerm = dataTuple[0];
         if (searchTerm == None): 
-            sql = "SELECT UNIQUE C.courseId, C.name, C.description, C.credits, C.session, C.term, C.startTime, C.endTime,(SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s) AS Requested FROM Course AS C WHERE C.courseId NOT IN (SELECT courseId FROM Attend WHERE studentId = %s)"
-            cursor.execute(sql, (studentId, studentId))
+            sql = "SELECT UNIQUE C.courseId, C.name, C.description, C.credits, C.session, C.term, C.startTime, C.endTime,(SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s) AS Requested, (SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s AND CR.denied = 1) AS Denied FROM Course AS C WHERE C.courseId NOT IN (SELECT courseId FROM Attend WHERE studentId = %s)"
+            cursor.execute(sql, (studentId, studentId, studentId))
         else:
             searchTerm =  '%' + searchTerm + '%'
-            sql = "SELECT UNIQUE C.courseId, C.name, C.description, C.credits, C.session, C.term, C.startTime, C.endTime,(SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s) AS Requested FROM Course AS C WHERE C.courseId NOT IN (SELECT courseId FROM Attend WHERE studentId = %s) AND (C.name LIKE %s OR C.description LIKE %s);"
-            cursor.execute(sql, (studentId, studentId, searchTerm, searchTerm))
+            sql = "SELECT UNIQUE C.courseId, C.name, C.description, C.credits, C.session, C.term, C.startTime, C.endTime,(SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s) AS Requested, (SELECT COUNT(courseId) FROM CourseRequests AS CR WHERE CR.courseId = C.courseId AND CR.studentId = %s AND CR.denied = 1) AS Denied  FROM Course AS C WHERE C.courseId NOT IN (SELECT courseId FROM Attend WHERE studentId = %s) AND (C.name LIKE %s OR C.description LIKE %s);"
+            cursor.execute(sql, (studentId, studentId, studentId, searchTerm, searchTerm))
         
         courseData = cursor.fetchall();
         

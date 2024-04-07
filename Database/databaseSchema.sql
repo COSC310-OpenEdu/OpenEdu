@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS Attend (
 CREATE TABLE IF NOT EXISTS CourseRequests (
     studentId   INTEGER NOT NULL,
     courseId    INTEGER NOT NULL,
+    denied      BIT DEFAULT 0,
 
     PRIMARY KEY (studentId, courseId),
     FOREIGN KEY (studentId) REFERENCES Student(userId),

@@ -64,21 +64,29 @@
                 courseInfo.appendChild(joinButton);
                 
                 // Handle join course request
-                if (jsonData[i][8] == 0) {
-                    // Course can be requested
-                    joinButton.innerHTML = 'Request to join';
-                    joinButton.addEventListener('click', function(){
-                        joinCourse(jsonData[i][0] + '');
-                    });
-                } else {
-                    // Course has already been requested
+                if (jsonData[i][9] == 1) {
+                    // Course Request denied
+                    joinButton.innerHTML = 'Request Denied';
                     joinButton.classList.add('requested');
-                    joinButton.innerHTML = 'Requested';
                     joinButton.addEventListener('click', function(){
-                        alert('You have already request to join this course')
+                        alert('Your request has been dienied')
                     })
+                } else {
+                     if (jsonData[i][8] == 0) {
+                        // Course can be requested
+                        joinButton.innerHTML = 'Request to join';
+                        joinButton.addEventListener('click', function(){
+                            joinCourse(jsonData[i][0] + '');
+                        });
+                    } else {
+                        // Course has already been requested
+                        joinButton.classList.add('requested');
+                        joinButton.innerHTML = 'Requested';
+                        joinButton.addEventListener('click', function(){
+                            alert('You have already request to join this course')
+                        })
+                    }
                 }
-
                 // Toggle the visablity of the course information div
                 div.addEventListener('click', function(){
                     toggleHidden('courseInfo-' + i);
