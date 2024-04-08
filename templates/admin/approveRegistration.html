@@ -74,7 +74,7 @@
 {% block pageHeader %}Approve Registration{% endblock %}
 {% block navTop %}
   <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-  <a href="#" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
+  <a href="{{ url_for('updateAccount') }}" id="account"><span class="material-symbols-outlined">account_circle</span>Account</a>
   <a href="#" id="home" class="active"><span class="material-symbols-outlined">home</span>Home</a>
 {% endblock %}
 {% block navBottom %}

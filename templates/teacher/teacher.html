@@ -13,7 +13,7 @@
     <a href="{{url_for('teacherHome')}}" id="logo">
         <span class="material-symbols-outlined size-36">school</span>
     </a>
-    <a href="#" id="account" class="{% block account %}{% endblock %}">
+    <a href="{{ url_for('updateAccount') }}" id="account" class="{% block account %}{% endblock %}">
         <span class="material-symbols-outlined">account_circle</span>
         Account
     </a>
