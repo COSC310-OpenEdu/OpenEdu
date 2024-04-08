@@ -57,6 +57,7 @@ from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 from src.Database.Update.DeleteCourseFile import DeleteCourseFile
 from src.Database.Update.DeleteAllQuestionsForAssignment import DeleteAllQuestionsForAssignment
+from src.Database.Query.GetEssayLocation import GetEssayLocation
 import mysql
 
 currentUser = None  # Start with no user logged in
@@ -414,6 +415,18 @@ def courseDashboard(courseId,courseName):
         files=files
     )
 
+@app.route("/student/essay/<int:courseId>-<int:assignmentId>-<int:studentId>")
+def downloadEssay(courseId, assignementId, studentId):
+    file_info = GetEssayLocation.query((courseId, assignementId, studentId))
+    file_info = file_info[0]
+    
+    if file_info:
+        file_path = file_info['fileLocator']
+        directory = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        return "File not found", 404
 
 
 @app.route("/admin/approveRegistration", methods=['POST', 'GET'])
