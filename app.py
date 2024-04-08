@@ -155,10 +155,10 @@ def createAccount():
         return redirect(url_for("login"))
 
 
-@app.route("/student/updateAccount", methods=["GET", "POST"])
+@app.route("/account/update", methods=["GET", "POST"])
 def updateAccount():
     if request.method == "GET":
-        return render_template("student/updateAccount.html")
+        return render_template("updateAccount.html")
     else:
         requestType = request.form["type"]
         # Password update request
