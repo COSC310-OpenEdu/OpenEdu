@@ -3,7 +3,7 @@ from src.Database.DatabaseManager import DatabaseManager
 class CourseRequestManager:
     
     #
-    #   Returns course requests and information about people that are making the requests 
+    #   Returns course requests and information about people that are making the requests that are not denied
     #   Input:  N/A
     #   Output: A list of course requests
     #
@@ -18,6 +18,7 @@ class CourseRequestManager:
                 JOIN Course c ON cr.courseId = c.courseId
                 JOIN User u ON cr.studentId = u.userId
                 JOIN Student s ON u.userId = s.userId
+                WHERE cr.denied = false
                 ORDER BY c.session, c.courseId, u.lastName, u.firstName
             """)
             requests = cursor.fetchall()
