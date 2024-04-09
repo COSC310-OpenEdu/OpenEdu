@@ -35,13 +35,16 @@
 <!-- Inherits the secondary header for courses -->
 {{ super() }}
 <!-- Contains quiz section -->
-<div class="container-body" style="flex-direction: row; overflow: hidden">
   <!-- Check if the assignment is an essay -->
   {% if is_quiz == 0 %}
+  <div class="container-body">
    <!-- For Essay -->
+    <div class="border-box" style="background-color: white;">
    <h2>Essay Prompt</h2>
    
    <p>{{ essayPrompt }}</p> <!-- Display the essay prompt -->
+    </div>
+    <div class="border-box" style="background-color: white;">
    <form action="{{ url_for('submitStudentEssay', courseId=courseId, assignmentId=assignmentId) }}" method="post" enctype="multipart/form-data">
      <input type="hidden" name="courseName" value="{{ courseName }}" />
      <input type="hidden" name="assignmentName" value="{{ assignmentName }}" />
@@ -49,7 +52,10 @@
      <input type="file" name="essay_file" id="essay_file" required />
      <button type="submit">Submit Essay</button>
    </form>
+  </div>
+  </div>
   {% else %}
+  <div class="container-body" style="flex-direction: row; overflow: hidden">
   <!-- Primary column containing question builder -->
   <div class="primary-container">
     {% with messages = get_flashed_messages() %} {% if messages %} {% for
@@ -137,5 +143,6 @@
       {% endif %} {% endif %}
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
