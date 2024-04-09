@@ -1,83 +1,186 @@
-{% extends "base.html" %}
+<!-- Extend common student navbar from student.tmpl -->
+{% extends "student/student.html" %}
+
+<!-- Webpage title -->
 {% block title %}Update Account{% endblock %}
+
+<!-- Inherits stylesheets from base.html -->
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='CSS/form.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
+        // Adds the class highlight to the given element
+        function addHighlight(element) {
+            element.classList.add('highlight')
+        }
+
+        // Removes the class highlight from the given element
+        function removeHighlight(element) {
+            element.classList.remove('highlight')
+        }
+
+        // Runs Ajax to load students information like name and email for the currently logged in user
+        function loadPageData() {
+            $.post("{{ url_for('studentInfo') }}")
+                .done(function(data) {
+                    // Receive the student infromation for the given user from the server
+                    studentInfo = JSON.parse(data);
+
+                    displayName(studentInfo['firstName'], studentInfo['lastName']);
+                    displayEmail(studentInfo['email']);
+                });
+        }
+
+        // Sets the display of the name
+        function displayName(firstName, lastName) {
+            document.getElementById('fullName').innerHTML = firstName + " " + lastName;
+        }
+
+        // Sets the display of the email
+        function displayEmail(email) {
+            document.getElementById('curEmail').innerHTML = email;
+        }
+
         // Run once document is loaded
         document.addEventListener('DOMContentLoaded', function (){
-            
-            document.querySelector('#password').addEventListener('click', function (e){
-                e.target.classList.remove('highlight');
+            loadPageData();
+
+            document.querySelector('#curPassword').addEventListener('click', function (e){
+                removeHighlight(e.target);
             });
-            document.querySelector('#repassword').addEventListener('click', function (e){
-                e.target.classList.remove('highlight');
+            document.querySelector('#newPassword').addEventListener('click', function (e){
+                removeHighlight(e.target);
+            });
+            document.querySelector('#renewPassword').addEventListener('click', function (e){
+                removeHighlight(e.target);
             });
 
-            // Verify form inputs are submitted properly
+            // Verify form inputs and submit update requests to the server
             document.querySelector('form').addEventListener('submit', function (e){
-
-                // Check password
-                let password = document.querySelector("#password")
-                let repassword = document.querySelector("#repassword")
-
-                if (password.value != repassword.value && password.value.trim != '') {
-                    e.preventDefault();
-                    password.classList.add('highlight');
-                    repassword.classList.add('highlight');
-                }
                 e.preventDefault();
+                //
+                // Check for password update request
+                //
+                let curPassword = document.querySelector("#curPassword");
+                let newPassword = document.querySelector("#newPassword");
+                let renewPassword = document.querySelector("#renewPassword");
+
+                // If curPassword if empty then the user does not want to change their password             console.log(curPassword.value.trim() == '')
+                if (curPassword.value.trim() != '') {
+                    // Check if passwords match and aren't empty
+                    if (newPassword.value.trim() != renewPassword.value.trim() || newPassword.value.trim() == '') {
+                        addHighlight(curPassword);
+                        addHighlight(newPassword);
+                        addHighlight(renewPassword);
+                        alert('The new passwords must not be empty and must match');
+                    } else {
+                        // Create a request to the server to update password
+                        data = {
+                            'type': 'password',
+                            'old': curPassword.value,
+                            'new': newPassword.value
+                        };
+    
+                        $.post("{{ url_for('updateAccount') }}", data)
+                            .done(function () {
+                                loadPageData();
+                                alert('Your password has been updated')
+                            })
+                            .fail(function() {
+                                alert('The old password is invalid.');
+                            });
+                    }
+
+                    
+                    
+                }
+
+                //
+                // Check for email update request
+                //
+                let email = document.getElementById('email');
+
+                // If the email is empty user does not want to update the email
+                if (email.value.trim() != '') {
+                    // Check formatting for the email
+                    let re = /^[a-zA-Z1-9.]+@[a-zA-Z1-9.]+.[a-zA-Z1-9]+/; // Regex for email
+                    if (!email.value.trim().match(re)){
+                        addHighlight(email);
+                        alert('The email is not properly formatted');
+                    } else {
+                        // Create a request to the server to update the email
+                        data = {
+                            'type': 'email',
+                            'email': email.value.trim(),
+                        };
+    
+                        $.post("{{ url_for('updateAccount') }}", data)
+                            .done(function () {
+                                loadPageData();
+                                alert('Your email has been updated');
+                            });
+                    } 
+                }    
             });
+
+            // Prevent the form from being submitted and redirect the user to the student dashboard
+            document.getElementById('Cancel').addEventListener('click', function(e){
+                e.preventDefault();
+                window.location.replace("/");
+            })
         });
     </script>
 {% endblock %}
-{% block pageHeader %}Update your OpenEdu Account{% endblock %}
-{% block navTop %}
-<div class="flex-container">
-    <!-- Navigation bar -->
-    <!-- Left Column -->
-    <a href="#" id="logo"><span class="material-symbols-outlined size-36">school</span></a>
-    <a href="#" id="account" class="active"><span class="material-symbols-outlined">account_circle</span>Account</a>
-    <a href="{{ url_for('home') }}" id="home"><span class="material-symbols-outlined">home</span>Home</a>
-    <a href="#" id="courses"><span class="material-symbols-outlined">library_books</span>Courses</a>
-    <a href="#" id="{{ url_for('search')}}"><span class="material-symbols-outlined">search</span>Search</a>
-{% endblock %}
-{% block navBottom %}
-    <a href="{{ url_for('logout') }}" id="log"><span class="material-symbols-outlined">logout</span>Logout</a>
-{% endblock %}
+
+<!-- Set account in navbar to active class-->
+{% block account %}active{% endblock %}
+
+<!-- On page header displaying where you are in the navigation -->
+{% block pageHeader %}Update Account{% endblock %}
+
+<!-- This is where page content goes -->
 {% block content %}
     <!-- Main body of page -->
-    <div class="overlay"></div>
-    <form action="{{ url_for('updateAccount') }}" method="post" class="center">
-        <div class="FormLine FormHeader">
-            <legend>Update User Details</legend>
-        </div>
-        
-        <div class="FormLine">
-            <p>Full Name: <span>Aidan Morris</span></p>
-        </div>
+    <div class="main-container">
+        <div class="overlay"></div>
+            <form class="center">
+                <div class="FormLine FormHeader">
+                    <legend>Update User Details</legend>
+                </div>
+                
+                <div class="FormLine">
+                    <p>Full Name: <span id="fullName"></span></p>
+                </div>
 
-        <div class="FormLine">
-            <label for="email">Email: <span>test@email.com</span></label> <br>
-            <input type="email" name="email" id="email" placeholder="Change Email"> <br>
-        </div>
+                <div class="FormLine">
+                    <label for="email">Update Email: <span id="curEmail"></span></label> <br>
+                    <input type="email" name="email" id="email" placeholder="Change Email" maxlength="100"> <br>
+                </div>
 
-        <div class="FormLine">
-            <label for="password">Password</label> <br>
-            <input type="password" name="password" id="password" placeholder="Change Password" > <br>
-        </div>
-        
-        <div class="FormLine" style="padding-top: 0em;">
-            <input type="password" name="password" id="repassword" placeholder="Retype Password"> <br>
-        </div>
+                <div class="FormLine">
+                    <label for="password">Update Password</label> <br>
+                    <input type="password" name="password" id="curPassword" placeholder="Current Password" maxlength="20"> <br>
+                </div>
+                
+                <div class="FormLine" style="padding-top: 0em;">
+                    <input type="password" name="password" id="newPassword" placeholder="New Password" maxlength="20"> <br>
+                </div>
 
-        <div class="FormLine buttons FormFooter">
-            <div class="left">
-                <button onclick="javasrcipt:window.history.back();">Cancel</button>
-            </div>
-            <div class="right">
-                <button type="submit" class="right" style="width: 80%;">Submit Changes</button> <br>
-            </div>
-        </div>
-    </form>
+                <div class="FormLine" style="padding-top: 0em;">
+                    <input type="password" name="password" id="renewPassword" placeholder="Retype New Password" maxlength="20"> <br>
+                </div>
+
+                <div class="FormLine buttons">
+                    <div class="left">
+                        <button onclick="" id="Cancel">Cancel</button>
+                    </div>
+                    <div class="right">
+                        <button type="submit" class="right" style="width: 80%;">Submit Changes</button> <br>
+                    </div>
+                </div>
+            </form>
+
+    </div>
 {% endblock %}

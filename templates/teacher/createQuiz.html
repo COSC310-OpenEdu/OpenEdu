@@ -32,7 +32,9 @@
                         </button>
                     </div>
                 </div>
-                <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+                <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm">
+                    <input type="hidden" name="isQuiz" value="1">
+                </form>
             </div>
             <!-- Secondary column containing list of links to each question added to form -->
                 <div class="secondary-container">
@@ -64,7 +66,9 @@
                 node.innerHTML = '';
                 node.insertAdjacentHTML("beforeend",
                 `<div class="primary-container" >
-                    <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm"></form>
+                    <form action="{{ url_for('createQuiz', courseId=courseId, courseName=courseName)}}" id="questionForm" method="post" name="questionForm">
+                        <input type="hidden" name="isQuiz" value="0">
+                    </form>
                     <div class="form-header" style="justify-content: flex-start;">
                         <input id="quizId" class="border-box" placeholder="Essay Name" name="quizId" required form="questionForm" style="width:50%;">
                     </div>

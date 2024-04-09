@@ -56,8 +56,10 @@ from src.Database.Check.CheckSubmissionIsGraded import CheckSubmissionIsGraded
 from src.Database.Update.AddCourseFile import AddCourseFile
 from src.Database.Query.SelectFilesQuery import SelectFilesQuery, RetrieveFileInfoQuery
 from src.Database.Update.DeleteCourseFile import DeleteCourseFile
-from src.Database.Update.DeleteAllQuestionsForAssignment import DeleteAllQuestionsForAssignment
-from src.Database.Query.GetEssayLocation import GetEssayLocation
+from src.Database.Update.DeleteAllQuestionsForAssignment import (
+    DeleteAllQuestionsForAssignment,
+)
+from src.Database.Update.UpdateSolutionEssay import UpdateSolutionEssay
 import mysql
 
 currentUser = None  # Start with no user logged in
@@ -149,17 +151,16 @@ def createAccount():
             )
         except mysql.connector.errors.IntegrityError:
             return render_template("accountCreation.html", error="Username")
-           
-            
+
         # Forward to the login page
 
         return redirect(url_for("login"))
 
 
-@app.route("/student/updateAccount", methods=["GET", "POST"])
+@app.route("/account/update", methods=["GET", "POST"])
 def updateAccount():
     if request.method == "GET":
-        return render_template("student/updateAccount.html")
+        return render_template("updateAccount.html")
     else:
         requestType = request.form["type"]
         # Password update request
@@ -231,11 +232,46 @@ def createQuiz(courseId, courseName):
             courseName=courseName,
             courses=courses,
         )
-    if request.method == "POST":
+    elif request.method == "POST":
         questionForm = request.form
-        AddQuizToDatabase.update(questionForm, courseId)
-        return redirect(url_for("teacherCourseAssignments", courseId=courseId, courseName=courseName))
-    
+        # Retrieve the 'isQuiz' value from form data
+        is_quiz = questionForm.get("isQuiz", "0")
+        
+        if is_quiz == "1":
+            # Process quiz creation
+            AddQuizToDatabase.update(questionForm, courseId, is_quiz)
+        else:
+            # Process essay creation
+            essay_name = request.form.get("quizId")
+            essay_prompt = request.form.get("questionText1")
+            create_essay_assignment(courseId, essay_name, essay_prompt)
+            
+            
+
+        return redirect(
+            url_for(
+                "teacherCourseAssignments", courseId=courseId, courseName=courseName
+            )
+        )
+
+def create_essay_assignment(courseId, essay_name, essay_prompt):
+    cursor = DatabaseManager.getDatabaseCursor()
+    try:
+        # Insert a new record into the Assignment table
+        assignment_query = "INSERT INTO Assignment (courseId, name, quiz) VALUES (%s, %s, 0)"
+        cursor.execute(assignment_query, (courseId, essay_name))
+        assignmentId = cursor.lastrowid  # Get the ID of the newly inserted assignment
+        # Insert a corresponding record into the Question table
+        question_query = "INSERT INTO Question (questionId, courseId, assignmentId, questionText, longQuestion) VALUES (1, %s, %s, %s, 1)"
+        cursor.execute(question_query, (courseId, assignmentId, essay_prompt))
+        DatabaseManager.commit()
+        
+    except Exception as e:
+        print(f"Error creating essay assignment: {e}")
+    finally:
+        DatabaseManager.closeConnection()
+
+
 
 @app.route("/search", methods=["POST", "GET"])
 def search():
@@ -244,7 +280,7 @@ def search():
         return render_template("student/search.html", courses=courses)
     else:
         searchTerm = request.form["searchTerm"]
-        return CourseSearch.search((searchTerm, session['userId']))
+        return CourseSearch.search((searchTerm, session["userId"]))
 
 
 @app.route("/Course/<courseId>/join", methods=["POST"])
@@ -294,29 +330,33 @@ def teacherCourseDash(courseId, courseName):
         courseId=courseId,
         courseName=courseName,
         courses=courses,
-        files=files  # Pass the list of files to the template
+        files=files,  # Pass the list of files to the template
     )
 
-@app.route('/download_file/<int:file_id>')
+
+@app.route("/download_file/<int:file_id>")
 def download_file(file_id):
     # Assuming RetrieveFileInfoQuery.get_file_info fetches file path using file_id
     file_info = RetrieveFileInfoQuery.get_file_info(file_id)
     if file_info:
-        file_path = file_info['fileLocator']
+        file_path = file_info["fileLocator"]
         directory = os.path.dirname(file_path)
         filename = os.path.basename(file_path)
         return send_from_directory(directory, filename, as_attachment=True)
     else:
         return "File not found", 404
 
-@app.route('/delete_file/<int:courseId>/<courseName>/<int:file_id>', methods=['POST'])
+
+@app.route("/delete_file/<int:courseId>/<courseName>/<int:file_id>", methods=["POST"])
 def delete_file(courseId, courseName, file_id):
     success = DeleteCourseFile.delete_file_record(file_id)
     if success:
-        flash('File deleted successfully', 'success')
+        flash("File deleted successfully", "success")
     else:
-        flash('File could not be deleted', 'error')
-    return redirect(url_for('teacherCourseDash', courseId=courseId, courseName=courseName))  # Redirect to the appropriate page
+        flash("File could not be deleted", "error")
+    return redirect(
+        url_for("teacherCourseDash", courseId=courseId, courseName=courseName)
+    )  # Redirect to the appropriate page
 
 
 @app.route("/teacher/<courseId>-<courseName>/assignments", methods=["GET"])
@@ -338,34 +378,64 @@ def teacherCourseGrading(courseId, courseName):
     grades = SelectGradesForCourse.queryAll((courseId,))
     questions = SelectQuestionsForCourse.queryAll((courseId,))
     solutions = SelectSolutionsForCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session['userId'],))
+    courses = SelectCourseQuery.query((session["userId"],))
 
     # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
-    
+
     if len(grades) < len(solutions):
         for i in range(0, len(solutions)):
             matching = False
             for j in range(0, len(grades)):
                 if grades[j] != 0:
-                    if grades[j][0] == solutions[i][0] and grades[j][4] == solutions[i][2] and grades[j][5] == solutions[i][1]:
+                    if (
+                        grades[j][0] == solutions[i][0]
+                        and grades[j][4] == solutions[i][2]
+                        and grades[j][5] == solutions[i][1]
+                    ):
                         matching = True
             if matching == False:
                 try:
                     grades.insert(i, 0)
                 except:
                     grades.append(0)
-            
-    
-    return render_template("teacher/grading.html", courseId=courseId, solutions=solutions, courseName=courseName, grades=grades, assignments=assignments, questions=questions, courses=courses)
+
+    return render_template(
+        "teacher/grading.html",
+        courseId=courseId,
+        solutions=solutions,
+        courseName=courseName,
+        grades=grades,
+        assignments=assignments,
+        questions=questions,
+        courses=courses,
+    )
+
 
 @app.route("/updateGrade", methods=["POST"])
 def updateGrade():
     form = request.form
     # If grade is already in database, update it. If not, insert it.
-    if (form['insert'] == "1"):
-        AddGrade.update((form['courseId'], form['questionId'], form['assignmentId'], form['studentId'], session['userId'], form['grade'],))
+    if form["insert"] == "1":
+        AddGrade.update(
+            (
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+                session["userId"],
+                form["grade"],
+            )
+        )
     else:
-        UpdateGrade.update((form['grade'], form['courseId'], form['questionId'], form['assignmentId'], form['studentId'],))
+        UpdateGrade.update(
+            (
+                form["grade"],
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+            )
+        )
     return "DONE"
 
 
@@ -400,10 +470,10 @@ def studentCoursePeople(courseId, courseName):
     )
 
 
-@app.route("/student/<courseId>-<courseName>/dashboard", methods = ['GET'])
-def courseDashboard(courseId,courseName):
+@app.route("/student/<courseId>-<courseName>/dashboard", methods=["GET"])
+def courseDashboard(courseId, courseName):
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
-    
+
     # Retrieve the list of files for the course
     files = SelectFilesQuery.get_files_for_course(courseId)
 
@@ -412,7 +482,7 @@ def courseDashboard(courseId,courseName):
         courseId=courseId,
         courseName=courseName,
         courses=courses,
-        files=files
+        files=files,
     )
 
 @app.route("/student/essay/<int:courseId>-<int:assignmentId>-<int:studentId>")
@@ -428,22 +498,28 @@ def downloadEssay(courseId, assignementId, studentId):
     else:
         return "File not found", 404
 
-
-@app.route("/admin/approveRegistration", methods=['POST', 'GET'])
+@app.route("/admin/approveRegistration", methods=["POST", "GET"])
 def courseRegistration():
-    if request.method == 'GET':
+    if request.method == "GET":
         course_requests = CourseRequestManager.get_course_requests()
-        return render_template("admin/approveRegistration.html", course_requests=course_requests)
+        return render_template(
+            "admin/approveRegistration.html", course_requests=course_requests
+        )
     else:
-        type = request.form['type']
-        
-        if type == 'approve':
-            ApproveCourseRequest.update((request.form['studentId'],request.form['courseId']))
+        type = request.form["type"]
 
-        if type == 'deny':
-            DenyCourseRequest.update((request.form['studentId'],request.form['courseId']))  
-        
+        if type == "approve":
+            ApproveCourseRequest.update(
+                (request.form["studentId"], request.form["courseId"])
+            )
+
+        if type == "deny":
+            DenyCourseRequest.update(
+                (request.form["studentId"], request.form["courseId"])
+            )
+
         return {}
+
 
 @app.route("/admin/createCourse", methods=["POST", "GET"])
 def createCourse():
@@ -482,14 +558,26 @@ def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
     for i in range(0, len(assignments)):
-        completion = CheckAssignmentCompletion.check((courseId, assignments[i][0], session['userId'],))
+        completion = CheckAssignmentCompletion.check(
+            (
+                courseId,
+                assignments[i][0],
+                session["userId"],
+            )
+        )
         if completion == False:
             completion = (False,)
         else:
             completion = (True,)
         assignments[i] = assignments[i] + completion
-    
-    return render_template("student/seeAssignments.html", courseId=courseId, assignments=assignments, courseName=courseName, courses=courses)
+
+    return render_template(
+        "student/seeAssignments.html",
+        courseId=courseId,
+        assignments=assignments,
+        courseName=courseName,
+        courses=courses,
+    )
 
 
 @app.route(
@@ -510,6 +598,30 @@ def studentAssignment(courseId, courseName, assignmentId, assignmentName):
             session["userId"],
         )
     )
+    # For now, set these to None!
+    is_quiz = None
+    essay_prompt = None
+    # Query the database to check if the assignment is a quiz or an essay
+    cursor = DatabaseManager.getDatabaseCursor()
+    try:
+        
+        
+        # Determining if the assignment is a quiz or an essay
+        cursor.execute("SELECT quiz FROM Assignment WHERE courseId = %s AND assignmentId = %s", (courseId, assignmentId))
+        is_quiz = cursor.fetchone()[0]
+        
+        if is_quiz == 0:
+            # Fetching the essay prompt for essays
+            cursor.execute(
+                "SELECT questionText FROM Question WHERE courseId = %s AND assignmentId = %s AND questionId = 1",
+                (courseId, assignmentId)
+            )
+            essay_prompt = cursor.fetchone()[0]
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        DatabaseManager.closeConnection()
+
     assignmentName = assignmentName.strip('"')
     return render_template(
         "student/assignment.html",
@@ -519,6 +631,8 @@ def studentAssignment(courseId, courseName, assignmentId, assignmentName):
         assignmentName=assignmentName,
         questions=questions,
         completion=completion,
+        essayPrompt=essay_prompt,
+        is_quiz=is_quiz
     )
 
 
@@ -557,6 +671,81 @@ def submitAssignment():
             assignmentName=assignmentName,
         )
     )
+
+
+@app.route("/submitStudentEssay/<int:courseId>/<int:assignmentId>", methods=["POST"])
+def submitStudentEssay(courseId, assignmentId):
+    # Check if the file is present in the request
+    if 'essay_file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+
+    file = request.files['essay_file']
+
+    # If user does not select file, browser also submit an empty part without filename
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Change upload directory here, but honestly I'm done with this project - Anilov :(
+        upload_folder = os.path.join('uploads', 'essays', str(courseId), str(session['userId']))
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
+
+        # Update database
+        try:
+            cursor = DatabaseManager.getDatabaseCursor()
+            # Apparently for essays it should always be 1 so this would be located in the solution...
+            questionId = 1
+            
+            # Check if solution already exists firsts
+            check_query = """
+                SELECT * FROM Solution WHERE courseId = %s AND assignmentId = %s AND studentId = %s AND questionId = %s
+                """
+            cursor.execute(check_query, (courseId, assignmentId, session['userId'], questionId))
+            if cursor.fetchone():
+                # Update existing Solution row if a student has already submitted an essay
+                # This prevents duplicate submissions on the same assignment
+                update_query = """
+                UPDATE Solution SET studentAnswer = %s WHERE courseId = %s AND assignmentId = %s AND studentId = %s AND questionId = %s
+                """
+                cursor.execute(update_query, (file_path, courseId, assignmentId, session['userId'], questionId))
+            else:
+                # Insert new Solution row if this is a first submission for the student
+                insert_query = """
+                INSERT INTO Solution (courseId, questionId, assignmentId, studentId, studentAnswer) VALUES (%s, %s, %s, %s, %s)
+                """
+                cursor.execute(insert_query, (courseId, questionId, assignmentId, session['userId'], file_path))
+                print("Hello there should be a new solution created with the following", courseId,assignmentId, session['userId'], file_path)
+
+            DatabaseManager.commit()
+            flash('File successfully uploaded')
+        except Exception as e:
+            print(f"Error updating database: {e}")
+            flash('An error occurred while uploading the file.')
+        finally:
+            DatabaseManager.closeConnection()
+
+        
+        courseName = request.form.get("courseName", "")
+        # Redirects back to list of assignments once submitted successfully
+        return redirect(url_for('seeAssignments', courseId=courseId, courseName=courseName))
+    
+    flash('Invalid file')
+    return redirect(request.url)
+
+# This is for checking if file extensions are valid
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 
 
 @app.route("/deleteSolutions", methods=["POST"])
@@ -615,7 +804,12 @@ def deleteAssignment():
             assignmentId,
         )
     )
-    DeleteAllQuestionsForAssignment.update((courseId, assignmentId,))
+    DeleteAllQuestionsForAssignment.update(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
     DeleteAssignment.update(
         (
             courseId,
@@ -632,14 +826,33 @@ def deleteAssignment():
     "/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>",
     methods=["GET"],
 )
-def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName):
-    questions = SelectQuestionsForAssignment.queryAll((courseId,assignmentId,))
+def teacherAssignment(
+    courseId, courseName, assignmentId, assignmentName, studentId, firstName, lastName
+):
+    questions = SelectQuestionsForAssignment.queryAll(
+        (
+            courseId,
+            assignmentId,
+        )
+    )
     completion = None
     grades = None
     # If clicked from grading tab, get the completion status and the grades from that submission
     if studentId != "False":
-        completion = CheckAssignmentCompletion.check((courseId,assignmentId,studentId,))
-        grades = SelectGradesForAssignment.queryAll((courseId,assignmentId,studentId,))
+        completion = CheckAssignmentCompletion.check(
+            (
+                courseId,
+                assignmentId,
+                studentId,
+            )
+        )
+        grades = SelectGradesForAssignment.queryAll(
+            (
+                courseId,
+                assignmentId,
+                studentId,
+            )
+        )
         # Make grades the same length as solutions as to not cause any errors
         if len(grades) < len(completion):
             for i in range(len(grades) - 1, len(completion)):
@@ -648,7 +861,14 @@ def teacherAssignment(courseId, courseName, assignmentId, assignmentName, studen
     # If assignment is not complete, return to grading page (very unlikely event as the submission won't show up unless it's complete)
     if completion == False:
         flash("This student has not submitted this assignment yet.")
-        return redirect(url_for("teacherCourseGrading",_anchor=str(assignmentId),courseId=courseId,courseName=courseName,))
+        return redirect(
+            url_for(
+                "teacherCourseGrading",
+                _anchor=str(assignmentId),
+                courseId=courseId,
+                courseName=courseName,
+            )
+        )
     else:
         return render_template(
             "teacher/teacherAssignment.html",
