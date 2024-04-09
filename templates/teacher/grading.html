@@ -189,7 +189,7 @@
                                     <div class="gradeItem2">     
                                         <span>{{grades[i][1]}} {{grades[i][2]}}</span>
                                         <span class="material-symbols-outlined">
-                                            <a href="">
+                                            <a href="{{ url_for('downloadEssay', courseId=courseId,assignmentId=assignment[0],studentId=grades[i][4])}}">
                                             link</a></span>
                                         <input id="{{grades[i][0]}}_{{assignment[0]}}_{{grades[i][4]}}" class="{{grades[i][0]}}_{{assignment[0]}}" type="number" value="{{grades[i][6]}}" /><span>/100</span><span>{{grades[i][6]}}%</span>
                                     </div>
@@ -205,7 +205,7 @@
                                     <div class="gradeItem2">     
                                         <span>{{solutions[i][3]}} {{solutions[i][4]}}</span>
                                         <span class="material-symbols-outlined">
-                                            <a href="">
+                                            <a href="{{ url_for('downloadEssay', courseId=courseId,assignmentId=assignment[0],studentId=solutions[i][2])}}">
                                             link</a></span>        
                                         <input id="{{solutions[i][0]}}_{{assignment[0]}}_{{solutions[i][2]}}" class="{{solutions[i][0]}}_{{assignment[0]}} insert" type="number" value="" /><span>/100</span><span></span>
                                     </div>

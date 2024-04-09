@@ -59,6 +59,7 @@ from src.Database.Update.DeleteCourseFile import DeleteCourseFile
 from src.Database.Update.DeleteAllQuestionsForAssignment import (
     DeleteAllQuestionsForAssignment,
 )
+from src.Database.Query.GetEssayLocation import GetEssayLocation
 from src.Database.Update.UpdateSolutionEssay import UpdateSolutionEssay
 import mysql
 
@@ -486,12 +487,11 @@ def courseDashboard(courseId, courseName):
     )
 
 @app.route("/student/essay/<int:courseId>-<int:assignmentId>-<int:studentId>")
-def downloadEssay(courseId, assignementId, studentId):
-    file_info = GetEssayLocation.query((courseId, assignementId, studentId))
-    file_info = file_info[0]
-    
+def downloadEssay(courseId, assignmentId, studentId):
+    file_info = GetEssayLocation.query((courseId, assignmentId, studentId,))
+
     if file_info:
-        file_path = file_info['fileLocator']
+        file_path = file_info[0]
         directory = os.path.dirname(file_path)
         filename = os.path.basename(file_path)
         return send_from_directory(directory, filename, as_attachment=True)

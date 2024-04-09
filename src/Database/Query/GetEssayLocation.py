@@ -13,6 +13,8 @@ class GetEssayLocation(DatabaseQuery):
         
         cursor = DatabaseManager.getDatabaseCursor()
         
-        sql = "SELECT studentAnswer FROM SOLUTION WHERE courseId = %s AND questionId = 1 AND assignmentId = %s AND studentId = %s"
+        sql = "SELECT studentAnswer FROM Solution WHERE courseId = %s AND questionId = 1 AND assignmentId = %s AND studentId = %s"
+        cursor.execute(sql, (dataTuple))
+        studentAnswer = cursor.fetchone()
         
-        cursor.execute(sql, dataTuple)
+        return studentAnswer
