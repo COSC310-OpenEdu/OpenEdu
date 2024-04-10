@@ -4,6 +4,13 @@ import mysql
 
 
 class SelectStudentQuery(DatabaseQuery):
+    
+    #
+    #   Gets student information 
+    #   Input: dataTuple = (userId,)
+    #   Ouput: The student's data
+    #
+    
     @classmethod
     def query(cls, dataTuple) -> tuple:
         sql = "SELECT * FROM User WHERE userId = %s"

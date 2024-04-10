@@ -3,6 +3,13 @@ from src.Database.DatabaseManager import DatabaseManager;
 import mysql
 
 class SelectGradesForCourse(DatabaseQueryAll):
+   
+    #
+    #   Gets information about all grades in a given course
+    #   Input:  dataTuple = (courseId,)
+    #   Ouput:  A list of grades
+    #
+   
     @classmethod
     def queryAll(cls, dataTuple) -> tuple:
        

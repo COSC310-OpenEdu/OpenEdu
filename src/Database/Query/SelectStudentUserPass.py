@@ -4,6 +4,13 @@ import mysql
 
 
 class SelectStudentUserPass(DatabaseQuery):
+    
+    #
+    #   Gets user information from username and password
+    #   Input: dataTuple = (username, password)
+    #   Output: infromation about the selected user
+    #
+    
     @classmethod
     def query(cls, dataTuple) -> tuple:
         username, password = dataTuple;
