@@ -105,7 +105,7 @@
                 // If the email is empty user does not want to update the email
                 if (email.value.trim() != '') {
                     // Check formatting for the email
-                    let re = /^[a-zA-Z1-9.]+@[a-zA-Z1-9.]+.[a-zA-Z1-9]+/; // Regex for email
+                    let re = /^[a-zA-Z0-9.]+@[a-zA-Z0-9.]+.[a-zA-Z0-9]+/; // Regex for email
                     if (!email.value.trim().match(re)){
                         addHighlight(email);
                         alert('The email is not properly formatted');
