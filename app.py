@@ -67,10 +67,11 @@ currentUser = None  # Start with no user logged in
 app = Flask(__name__)
 app.secret_key = "a"
 
+###################Prior to Login Pages##########################
 
+#Home page. If user is logged in, divert to correct home.
 @app.route("/")
 def home():
-    # Test the database connection
 
     if session.get("userType") == "Student":
         courses = SelectRegisteredCourses.queryAll((session["userId"],))
@@ -80,7 +81,7 @@ def home():
     else:
         return render_template("openEduHome.html")
 
-
+#Page for users to login as student, teacher, or admin
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -99,7 +100,7 @@ def login():
             error = "Invalid username and password"
             return render_template("login.html", error=error)
 
-
+#Helper method that adds user to session and saves the user type. Directs home afterwards
 def addUserToSession(username, password):
     # Adds username and userId to session
     StudentData = SelectStudentUserPass.query((username, password))
@@ -123,6 +124,7 @@ def addUserToSession(username, password):
         return redirect(url_for("createCourse"))
 
 
+#Remove all user info from session then go to home page
 @app.route("/logout")
 def logout():
     # Remove user from session and return to home page
@@ -131,7 +133,7 @@ def logout():
     session.pop("userType", None)
     return redirect(url_for("home"))
 
-
+#Page where user can create an account of their choice
 @app.route("/login/createaccount", methods=["GET", "POST"])
 def createAccount():
     if request.method == "GET":
@@ -157,7 +159,7 @@ def createAccount():
 
         return redirect(url_for("login"))
 
-
+#Update account details of any user type
 @app.route("/account/update", methods=["GET", "POST"])
 def updateAccount():
     if request.method == "GET":
@@ -182,7 +184,9 @@ def updateAccount():
 
         return {}
 
-
+#######################Student Pages#######################
+    
+#Get all student info
 @app.route("/student/info", methods=["POST"])
 def studentInfo():
     # Returns firstname lastname and email to the given user id
@@ -195,6 +199,7 @@ def studentInfo():
     return json.dumps(returnData)
 
 
+#Student viewing grades from a specifc course
 @app.route("/student/<courseId>-<courseName>/grades", methods=["GET"])
 def seeGrades(courseId, courseName):
     # Query for getting grades for every assignment in a class for a given student
@@ -220,60 +225,7 @@ def seeGrades(courseId, courseName):
         courses=courses,
     )
 
-
-@app.route(
-    "/teacher/<courseId>-<courseName>/assignments/createQuiz", methods=["POST", "GET"]
-)
-def createQuiz(courseId, courseName):
-    if request.method == "GET":
-        courses = SelectCourseQuery.query((session["userId"],))
-        return render_template(
-            "teacher/createQuiz.html",
-            courseId=courseId,
-            courseName=courseName,
-            courses=courses,
-        )
-    elif request.method == "POST":
-        questionForm = request.form
-        # Retrieve the 'isQuiz' value from form data
-        is_quiz = questionForm.get("isQuiz", "0")
-        
-        if is_quiz == "1":
-            # Process quiz creation
-            AddQuizToDatabase.update(questionForm, courseId, is_quiz)
-        else:
-            # Process essay creation
-            essay_name = request.form.get("quizId")
-            essay_prompt = request.form.get("questionText1")
-            create_essay_assignment(courseId, essay_name, essay_prompt)
-            
-            
-
-        return redirect(
-            url_for(
-                "teacherCourseAssignments", courseId=courseId, courseName=courseName
-            )
-        )
-
-def create_essay_assignment(courseId, essay_name, essay_prompt):
-    cursor = DatabaseManager.getDatabaseCursor()
-    try:
-        # Insert a new record into the Assignment table
-        assignment_query = "INSERT INTO Assignment (courseId, name, quiz) VALUES (%s, %s, 0)"
-        cursor.execute(assignment_query, (courseId, essay_name))
-        assignmentId = cursor.lastrowid  # Get the ID of the newly inserted assignment
-        # Insert a corresponding record into the Question table
-        question_query = "INSERT INTO Question (questionId, courseId, assignmentId, questionText, longQuestion) VALUES (1, %s, %s, %s, 1)"
-        cursor.execute(question_query, (courseId, assignmentId, essay_prompt))
-        DatabaseManager.commit()
-        
-    except Exception as e:
-        print(f"Error creating essay assignment: {e}")
-    finally:
-        DatabaseManager.closeConnection()
-
-
-
+#Students searching courses to request to join
 @app.route("/search", methods=["POST", "GET"])
 def search():
     if request.method == "GET":
@@ -283,7 +235,7 @@ def search():
         searchTerm = request.form["searchTerm"]
         return CourseSearch.search((searchTerm, session["userId"]))
 
-
+#Files a request to join a course for a student
 @app.route("/Course/<courseId>/join", methods=["POST"])
 def joinCourse(courseId):
     userId = session["userId"]
@@ -297,164 +249,7 @@ def joinCourse(courseId):
     return {}
 
 
-@app.route("/teacher/homepage", methods=["POST", "GET"])
-def teacherHome():
-    # temporarily getting a list of all courses
-
-    courses = SelectCourseQuery.query((session["userId"],))
-
-    return render_template("teacher/homepage.html", courses=courses)
-
-
-@app.route("/teacher/<courseId>-<courseName>/dashboard", methods=["GET", "POST"])
-def teacherCourseDash(courseId, courseName):
-    courses = SelectCourseQuery.query((session["userId"],))
-    if request.method == "POST":
-        # Handle file uploads
-        file = request.files["file"]
-        # Retrieves custom file name from the pop-up window
-        custom_file_name = request.form["fileName"]
-        if file:
-            filename = secure_filename(file.filename)
-            file_path = os.path.join("uploads/course_" + str(courseId), filename)
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            file.save(file_path)
-
-            # Use AddCourseFile to insert the file record
-            AddCourseFile.insert_file_record(courseId, file_path, custom_file_name)
-
-    # Retrieve the list of files for the course to display
-    files = SelectFilesQuery.get_files_for_course(courseId)
-
-    return render_template(
-        "teacher/courseDashboard.html",
-        courseId=courseId,
-        courseName=courseName,
-        courses=courses,
-        files=files,  # Pass the list of files to the template
-    )
-
-
-@app.route("/download_file/<int:file_id>")
-def download_file(file_id):
-    # Assuming RetrieveFileInfoQuery.get_file_info fetches file path using file_id
-    file_info = RetrieveFileInfoQuery.get_file_info(file_id)
-    if file_info:
-        file_path = file_info["fileLocator"]
-        directory = os.path.dirname(file_path)
-        filename = os.path.basename(file_path)
-        return send_from_directory(directory, filename, as_attachment=True)
-    else:
-        return "File not found", 404
-
-
-@app.route("/delete_file/<int:courseId>/<courseName>/<int:file_id>", methods=["POST"])
-def delete_file(courseId, courseName, file_id):
-    success = DeleteCourseFile.delete_file_record(file_id)
-    if success:
-        flash("File deleted successfully", "success")
-    else:
-        flash("File could not be deleted", "error")
-    return redirect(
-        url_for("teacherCourseDash", courseId=courseId, courseName=courseName)
-    )  # Redirect to the appropriate page
-
-
-@app.route("/teacher/<courseId>-<courseName>/assignments", methods=["GET"])
-def teacherCourseAssignments(courseId, courseName):
-    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session["userId"],))
-    return render_template(
-        "teacher/assignmentsTab.html",
-        courseId=courseId,
-        courseName=courseName,
-        assignments=assignments,
-        courses=courses,
-    )
-
-
-@app.route("/teacher/<courseId>-<courseName>/grading", methods=["GET"])
-def teacherCourseGrading(courseId, courseName):
-    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
-    grades = SelectGradesForCourse.queryAll((courseId,))
-    questions = SelectQuestionsForCourse.queryAll((courseId,))
-    solutions = SelectSolutionsForCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session["userId"],))
-
-    # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
-
-    if len(grades) < len(solutions):
-        for i in range(0, len(solutions)):
-            matching = False
-            for j in range(0, len(grades)):
-                if grades[j] != 0:
-                    if (
-                        grades[j][0] == solutions[i][0]
-                        and grades[j][4] == solutions[i][2]
-                        and grades[j][5] == solutions[i][1]
-                    ):
-                        matching = True
-            if matching == False:
-                try:
-                    grades.insert(i, 0)
-                except:
-                    grades.append(0)
-
-    return render_template(
-        "teacher/grading.html",
-        courseId=courseId,
-        solutions=solutions,
-        courseName=courseName,
-        grades=grades,
-        assignments=assignments,
-        questions=questions,
-        courses=courses,
-    )
-
-
-@app.route("/updateGrade", methods=["POST"])
-def updateGrade():
-    form = request.form
-    # If grade is already in database, update it. If not, insert it.
-    if form["insert"] == "1":
-        AddGrade.update(
-            (
-                form["courseId"],
-                form["questionId"],
-                form["assignmentId"],
-                form["studentId"],
-                session["userId"],
-                form["grade"],
-            )
-        )
-    else:
-        UpdateGrade.update(
-            (
-                form["grade"],
-                form["courseId"],
-                form["questionId"],
-                form["assignmentId"],
-                form["studentId"],
-            )
-        )
-    return "DONE"
-
-
-@app.route("/teacher/<courseId>-<courseName>/people", methods=["GET"])
-def teacherCoursePeople(courseId, courseName):
-    instructors = SelectInstructorsForCourse.queryAll((courseId,))
-    people = SelectPeopleInCourse.queryAll((courseId,))
-    courses = SelectCourseQuery.query((session["userId"],))
-    return render_template(
-        "teacher/people.html",
-        courseId=courseId,
-        courseName=courseName,
-        people=people,
-        instructors=instructors,
-        courses=courses,
-    )
-
-
+#Students viewing all teachers and students in their class
 @app.route("/student/<courseId>-<courseName>/people", methods=["GET"])
 def studentCoursePeople(courseId, courseName):
     instructors = SelectInstructorsForCourse.queryAll((courseId,))
@@ -470,7 +265,7 @@ def studentCoursePeople(courseId, courseName):
         courses=courses,
     )
 
-
+#Student dahsboard that views all courses they are enrolled in
 @app.route("/student/<courseId>-<courseName>/dashboard", methods=["GET"])
 def courseDashboard(courseId, courseName):
     courses = SelectRegisteredCourses.queryAll((session["userId"],))
@@ -486,6 +281,7 @@ def courseDashboard(courseId, courseName):
         files=files,
     )
 
+#View an essay assignment from teacher
 @app.route("/student/essay/<int:courseId>-<int:assignmentId>-<int:studentId>")
 def downloadEssay(courseId, assignmentId, studentId):
     file_info = GetEssayLocation.query((courseId, assignmentId, studentId,))
@@ -498,61 +294,8 @@ def downloadEssay(courseId, assignmentId, studentId):
     else:
         return "File not found", 404
 
-@app.route("/admin/approveRegistration", methods=["POST", "GET"])
-def courseRegistration():
-    if request.method == "GET":
-        course_requests = CourseRequestManager.get_course_requests()
-        return render_template(
-            "admin/approveRegistration.html", course_requests=course_requests
-        )
-    else:
-        type = request.form["type"]
 
-        if type == "approve":
-            ApproveCourseRequest.update(
-                (request.form["studentId"], request.form["courseId"])
-            )
-
-        if type == "deny":
-            DenyCourseRequest.update(
-                (request.form["studentId"], request.form["courseId"])
-            )
-
-        return {}
-
-
-@app.route("/admin/createCourse", methods=["POST", "GET"])
-def createCourse():
-    if request.method == "POST":
-        # Extract form data using .get() to avoid BadRequestKeyError
-        form = request.form
-        courseName = form.get("courseName", "")
-        description = form.get("description", "")
-        credits = int(form.get("credits", 0))
-        session = int(form.get("session", 0))
-        term = int(form.get("term", 0))
-        instructorId = int(form.get("instructor", 0))
-
-        courseData = (courseName, description, credits, session, term)
-        # Update Database with course information
-        try:
-            CreateCourse.update(courseData, instructorId)
-            flash("Course created successfully!", "success")
-        except Exception as e:
-            flash(f"An error occurred: {str(e)}", "error")
-            return render_template("admin/createCourse.html")
-
-        return redirect(url_for("createCourse"))
-    else:
-        instructorIds, instructorNames = SelectAllInstructors.queryAll()
-        return render_template(
-            "admin/createCourse.html",
-            instructorIds=instructorIds,
-            instructorNames=instructorNames,
-            len=len,
-        )
-
-
+#View all assignments created by teacher
 @app.route("/student/<courseId>-<courseName>/assignments", methods=["GET"])
 def seeAssignments(courseId, courseName):
     assignments = SelectAssignmentsForCourse.queryAll((courseId,))
@@ -579,7 +322,7 @@ def seeAssignments(courseId, courseName):
         courses=courses,
     )
 
-
+#Viewing a specific assignment as a student
 @app.route(
     "/student/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>",
     methods=["GET"],
@@ -635,7 +378,7 @@ def studentAssignment(courseId, courseName, assignmentId, assignmentName):
         is_quiz=is_quiz
     )
 
-
+#Students submitting an assignment for a course
 @app.route("/submitAssignment", methods=["POST"])
 def submitAssignment():
     form = request.form
@@ -672,7 +415,7 @@ def submitAssignment():
         )
     )
 
-
+#Student submitting their uploaded file for their essay
 @app.route("/submitStudentEssay/<int:courseId>/<int:assignmentId>", methods=["POST"])
 def submitStudentEssay(courseId, assignmentId):
     # Check if the file is present in the request
@@ -747,7 +490,7 @@ def allowed_file(filename):
 
 
 
-
+#Student deleting their submission
 @app.route("/deleteSolutions", methods=["POST"])
 def deleteSolutions():
     form = request.form
@@ -783,45 +526,244 @@ def deleteSolutions():
         )
     )
 
+############################Teacher Pages############################
 
+#Page where teacher can create quizzes
+@app.route(
+    "/teacher/<courseId>-<courseName>/assignments/createQuiz", methods=["POST", "GET"]
+)
+def createQuiz(courseId, courseName):
+    if request.method == "GET":
+        courses = SelectCourseQuery.query((session["userId"],))
+        return render_template(
+            "teacher/createQuiz.html",
+            courseId=courseId,
+            courseName=courseName,
+            courses=courses,
+        )
+    elif request.method == "POST":
+        questionForm = request.form
+        # Retrieve the 'isQuiz' value from form data
+        is_quiz = questionForm.get("isQuiz", "0")
+        
+        if is_quiz == "1":
+            # Process quiz creation
+            AddQuizToDatabase.update(questionForm, courseId, is_quiz)
+        else:
+            # Process essay creation
+            essay_name = request.form.get("quizId")
+            essay_prompt = request.form.get("questionText1")
+            create_essay_assignment(courseId, essay_name, essay_prompt)
+            
+            
+
+        return redirect(
+            url_for(
+                "teacherCourseAssignments", courseId=courseId, courseName=courseName
+            )
+        )
+
+#Helper method to create an essay for students
+def create_essay_assignment(courseId, essay_name, essay_prompt):
+    cursor = DatabaseManager.getDatabaseCursor()
+    try:
+        # Insert a new record into the Assignment table
+        assignment_query = "INSERT INTO Assignment (courseId, name, quiz) VALUES (%s, %s, 0)"
+        cursor.execute(assignment_query, (courseId, essay_name))
+        assignmentId = cursor.lastrowid  # Get the ID of the newly inserted assignment
+        # Insert a corresponding record into the Question table
+        question_query = "INSERT INTO Question (questionId, courseId, assignmentId, questionText, longQuestion) VALUES (1, %s, %s, %s, 1)"
+        cursor.execute(question_query, (courseId, assignmentId, essay_prompt))
+        DatabaseManager.commit()
+        
+    except Exception as e:
+        print(f"Error creating essay assignment: {e}")
+    finally:
+        DatabaseManager.closeConnection()
+
+
+#Main Homepage for teachers to see all courses they teach
+@app.route("/teacher/homepage", methods=["POST", "GET"])
+def teacherHome():
+    # temporarily getting a list of all courses
+    courses = SelectCourseQuery.query((session["userId"],))
+
+    return render_template("teacher/homepage.html", courses=courses)
+
+
+#Teacher dashboard of a course they teach. Here they can upload lecture slides and course files for students
+@app.route("/teacher/<courseId>-<courseName>/dashboard", methods=["GET", "POST"])
+def teacherCourseDash(courseId, courseName):
+    courses = SelectCourseQuery.query((session["userId"],))
+    if request.method == "POST":
+        # Handle file uploads
+        file = request.files["file"]
+        # Retrieves custom file name from the pop-up window
+        custom_file_name = request.form["fileName"]
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join("uploads/course_" + str(courseId), filename)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            file.save(file_path)
+
+            # Use AddCourseFile to insert the file record
+            AddCourseFile.insert_file_record(courseId, file_path, custom_file_name)
+
+    # Retrieve the list of files for the course to display
+    files = SelectFilesQuery.get_files_for_course(courseId)
+
+    return render_template(
+        "teacher/courseDashboard.html",
+        courseId=courseId,
+        courseName=courseName,
+        courses=courses,
+        files=files,  # Pass the list of files to the template
+    )
+
+#Teachers downloading a file 
+@app.route("/download_file/<int:file_id>")
+def download_file(file_id):
+    # Assuming RetrieveFileInfoQuery.get_file_info fetches file path using file_id
+    file_info = RetrieveFileInfoQuery.get_file_info(file_id)
+    if file_info:
+        file_path = file_info["fileLocator"]
+        directory = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        return "File not found", 404
+
+
+#Deleting a file from a course
+@app.route("/delete_file/<int:courseId>/<courseName>/<int:file_id>", methods=["POST"])
+def delete_file(courseId, courseName, file_id):
+    success = DeleteCourseFile.delete_file_record(file_id)
+    if success:
+        flash("File deleted successfully", "success")
+    else:
+        flash("File could not be deleted", "error")
+    return redirect(
+        url_for("teacherCourseDash", courseId=courseId, courseName=courseName)
+    )  # Redirect to the appropriate page
+
+
+#View all assignments as a teacher
+@app.route("/teacher/<courseId>-<courseName>/assignments", methods=["GET"])
+def teacherCourseAssignments(courseId, courseName):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    courses = SelectCourseQuery.query((session["userId"],))
+    return render_template(
+        "teacher/assignmentsTab.html",
+        courseId=courseId,
+        courseName=courseName,
+        assignments=assignments,
+        courses=courses,
+    )
+
+#Grading page for teachers to mark assignments from students
+@app.route("/teacher/<courseId>-<courseName>/grading", methods=["GET"])
+def teacherCourseGrading(courseId, courseName):
+    assignments = SelectAssignmentsForCourse.queryAll((courseId,))
+    grades = SelectGradesForCourse.queryAll((courseId,))
+    questions = SelectQuestionsForCourse.queryAll((courseId,))
+    solutions = SelectSolutionsForCourse.queryAll((courseId,))
+    courses = SelectCourseQuery.query((session["userId"],))
+
+    # Assures that every index in grades matches solutions, and if the grade doesn't exist, insert a 0 into the correct spot
+
+    if len(grades) < len(solutions):
+        for i in range(0, len(solutions)):
+            matching = False
+            for j in range(0, len(grades)):
+                if grades[j] != 0:
+                    if (
+                        grades[j][0] == solutions[i][0]
+                        and grades[j][4] == solutions[i][2]
+                        and grades[j][5] == solutions[i][1]
+                    ):
+                        matching = True
+            if matching == False:
+                try:
+                    grades.insert(i, 0)
+                except:
+                    grades.append(0)
+
+    return render_template(
+        "teacher/grading.html",
+        courseId=courseId,
+        solutions=solutions,
+        courseName=courseName,
+        grades=grades,
+        assignments=assignments,
+        questions=questions,
+        courses=courses,
+    )
+
+
+#Updates any grades changes made by teachers
+@app.route("/updateGrade", methods=["POST"])
+def updateGrade():
+    form = request.form
+    # If grade is already in database, update it. If not, insert it.
+    if form["insert"] == "1":
+        AddGrade.update(
+            (
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+                session["userId"],
+                form["grade"],
+            )
+        )
+    else:
+        UpdateGrade.update(
+            (
+                form["grade"],
+                form["courseId"],
+                form["questionId"],
+                form["assignmentId"],
+                form["studentId"],
+            )
+        )
+    return "DONE"
+
+#Teachers viewing all students enrolled in their class
+@app.route("/teacher/<courseId>-<courseName>/people", methods=["GET"])
+def teacherCoursePeople(courseId, courseName):
+    instructors = SelectInstructorsForCourse.queryAll((courseId,))
+    people = SelectPeopleInCourse.queryAll((courseId,))
+    courses = SelectCourseQuery.query((session["userId"],))
+    return render_template(
+        "teacher/people.html",
+        courseId=courseId,
+        courseName=courseName,
+        people=people,
+        instructors=instructors,
+        courses=courses,
+    )
+
+
+
+#Delete an assignment from the database. Deletes all user submissions as well
 @app.route("/deleteAssignment", methods=["POST"])
 def deleteAssignment():
     form = request.form
     courseId = form.get("courseId", "")
     courseName = form.get("courseName", "")
     assignmentId = form.get("assignmentId", "")
-    assignmentName = form.get("assignmentName", "")
 
-    DeleteGradesForAssignment.update(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
-    DeleteAllSolutionsForAssignment.update(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
-    DeleteAllQuestionsForAssignment.update(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
-    DeleteAssignment.update(
-        (
-            courseId,
-            assignmentId,
-        )
-    )
+    DeleteGradesForAssignment.update((courseId, assignmentId,))
+    DeleteAllSolutionsForAssignment.update((courseId,assignmentId,))
+    DeleteAllQuestionsForAssignment.update((courseId,assignmentId,))
+    DeleteAssignment.update((courseId,assignmentId,))
 
     return redirect(
         url_for("teacherCourseAssignments", courseId=courseId, courseName=courseName)
     )
 
 
+#Teacher page for viewing a student's assignment
 @app.route(
     "/teacher/<courseId>-<courseName>/assignments/<assignmentId>-<assignmentName>/<studentId>-<firstName>-<lastName>",
     methods=["GET"],
@@ -884,6 +826,65 @@ def teacherAssignment(
             completion=completion,
         )
 
+
+########################Admin Pages###############################
+    
+#Page where admin can accept or deny students into courses
+#Get will display the page itself. When clicking accept or deny, the page will run
+#a post to itself to run the query to accept/dent student.
+@app.route("/admin/approveRegistration", methods=["POST", "GET"])
+def courseRegistration():
+    if request.method == "GET":
+        course_requests = CourseRequestManager.get_course_requests()
+        return render_template(
+            "admin/approveRegistration.html", course_requests=course_requests
+        )
+    else:
+        type = request.form["type"]
+
+        if type == "approve":
+            ApproveCourseRequest.update(
+                (request.form["studentId"], request.form["courseId"])
+            )
+
+        if type == "deny":
+            DenyCourseRequest.update(
+                (request.form["studentId"], request.form["courseId"])
+            )
+
+        return {}
+
+#Page where admins can create courses and assign them to teachers
+@app.route("/admin/createCourse", methods=["POST", "GET"])
+def createCourse():
+    if request.method == "POST":
+        # Extract form data using .get() to avoid BadRequestKeyError
+        form = request.form
+        courseName = form.get("courseName", "")
+        description = form.get("description", "")
+        credits = int(form.get("credits", 0))
+        session = int(form.get("session", 0))
+        term = int(form.get("term", 0))
+        instructorId = int(form.get("instructor", 0))
+
+        courseData = (courseName, description, credits, session, term)
+        # Update Database with course information
+        try:
+            CreateCourse.update(courseData, instructorId)
+            flash("Course created successfully!", "success")
+        except Exception as e:
+            flash(f"An error occurred: {str(e)}", "error")
+            return render_template("admin/createCourse.html")
+
+        return redirect(url_for("createCourse"))
+    else:
+        instructorIds, instructorNames = SelectAllInstructors.queryAll()
+        return render_template(
+            "admin/createCourse.html",
+            instructorIds=instructorIds,
+            instructorNames=instructorNames,
+            len=len,
+        )
 
 if __name__ == "__main__":
     app.debug = True
