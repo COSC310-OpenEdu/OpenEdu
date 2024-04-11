@@ -1,5 +1,31 @@
 from mysql import connector
 
+#
+#   The database manager is used to facilitate interation with the database
+#   A singleton pattern is used to keep only one connection to the database 
+#   at a given time. 
+#
+#   Test Mode:
+#   Test mode is used while testing. The system switches what database is 
+#   being used for testing. When entering testing mode test is set to True
+#   When a database call requests the database cursor or the connection 
+#   the following will occur:
+#   
+#   1) testing mode is requested but the system is in normal mode
+#       - create a new connection to the test database
+#       - currently testing is true
+#
+#   2) test mode is requested and the system is in testing mode
+#       - return the current cursor/connection
+#
+#   3) test mode is not request and the system is in normal mode
+#       - return the current cursor/connection
+#
+#   4) test mode is not request and the system is in testing mode
+#       - create a new connection to the normal database
+#       - currently testing is false
+#
+
 
 class DatabaseManager:
     # User test database if in test mode
