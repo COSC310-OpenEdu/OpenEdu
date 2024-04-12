@@ -3,6 +3,15 @@ from src.Database.DatabaseManager import DatabaseManager
 import mysql
 
 class UsernamePasswordCheck(DatabaseCheck):
+    
+    #
+    #   Checks if a given username and password have a user associated to them
+    #   Input:  dataTuple = (username, password)
+    #                     = username and password being checked
+    #   Ouput:  True is the user exists
+    #           False otherwise
+    #
+    
     @classmethod
     def check(cls, dataTuple) -> bool:
         statement = "SELECT * FROM User WHERE username = %s AND password = %s"

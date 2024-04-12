@@ -3,6 +3,12 @@ from src.Database.DatabaseManager import DatabaseManager;
 import mysql
 
 class SelectAssignmentsForCourse(DatabaseQueryAll):
+    
+    #
+    #   Selects information for all assignment from a given course
+    #   Input:  dataTuple = (courseId,)
+    #   Ouput:  A list of assignments
+    
     @classmethod
     def queryAll(cls, dataTuple) -> tuple:
        

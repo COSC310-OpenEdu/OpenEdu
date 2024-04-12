@@ -3,6 +3,13 @@ from src.Database.DatabaseManager import DatabaseManager;
 import mysql
 
 class SelectCourseQueryAll(DatabaseQueryAll):
+    
+    #
+    #   Selects courses with names that contain the input
+    #   Input:  dataTuple = (searchTerm)
+    #   Ouput:  A list of courses
+    #
+    
     @classmethod
     def queryAll(cls, dataTuple) -> list:
         cursor = DatabaseManager.getDatabaseCursor()

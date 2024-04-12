@@ -3,6 +3,12 @@ from src.Database.Query.DatabaseQuery import DatabaseQuery
 import os
 
 class DeleteCourseFile(DatabaseQuery):
+    
+    #
+    #   Deletes a file from the course file list and removes it from the file system
+    #   Input:  file_id = the file being deleted
+    #
+    
     @classmethod
     def delete_file_record(cls, file_id):
         try:

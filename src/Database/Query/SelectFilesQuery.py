@@ -2,6 +2,13 @@ from src.Database.DatabaseManager import DatabaseManager
 from src.Database.Query.DatabaseQuery import DatabaseQuery
 
 class SelectFilesQuery(DatabaseQuery):
+    
+    #
+    #   Gets information for all the files related to a course
+    #   Input: courseId
+    #   Output: File information
+    #
+    
     @classmethod
     def get_files_for_course(cls, courseId):
         query = "SELECT fileId, fileLocator, fileName FROM CourseFiles WHERE courseId = %s"
@@ -11,9 +18,16 @@ class SelectFilesQuery(DatabaseQuery):
         DatabaseManager.closeConnection()
         return files
 
-
+    
 
 class RetrieveFileInfoQuery(DatabaseQuery):
+    
+    #
+    #   Gets the filelocator for a fiven fileId
+    #   Input: file_id
+    #   Ouput: The file locator
+    #
+    
     @classmethod
     def get_file_info(cls, file_id):
         query = "SELECT fileLocator FROM CourseFiles WHERE fileId = %s"
